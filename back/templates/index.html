@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo War</title>
+</head>
+<body>
+  <h1>Jogo War</h1>
+  <button id="openDialog">Iniciar Partida</button>
+
+  <audio id="audio" controls loop>
+    <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg">
+  </audio>
+
+  <dialog id="configDialog">
+    <form method="dialog">
+      <label>
+        Duração do turno (em segundos):
+        <input type="number" name="duracao_turno" min="10" max="300" value="180">
+      </label>
+      <label>
+        Quantidade de jogadores humanos:
+        <input type="number" name="qtd_humanos" min="0" max="6" value="3">
+      </label>
+      <label>
+        Quantidade de jogadores artificiais:
+        <input type="number" name="qtd_ai" min="0" max="6" value="0">
+      </label>
+      <menu>
+        <button value="cancel">Cancelar</button>
+        <button value="start">Iniciar</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <script> // isso iria pro controller dessa pag. ta aqui pela simplicidade
+    const dialog = document.getElementById('configDialog');
+    const openBtn = document.getElementById('openDialog');
+    const audio = document.getElementById("audio");
+
+    openBtn.addEventListener('click', () => {
+      dialog.showModal();
+    });
+  </script>
+</body>
+</html>
