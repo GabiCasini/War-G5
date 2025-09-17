@@ -6,7 +6,8 @@
 </head>
 <body>
   <h1>Jogo War</h1>
-  <button id="openDialog">Iniciar Partida</button>
+  <h3>Versão RJ</h3>
+  <button id="openDialog">Jogar</button>
 
   <audio id="audio" controls loop>
     <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg">
@@ -23,8 +24,8 @@
       <label>Quantidade de jogadores artificiais:</label>
       <input type="number" name="qtd_ai" min="0" max="6" value="0"><br/><br/>
       
-      <button type="submit" name="action">Cancelar</button>
-      <button type="submit" name="action">Iniciar</button>
+      <button type="submit" name="acao" value="cancelar">Cancelar</button>
+      <button type="submit" name="acao" value="iniciar">Iniciar</button>
     </form>
   </dialog>
 
