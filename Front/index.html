@@ -6,7 +6,7 @@
     <title>War</title>
   </head>
   <body>
-    <link href="mapa-styles.css" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='mapa-styles.css') }}" rel="stylesheet" />
     <div id="mapa-container">
       <div id="map-tooltip" style="
         position: fixed;
@@ -424,6 +424,6 @@
         </g>
       </svg>
     </div>
-    <script src="configuracoes_mapa.js"></script>
+    <script src="{{ url_for('static', filename='configuracoes_mapa.js') }}"></script>
   </body>
 </html>

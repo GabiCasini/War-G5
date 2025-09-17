@@ -7,7 +7,7 @@ init_page_bp = Blueprint('init_page', __name__)
 class PaginaIndex:
 
     @init_page_bp.route('/inicializar_partida', methods=['POST'])
-    def submit_form():
+    def inicializar_partida():
         if request.method == 'POST':
             qtd_humanos = int(request.form.get('qtd_humanos'))
             qtd_ai = int(request.form.get('qtd_ai'))
