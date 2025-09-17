@@ -13,27 +13,22 @@
   </audio>
 
   <dialog id="configDialog">
-    <form method="dialog">
-      <label>
-        Duração do turno (em segundos):
-        <input type="number" name="duracao_turno" min="10" max="300" value="180">
-      </label><br/><br/>
-      <label>
-        Quantidade de jogadores humanos:
-        <input type="number" name="qtd_humanos" min="0" max="6" value="3">
-      </label><br/><br/>
-      <label>
-        Quantidade de jogadores artificiais:
-        <input type="number" name="qtd_ai" min="0" max="6" value="0">
-      </label><br/><br/>
-      <menu>
-        <button value="cancel">Cancelar</button>
-        <button value="start">Iniciar</button>
-      </menu>
+    <form action="/inicializar_partida" method="POST">
+      <label>Duração do turno (em segundos):</label>
+      <input type="number" name="duracao_turno" min="10" max="300" value="180"><br/><br/>
+      
+      <label>Quantidade de jogadores humanos:</label>
+      <input type="number" name="qtd_humanos" min="0" max="6" value="3"><br/><br/>
+      
+      <label>Quantidade de jogadores artificiais:</label>
+      <input type="number" name="qtd_ai" min="0" max="6" value="0"><br/><br/>
+      
+      <button type="submit" name="action">Cancelar</button>
+      <button type="submit" name="action">Iniciar</button>
     </form>
   </dialog>
 
-  <script> // isso iria pro controller dessa pag. ta aqui pela simplicidade
+  <script>
     const dialog = document.getElementById('configDialog');
     const openBtn = document.getElementById('openDialog');
     const audio = document.getElementById("audio");
