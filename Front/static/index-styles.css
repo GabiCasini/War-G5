@@ -1,0 +1,148 @@
+body {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('rj-fundo.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+
+}
+
+.title-container {
+  text-align: center;
+  margin-bottom: 15px;
+  margin-top: -10vh;
+}
+
+h1 {
+  color: #FFFFFF;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  font-size: 5em;
+  margin-bottom: 1;
+}
+
+h3 {
+  color: #f0f0f0;
+  margin-top: -10px;
+  text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.7);
+  font-size: 2em;
+}
+
+#openDialog {
+  background-color: #4CAF50;
+  color: white;
+  padding: 18px 35px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.2em;
+  margin: 4px 2px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+  font-family: sans-serif;
+}
+
+#openDialog:hover {
+  background-color: #45a049;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+dialog {
+  width: 450px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  padding: 2em;
+  font-family: sans-serif;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+dialog form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+dialog label {
+  font-weight: bold;
+  color: #444;
+  margin-bottom: -5px;
+  font-size: 1.1em;
+}
+
+dialog select {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1.1em;
+  background-color: white;
+  width: 100%;
+  font-family: sans-serif;
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+dialog button {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
+  font-family: sans-serif;
+  font-size: 1em;
+}
+
+dialog button:hover {
+    transform: translateY(-2px);
+}
+
+#total-jogadores-aviso {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+  transition: opacity 0.3s;
+  opacity: 1;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.aviso-hidden {
+  opacity: 0;
+}
+
+button[name="acao"][value="iniciar"] {
+  background-color: #4CAF50;
+  color: white;
+}
+
+button[name="acao"][value="iniciar"]:hover {
+  background-color: #45a049;
+}
+
+button[name="acao"][value="cancelar"] {
+  background-color: #f44336;
+  color: white;
+}
+
+button[name="acao"][value="cancelar"]:hover {
+  background-color: #da190b;
+}

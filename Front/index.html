@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Jogo War</title>
+  <link href="{{ url_for('static', filename='index-styles.css') }}" rel="stylesheet" />
 </head>
 <body>
   <h1>Jogo War</h1>
   <h3>Versão RJ</h3>
   <button id="openDialog">Jogar</button>
-  <img src="{{ url_for('static', filename='cristo.png') }}"
 
   <audio id="audio" controls loop>
     <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg">
@@ -16,17 +16,43 @@
 
   <dialog id="configDialog">
     <form action="/inicializar_partida" method="POST">
-      <label>Duração do turno (em segundos):</label>
-      <input type="number" name="duracao_turno" min="10" max="300" value="180"><br/><br/>
+      <label for="duracao_turno">Duração do turno:</label>
+      <select name="duracao_turno" id="duracao_turno">
+        <option value="60">1 minuto</option>
+        <option value="120">2 minutos</option>
+        <option value="180" selected>3 minutos</option>
+        <option value="240">4 minutos</option>
+        <option value="300">5 minutos</option>
+      </select>
       
-      <label>Quantidade de jogadores humanos:</label>
-      <input type="number" name="qtd_humanos" min="0" max="6" value="3"><br/><br/>
+      <label for="qtd_humanos">Quantidade de jogadores humanos:</label>
+      <select name="qtd_humanos" id="qtd_humanos">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3" selected>3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
       
-      <label>Quantidade de jogadores artificiais:</label>
-      <input type="number" name="qtd_ai" min="0" max="6" value="0"><br/><br/>
-      
-      <button type="submit" name="acao" value="cancelar">Cancelar</button>
-      <button type="submit" name="acao" value="iniciar">Iniciar</button>
+      <label for="qtd_ai">Quantidade de jogadores artificiais:</label>
+      <select name="qtd_ai" id="qtd_ai">
+        <option value="0" selected>0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
+
+      <p id="total-jogadores-aviso" style="color: red; display: none;">O total de jogadores deve ser entre 3 e 6.</p>
+     
+      <div class="dialog-actions">
+        <button type="submit" name="acao" value="cancelar">Cancelar</button>
+        <button type="submit" name="acao" value="iniciar">Iniciar</button>
+      </div>
     </form>
   </dialog>
 
