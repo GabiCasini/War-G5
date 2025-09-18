@@ -61,8 +61,31 @@
     const openBtn = document.getElementById('openDialog');
     const audio = document.getElementById("audio");
 
+    const humanosSelect = document.getElementById('qtd_humanos');
+    const aiSelect = document.getElementById('qtd_ai');
+    const aviso = document.getElementById('total-jogadores-aviso');
+    const iniciarBtn = document.getElementById('iniciar-btn');
+
+    function validarTotalJogadores() {
+      const total = parseInt(humanosSelect.value) + parseInt(aiSelect.value);
+      
+      if (total < 3 || total > 6) {
+        aviso.classList.remove('aviso-hidden');
+        iniciarBtn.disabled = true;
+        iniciarBtn.classList.add('disabled');
+      } else {
+        aviso.classList.add('aviso-hidden');
+        iniciarBtn.disabled = false;
+        iniciarBtn.classList.remove('disabled');
+      }
+    }
+
+    humanosSelect.addEventListener('change', validarTotalJogadores);
+    aiSelect.addEventListener('change', validarTotalJogadores);
+
     openBtn.addEventListener('click', () => {
       dialog.showModal();
+      validarTotalJogadores(); 
     });
   </script>
 </body>
