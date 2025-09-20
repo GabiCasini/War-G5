@@ -1,9 +1,95 @@
 
-// Configuração para aparecer o tooltip com o nome do município ao passar o mouse sobre ele
 document.addEventListener('DOMContentLoaded', function () {
+	// Configuração para aparecer o tooltip com o nome do município ao passar o mouse sobre ele
 	const tooltip = document.getElementById('map-tooltip');
 	const svg = document.getElementById('mapa');
-	if (!svg || !tooltip) return;
+
+	// Zoom no mapa!!
+	let scale = 1;
+	const minScale = 1;
+	const maxScale = 4;
+	const baseViewBox = svg.getAttribute('viewBox').split(' ').map(Number); // [x, y, w, h]
+	let viewBoxX = baseViewBox[0];
+	let viewBoxY = baseViewBox[1];
+	let viewBoxW = baseViewBox[2];
+	let viewBoxH = baseViewBox[3];
+
+	// --- Pan ---
+	let isPanning = false;
+	let startMouse = { x: 0, y: 0 };
+	let startViewBox = { x: 0, y: 0 };
+
+	svg.addEventListener('mousedown', function (e) {
+		isPanning = true;
+		startMouse.x = e.clientX;
+		startMouse.y = e.clientY;
+		startViewBox.x = viewBoxX;
+		startViewBox.y = viewBoxY;
+		svg.style.cursor = 'grabbing';
+	});
+
+	document.addEventListener('mousemove', function (e) {
+		if (!isPanning) return;
+		const rect = svg.getBoundingClientRect();
+		const dx = (e.clientX - startMouse.x) * (viewBoxW / rect.width);
+		const dy = (e.clientY - startMouse.y) * (viewBoxH / rect.height);
+
+		let newX = startViewBox.x - dx;
+		let newY = startViewBox.y - dy;
+
+		// Limites: não deixar sair do mapa
+		newX = Math.max(baseViewBox[0], Math.min(newX, baseViewBox[0] + baseViewBox[2] - viewBoxW));
+		newY = Math.max(baseViewBox[1], Math.min(newY, baseViewBox[1] + baseViewBox[3] - viewBoxH));
+
+		viewBoxX = newX;
+		viewBoxY = newY;
+		setViewBox();
+	});
+
+	document.addEventListener('mouseup', function () {
+		isPanning = false;
+		svg.style.cursor = 'grab';
+	});
+
+	function setViewBox() {
+		svg.setAttribute('viewBox', `${viewBoxX} ${viewBoxY} ${viewBoxW} ${viewBoxH}`);
+	}
+
+	svg.addEventListener('wheel', function (e) {
+		e.preventDefault();
+		const rect = svg.getBoundingClientRect();
+		const mouseX = e.clientX - rect.left;
+		const mouseY = e.clientY - rect.top;
+
+		const svgX = viewBoxX + (mouseX / rect.width) * viewBoxW;
+		const svgY = viewBoxY + (mouseY / rect.height) * viewBoxH;
+
+
+		if (e.deltaY < 0) {
+			scale = Math.min(maxScale, scale * 1.15);
+		} else {
+			scale = Math.max(minScale, scale / 1.15);
+		}
+
+		const newW = baseViewBox[2] / scale;
+		const newH = baseViewBox[3] / scale;
+
+		// Centraliza o zoom no ponteiro
+		viewBoxX = svgX - (mouseX / rect.width) * newW;
+		viewBoxY = svgY - (mouseY / rect.height) * newH;
+		viewBoxW = newW;
+		viewBoxH = newH;
+
+		// Limite para não sair do mapa ao voltar ao tamanho original
+		if (scale === minScale) {
+			viewBoxX = baseViewBox[0];
+			viewBoxY = baseViewBox[1];
+			viewBoxW = baseViewBox[2];
+			viewBoxH = baseViewBox[3];
+		}
+
+		setViewBox();
+	}, { passive: false });
 
 	const regiaoGroups = svg.querySelectorAll('g[id^="Regiao_"]');
 	regiaoGroups.forEach(group => {
@@ -26,96 +112,3 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 });
 
-
-
-const ctx = canvas.getContext("2d");
-canvas.width = 500;
-canvas.height = 500;
-const rand = (m = 255, M = m + (m = 0)) => (Math.random() * (M - m) + m) | 0;
-
-
-const objects = [];
-for (let i = 0; i < 100; i++) {
-  objects.push({x: rand(canvas.width), y: rand(canvas.height),w: rand(40),h: rand(40), col: `rgb(${rand()},${rand()},${rand()})`});
-}
-
-requestAnimationFrame(drawCanvas); 
-
-const view = (() => {
-  const matrix = [1, 0, 0, 1, 0, 0]; // current view transform
-  var m = matrix;             // alias 
-  var scale = 1;              // current scale
-  var ctx;                    // reference to the 2D context
-  const pos = { x: 0, y: 0 }; // current position of origin
-  var dirty = true;
-  const API = {
-    set context(_ctx) { ctx = _ctx; dirty = true },
-    apply() {
-      dirty && this.update();
-      ctx.setTransform(...m);
-    },
-    get scale() { return scale },
-    get position() { return pos },
-    isDirty() { return dirty },
-    update() {
-      dirty = false;
-      m[3] = m[0] = scale;
-      m[2] = m[1] = 0;
-      m[4] = pos.x;
-      m[5] = pos.y;
-    },
-    pan(amount) {
-       pos.x += amount.x;
-       pos.y += amount.y;
-       dirty = true;
-    },
-    scaleAt(at, amount) { // at in canvas pixel coords 
-      scale *= amount;
-      pos.x = at.x - (at.x - pos.x) * amount;
-      pos.y = at.y - (at.y - pos.y) * amount;
-      dirty = true;
-    },
-  };
-  return API;
-})();
-view.context = ctx;
-function drawCanvas() {
-    if (view.isDirty()) { 
-        ctx.setTransform(1, 0, 0, 1, 0, 0); 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        view.apply(); // set the 2D context transform to the view
-        for (i = 0; i < objects.length; i++) {
-            var obj = objects[i];
-            ctx.fillStyle = obj.col;
-            ctx.fillRect(obj.x, obj.y, obj.h, obj.h);
-        }
-    }
-    requestAnimationFrame(drawCanvas);
-}
-
-const EVT_OPTS = {passive: true};
-canvas.addEventListener("mousemove", mouseEvent, EVT_OPTS);
-canvas.addEventListener("mousedown", mouseEvent, EVT_OPTS);
-canvas.addEventListener("mouseup",   mouseEvent, EVT_OPTS);
-canvas.addEventListener("mouseout",  mouseEvent, EVT_OPTS);
-canvas.addEventListener("wheel",     mouseWheelEvent, EVT_OPTS);
-const mouse = {x: 0, y: 0, oldX: 0, oldY: 0, button: false};
-function mouseEvent(event) {
-    if (event.type === "mousedown") { mouse.button = true }
-    if (event.type === "mouseup" || event.type === "mouseout") { mouse.button = false }
-    mouse.oldX = mouse.x;
-    mouse.oldY = mouse.y;
-    mouse.x = event.offsetX;
-    mouse.y = event.offsetY    
-    if (mouse.button) { // pan if button down
-        view.pan({x: mouse.x - mouse.oldX, y: mouse.y - mouse.oldY});
-    }
-}
-function mouseWheelEvent(event) {
-    var x = event.offsetX;
-    var y = event.offsetY;
-    if (event.deltaY < 0) { view.scaleAt({x, y}, 1.1) }
-    else { view.scaleAt({x, y}, 1 / 1.1) }
-    event.preventDefault();
-}
