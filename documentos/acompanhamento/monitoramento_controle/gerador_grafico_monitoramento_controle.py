@@ -3,10 +3,12 @@ import matplotlib.pyplot as plt
 from datetime import date
 
 try:
-    df = pd.read_csv('documentos/acompanhamento/valores_agregados_histórico.txt', parse_dates=['Data'])
+    df = pd.read_csv('documentos/acompanhamento/monitoramento_controle/valores_agregados_histórico.txt', parse_dates=['Data'])
 except FileNotFoundError:
     print("Arquivo 'valores_agregados_histórico.txt' não encontrado. Verifique o nome e o local do arquivo.")
     exit()
+
+versao = date.today().strftime('%Y-%m-%d')
 
 # Calcula os índices SPI e CPI se eles não existirem
 if 'SPI' not in df.columns or 'CPI' not in df.columns:
@@ -40,7 +42,6 @@ ax2.set_xlabel('Data')
 plt.xticks(rotation=45, ha='right')
 
 plt.tight_layout(rect=[0, 0, 1, 0.96])
-versao = date.today().strftime('%Y-%m-%d')
-plt.savefig(f'documentos/acompanhamento/analise_valor_agregado_atualizada_{versao}.png')
+plt.savefig(f'documentos/acompanhamento/monitoramento_controle/analise_valor_agregado_atualizada_{versao}.png')
 
 print("Gráfico 'analise_valor_agregado_atualizada.png' foi salvo com sucesso!")
