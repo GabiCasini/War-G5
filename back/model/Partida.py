@@ -3,7 +3,7 @@ class Partida():
         self,
         qtd_humanos: int, # qtd de jogadores humanos
         qtd_ai: int, # qtd de jogadores artificiais
-        duracao_turno: int, # segundos
+        duracao_turno: int, # minutos
     ):
         assert 6 >= qtd_humanos + qtd_ai >= 3
         self.qtd_humanos = qtd_humanos

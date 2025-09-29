@@ -10,7 +10,7 @@
   <h3>Versão RJ</h3>
   <button id="openDialog">Jogar</button>
 
-  <audio id="audio" controls loop>
+  <audio id="audio" loop>
     <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg">
   </audio>
 
@@ -47,22 +47,24 @@
         <option value="6">6</option>
       </select>
 
-      <p id="total-jogadores-aviso" style="color: red; display: none;">O total de jogadores deve ser entre 3 e 6.</p>
-     
-      <div class="dialog-actions">
-        <button type="submit" name="acao" value="cancelar">Cancelar</button>
-        <button type="submit" name="acao" value="iniciar">Iniciar</button>
-      </div>
+      <button type="submit" name="acao" value="iniciar" onclick="teste()">Iniciar</button>
     </form>
+    <br/><button id="cancelBtn" type="submit" name="acao" onclick="teste()" value="cancelar">Cancelar</button>
   </dialog>
 
   <script>
     const dialog = document.getElementById('configDialog');
     const openBtn = document.getElementById('openDialog');
+    const cancelBtn = document.getElementById('cancelBtn');
     const audio = document.getElementById("audio");
 
     openBtn.addEventListener('click', () => {
+      audio.play();
       dialog.showModal();
+    });
+
+    cancelBtn.addEventListener('click', () => {
+      dialog.close();
     });
   </script>
 </body>
