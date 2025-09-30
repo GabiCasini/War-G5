@@ -115,20 +115,6 @@ dialog button:hover {
     transform: translateY(-2px);
 }
 
-#total-jogadores-aviso {
-  color: red;
-  text-align: center;
-  margin-top: 10px;
-  transition: opacity 0.3s;
-  opacity: 1;
-  font-weight: bold;
-  font-size: 0.9em;
-}
-
-.aviso-hidden {
-  opacity: 0;
-}
-
 button[name="acao"][value="iniciar"] {
   background-color: #4CAF50;
   color: white;

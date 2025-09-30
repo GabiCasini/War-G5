@@ -47,25 +47,62 @@
         <option value="6">6</option>
       </select>
 
-      <button type="submit" name="acao" value="iniciar">Iniciar</button>
+      <!-- <button type="submit" name="acao" value="iniciar">Iniciar</button> -->
     </form>
-    <br/><button id="cancelBtn" type="submit" name="acao" value="cancelar">Cancelar</button>
+    <br/><button id="continueBtn" name="acao" value="iniciar">Continuar</button>
+    <br/><button id="closeConfigDialogBtn" name="acao" value="cancelar">Cancelar</button>
+  </dialog>
+
+    <dialog id="playerDialog">
+      <form action="/inicializar_partida" method="POST">
+        <label>Jogador 1</label>
+        <!-- aqui vai entrar a seleção das cores
+         no back já vou selecionar aleatoriamente os territorios iniciais dos jogadores -->
+        <button type="submit" name="acao" value="iniciar">Iniciar</button>
+      </form>
+    <br/><button id="closePlayerConfig" name="acao" value="cancelar">Cancelar</button> 
+    <!-- fix styles -->
+    <!-- TODO adicionar botão de voltar -->
   </dialog>
 
   <script>
-    const dialog = document.getElementById('configDialog');
+    const configDialog = document.getElementById('configDialog');
+    const playerDialog = document.getElementById('playerDialog');
     const openBtn = document.getElementById('openDialog');
-    const cancelBtn = document.getElementById('cancelBtn');
+    const continueBtn = document.getElementById('continueBtn');
+    const closeConfigDialogBtn = document.getElementById('closeConfigDialogBtn');
+    const closePlayerConfigBtn = document.getElementById('closePlayerConfig');
     const audio = document.getElementById("audio");
 
     openBtn.addEventListener('click', () => {
       audio.play();
-      dialog.showModal();
+      configDialog.showModal();
     });
 
-    cancelBtn.addEventListener('click', () => {
-      dialog.close();
+    closeConfigDialogBtn.addEventListener('click', () => {
+      configDialog.close();
     });
+
+    closePlayerConfigBtn.addEventListener('click', () => {
+      playerDialog.close();
+    });
+
+    continueBtn.addEventListener('click', () => {
+      validado = validate_num_players();
+      if (!validado) {
+        alert("O número total de jogadores deve ser entre 3 e 6.");
+        return;
+      }
+      configDialog.close();
+      playerDialog.showModal();
+    });
+
+    function validate_num_players() {
+      const qtd_humanos = parseInt(document.getElementById('qtd_humanos').value);
+      const qtd_ai = parseInt(document.getElementById('qtd_ai').value);
+      const total_players = qtd_humanos + qtd_ai;
+      return total_players >= 3 && total_players <= 6;
+    }
   </script>
 </body>
 </html>
