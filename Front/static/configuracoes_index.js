@@ -26,7 +26,7 @@ backBtn.addEventListener('click', () => {
 });
 
 continueBtn.addEventListener('click', () => {
-    validado = validate_num_players();
+    validado = validate_num_players(); // TODO: move validations to Validation class
     if (!validado) {
     alert("O número total de jogadores deve ser entre 3 e 6.");
     return;
@@ -71,19 +71,25 @@ const colors = document.querySelectorAll('.color');
 
 colors.forEach(color => {
     color.addEventListener('dragstart', e => {
-    dragged = e.target;
+        dragged = e.target;
     });
 
     color.addEventListener('dragover', e => {
-    e.preventDefault();
+        e.preventDefault();
     });
 
     color.addEventListener('drop', e => {
-    e.preventDefault();
-    if (dragged !== e.target) {
-        const tempColor = dragged.style.backgroundColor;
-        dragged.style.backgroundColor = e.target.style.backgroundColor;
-        e.target.style.backgroundColor = tempColor;
-    }
+        e.preventDefault();
+        if (dragged !== e.target) {
+            const tempColor = dragged.style.backgroundColor;
+            dragged.style.backgroundColor = e.target.style.backgroundColor;
+            e.target.style.backgroundColor = tempColor;
+
+            // Salvando mudanças no campo de input para form
+            const playerDragged = document.getElementById('input_' + dragged.id);
+            const playerDroped = document.getElementById('input_' + e.target.id);
+            playerDragged.value = dragged.style.backgroundColor;
+            playerDroped.value = e.target.style.backgroundColor;
+        }
     });
 });
