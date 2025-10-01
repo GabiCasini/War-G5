@@ -8,83 +8,116 @@
 <body>
   <h1>Jogo War</h1>
   <h3>Versão RJ</h3>
-  <button id="openDialog">Jogar</button>
+  <button id="openInitDialog">Jogar</button>
 
   <audio id="audio" loop>
     <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg">
   </audio>
 
-  <dialog id="configDialog">
+  <dialog id="initDialog">
     <form action="/inicializar_partida" method="POST">
-      <label for="duracao_turno">Duração do turno:</label>
-      <select name="duracao_turno" id="duracao_turno">
-        <option value="60">1 minuto</option>
-        <option value="120">2 minutos</option>
-        <option value="180" selected>3 minutos</option>
-        <option value="240">4 minutos</option>
-        <option value="300">5 minutos</option>
-      </select>
-      
-      <label for="qtd_humanos">Quantidade de jogadores humanos:</label>
-      <select name="qtd_humanos" id="qtd_humanos">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3" selected>3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-      </select>
-      
-      <label for="qtd_ai">Quantidade de jogadores artificiais:</label>
-      <select name="qtd_ai" id="qtd_ai">
-        <option value="0" selected>0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-      </select>
 
-      <!-- <button type="submit" name="acao" value="iniciar">Iniciar</button> -->
-    </form>
-    <br/><button id="continueBtn" name="acao" value="iniciar">Continuar</button>
-    <br/><button id="closeConfigDialogBtn" name="acao" value="cancelar">Cancelar</button>
-  </dialog>
+       <!-- PÁGINA 1 -->
+      <div id="dialogP1">
+        <label for="duracao_turno">Duração do turno:</label>
+        <select name="duracao_turno" id="duracao_turno">
+          <option value="60">1 minuto</option>
+          <option value="120">2 minutos</option>
+          <option value="180" selected>3 minutos</option>
+          <option value="240">4 minutos</option>
+          <option value="300">5 minutos</option>
+        </select>
+        
+        <label for="qtd_humanos">Quantidade de jogadores humanos:</label>
+        <select name="qtd_humanos" id="qtd_humanos">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+        
+        <label for="qtd_ai">Quantidade de jogadores artificiais:</label>
+        <select name="qtd_ai" id="qtd_ai">
+          <option value="0" selected>0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+      </div>
+      <!-- PÁGINA 2 -->
+      <div id="dialogP2" style="display: none;">
+        <button id="backBtn" type="button">Voltar</button>
+        <h2>Atribuição de cores</h2>
+        <div class="grid-player-color">
+          <div class="players">
+            <div class="player">Jogador 1</div>
+            <div class="player">Jogador 2</div>
+            <div class="player">Jogador 3</div>
+            <div class="player">Jogador 4</div>
+            <div class="player">Jogador 5</div>
+            <div class="player">Jogador 6</div>
+          </div>
 
-    <dialog id="playerDialog">
-      <form action="/inicializar_partida" method="POST">
-        <label>Jogador 1</label>
-        <!-- aqui vai entrar a seleção das cores
-         no back já vou selecionar aleatoriamente os territorios iniciais dos jogadores -->
-        <button type="submit" name="acao" value="iniciar">Iniciar</button>
-      </form>
-    <br/><button id="closePlayerConfig" name="acao" value="cancelar">Cancelar</button> 
-    <!-- fix styles -->
-    <!-- TODO adicionar botão de voltar -->
+          <div class="colors" id="colorsColumn">
+            <div id="cor_p1" class="color" draggable="true" style="background-color: red;">:::</div>
+            <div id="cor_p2" class="color" draggable="true" style="background-color: blue;">:::</div>
+            <div id="cor_p3" class="color" draggable="true" style="background-color: green;">:::</div>
+            <div id="cor_p4" class="color" draggable="true" style="background-color: orange;">:::</div>
+            <div id="cor_p5" class="color" draggable="true" style="background-color: purple;">:::</div>
+            <div id="cor_p6" class="color" draggable="true" style="background-color: yellow;">:::</div>
+          </div>
+        </div>
+
+        <input type="hidden" name="Player 1" id="input-P1" value="red">
+        <input type="hidden" name="Player 2" id="input-P2" value="blue">
+        <input type="hidden" name="Player 3" id="input-P3" value="green">
+        <input type="hidden" name="Player 4" id="input-P4" value="orange">
+        <input type="hidden" name="Player 5" id="input-P5" value="purple">
+        <input type="hidden" name="Player 6" id="input-P6" value="yellow">
+
+        <!-- add verificação de numero de jogadores para mostrar opcoes -->
+        <!-- no back devemos selecionar aleatoriamente os territorios iniciar dos jogadores -->
+        <br/><button id="playBtn" type="submit" name="acao" value="iniciar">Iniciar</button>
+      </div>
+    </form><br/>
+    <button id="continueBtn" name="acao" value="iniciar">Continuar</button>
+    <button id="closeInitDialogBtn" name="acao" value="cancelar">Cancelar</button>
   </dialog>
+  <!-- fix styles -->
+  <!-- TODO adicionar botão de voltar -->
 
   <script>
-    const configDialog = document.getElementById('configDialog');
-    const playerDialog = document.getElementById('playerDialog');
-    const openBtn = document.getElementById('openDialog');
+    const initDialog = document.getElementById('initDialog');
+    const openInitBtn = document.getElementById('openInitDialog');
     const continueBtn = document.getElementById('continueBtn');
-    const closeConfigDialogBtn = document.getElementById('closeConfigDialogBtn');
-    const closePlayerConfigBtn = document.getElementById('closePlayerConfig');
+    const backBtn = document.getElementById('backBtn');
+    const closeInitDialogBtn = document.getElementById('closeInitDialogBtn');
     const audio = document.getElementById("audio");
+    const dialogP1 = document.getElementById('dialogP1');
+    const dialogP2 = document.getElementById('dialogP2');
 
-    openBtn.addEventListener('click', () => {
+    openInitBtn.addEventListener('click', () => {
       audio.play();
-      configDialog.showModal();
+      initDialog.showModal();
+      dialogP1.style.display = 'block';
+      continueBtn.style.display = 'block';
+      dialogP2.style.display = 'none';
     });
 
-    closeConfigDialogBtn.addEventListener('click', () => {
-      configDialog.close();
+    closeInitDialogBtn.addEventListener('click', () => {
+      initDialog.close();
     });
 
-    closePlayerConfigBtn.addEventListener('click', () => {
-      playerDialog.close();
+    backBtn.addEventListener('click', () => {
+      dialogP1.style.display = 'block';
+      continueBtn.style.display = 'block';
+      dialogP2.style.display = 'none';
     });
 
     continueBtn.addEventListener('click', () => {
@@ -93,8 +126,9 @@
         alert("O número total de jogadores deve ser entre 3 e 6.");
         return;
       }
-      configDialog.close();
-      playerDialog.showModal();
+      dialogP1.style.display = 'none';
+      continueBtn.style.display = 'none';
+      dialogP2.style.display = 'block';
     });
 
     function validate_num_players() {
@@ -103,6 +137,29 @@
       const total_players = qtd_humanos + qtd_ai;
       return total_players >= 3 && total_players <= 6;
     }
+
+    let dragged = null;
+    const colors = document.querySelectorAll('.color');
+
+    colors.forEach(color => {
+      color.addEventListener('dragstart', e => {
+        dragged = e.target;
+      });
+
+      color.addEventListener('dragover', e => {
+        e.preventDefault();
+      });
+
+      color.addEventListener('drop', e => {
+        e.preventDefault();
+        if (dragged !== e.target) {
+          const tempColor = dragged.style.backgroundColor;
+          dragged.style.backgroundColor = e.target.style.backgroundColor;
+          e.target.style.backgroundColor = tempColor;
+        }
+      });
+    });
+
   </script>
 </body>
 </html>
