@@ -50,27 +50,28 @@
           <option value="6">6</option>
         </select>
       </div>
+
       <!-- PÁGINA 2 -->
       <div id="dialogP2" style="display: none;">
         <button id="backBtn" type="button">Voltar</button>
         <h2>Atribuição de cores</h2>
         <div class="grid-player-color">
           <div class="players">
-            <div class="player">Jogador 1</div>
-            <div class="player">Jogador 2</div>
-            <div class="player">Jogador 3</div>
-            <div class="player">Jogador 4</div>
-            <div class="player">Jogador 5</div>
-            <div class="player">Jogador 6</div>
+            <div id="p1" class="player">Jogador 1</div>
+            <div id="p2" class="player">Jogador 2</div>
+            <div id="p3" class="player">Jogador 3</div>
+            <div id="p4" class="player" style="display: none;">Jogador 4</div>
+            <div id="p5" class="player" style="display: none;">Jogador 5</div>
+            <div id="p6" class="player" style="display: none;">Jogador 6</div>
           </div>
 
           <div class="colors" id="colorsColumn">
             <div id="cor_p1" class="color" draggable="true" style="background-color: red;">:::</div>
             <div id="cor_p2" class="color" draggable="true" style="background-color: blue;">:::</div>
             <div id="cor_p3" class="color" draggable="true" style="background-color: green;">:::</div>
-            <div id="cor_p4" class="color" draggable="true" style="background-color: orange;">:::</div>
-            <div id="cor_p5" class="color" draggable="true" style="background-color: purple;">:::</div>
-            <div id="cor_p6" class="color" draggable="true" style="background-color: yellow;">:::</div>
+            <div id="cor_p4" class="color" draggable="true" style="background-color: orange; display: none;">:::</div>
+            <div id="cor_p5" class="color" draggable="true" style="background-color: purple; display: none;">:::</div>
+            <div id="cor_p6" class="color" draggable="true" style="background-color: yellow; display: none;">:::</div>
           </div>
         </div>
 
@@ -81,7 +82,6 @@
         <input type="hidden" name="Player 5" id="input-P5" value="purple">
         <input type="hidden" name="Player 6" id="input-P6" value="yellow">
 
-        <!-- add verificação de numero de jogadores para mostrar opcoes -->
         <!-- no back devemos selecionar aleatoriamente os territorios iniciar dos jogadores -->
         <br/><button id="playBtn" type="submit" name="acao" value="iniciar">Iniciar</button>
       </div>
@@ -89,77 +89,6 @@
     <button id="continueBtn" name="acao" value="iniciar">Continuar</button>
     <button id="closeInitDialogBtn" name="acao" value="cancelar">Cancelar</button>
   </dialog>
-  <!-- fix styles -->
-  <!-- TODO adicionar botão de voltar -->
-
-  <script>
-    const initDialog = document.getElementById('initDialog');
-    const openInitBtn = document.getElementById('openInitDialog');
-    const continueBtn = document.getElementById('continueBtn');
-    const backBtn = document.getElementById('backBtn');
-    const closeInitDialogBtn = document.getElementById('closeInitDialogBtn');
-    const audio = document.getElementById("audio");
-    const dialogP1 = document.getElementById('dialogP1');
-    const dialogP2 = document.getElementById('dialogP2');
-
-    openInitBtn.addEventListener('click', () => {
-      audio.play();
-      initDialog.showModal();
-      dialogP1.style.display = 'block';
-      continueBtn.style.display = 'block';
-      dialogP2.style.display = 'none';
-    });
-
-    closeInitDialogBtn.addEventListener('click', () => {
-      initDialog.close();
-    });
-
-    backBtn.addEventListener('click', () => {
-      dialogP1.style.display = 'block';
-      continueBtn.style.display = 'block';
-      dialogP2.style.display = 'none';
-    });
-
-    continueBtn.addEventListener('click', () => {
-      validado = validate_num_players();
-      if (!validado) {
-        alert("O número total de jogadores deve ser entre 3 e 6.");
-        return;
-      }
-      dialogP1.style.display = 'none';
-      continueBtn.style.display = 'none';
-      dialogP2.style.display = 'block';
-    });
-
-    function validate_num_players() {
-      const qtd_humanos = parseInt(document.getElementById('qtd_humanos').value);
-      const qtd_ai = parseInt(document.getElementById('qtd_ai').value);
-      const total_players = qtd_humanos + qtd_ai;
-      return total_players >= 3 && total_players <= 6;
-    }
-
-    let dragged = null;
-    const colors = document.querySelectorAll('.color');
-
-    colors.forEach(color => {
-      color.addEventListener('dragstart', e => {
-        dragged = e.target;
-      });
-
-      color.addEventListener('dragover', e => {
-        e.preventDefault();
-      });
-
-      color.addEventListener('drop', e => {
-        e.preventDefault();
-        if (dragged !== e.target) {
-          const tempColor = dragged.style.backgroundColor;
-          dragged.style.backgroundColor = e.target.style.backgroundColor;
-          e.target.style.backgroundColor = tempColor;
-        }
-      });
-    });
-
-  </script>
+  <script src="{{ url_for('static', filename='configuracoes_index.js') }}"></script>
 </body>
 </html>
