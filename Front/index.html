@@ -6,15 +6,35 @@
   <link href="{{ url_for('static', filename='index-styles.css') }}" rel="stylesheet" />
 </head>
 <body>
-  <h1>Jogo War</h1>
-  <h3>Versão RJ</h3>
+  <h1 id="title">Jogo War</h1>
+  <h3 id="subtitle">Versão RJ</h3>
   <button id="openInitDialog">Jogar</button>
 
   <audio id="audio" loop>
     <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg">
   </audio>
 
+  <button id="openMenuDialog">Menu</button>
+
   <!-- add menu for audio config and game rules -->
+  <dialog id="menuDialog">
+    <!-- Regras -->
+    <div>
+      <h2>Regras do Jogo</h2>
+      <label>...?</label>
+    </div><br/><br/><br/>
+
+    <!-- Áudio -->
+    <div> 
+      <h2>Áudio</h2>
+      <label>
+        Volume:
+        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1">
+      </label>
+    </div>
+
+    <br/><br/><button id="closeMenuDialogBtn">Fechar</button>
+  </dialog>
 
   <dialog id="initDialog">
     <form action="/inicializar_partida" method="POST">
@@ -88,8 +108,8 @@
         <br/><button id="playBtn" type="submit" name="acao" value="iniciar">Iniciar</button>
       </div>
     </form><br/>
-    <button id="continueBtn" name="acao" value="iniciar">Continuar</button>
-    <button id="closeInitDialogBtn" name="acao" value="cancelar">Cancelar</button>
+    <button id="continueBtn">Continuar</button>
+    <button id="closeInitDialogBtn">Cancelar</button>
   </dialog>
   <script src="{{ url_for('static', filename='configuracoes_index.js') }}"></script>
 </body>

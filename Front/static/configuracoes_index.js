@@ -1,11 +1,15 @@
 const initDialog = document.getElementById('initDialog');
 const openInitBtn = document.getElementById('openInitDialog');
+const menuDialog = document.getElementById('menuDialog');
+const openMenuBtn = document.getElementById('openMenuDialog');
 const continueBtn = document.getElementById('continueBtn');
 const backBtn = document.getElementById('backBtn');
 const closeInitDialogBtn = document.getElementById('closeInitDialogBtn');
+const closeMenuDialogBtn = document.getElementById('closeMenuDialogBtn');
 const audio = document.getElementById("audio");
 const dialogP1 = document.getElementById('dialogP1');
 const dialogP2 = document.getElementById('dialogP2');
+const volumeSlider = document.getElementById('volume-slider');
 
 openInitBtn.addEventListener('click', () => {
     audio.play();
@@ -17,6 +21,14 @@ openInitBtn.addEventListener('click', () => {
 
 closeInitDialogBtn.addEventListener('click', () => {
     initDialog.close();
+});
+
+openMenuBtn.addEventListener('click', () => {
+    menuDialog.showModal();
+});
+
+closeMenuDialogBtn.addEventListener('click', () => {
+    menuDialog.close();
 });
 
 backBtn.addEventListener('click', () => {
@@ -92,4 +104,13 @@ colors.forEach(color => {
             playerDroped.value = e.target.style.backgroundColor;
         }
     });
+});
+
+volumeSlider.addEventListener('input', () => {
+    audio.volume = volumeSlider.value;
+    if (audio.volume == 0) {
+    audio.muted = true;
+    } else {
+    audio.muted = false;
+    }
 });

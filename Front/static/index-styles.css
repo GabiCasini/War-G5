@@ -20,23 +20,26 @@ body {
   margin-top: -10vh;
 }
 
-h1 {
+h1[id="title"]{
   color: #FFFFFF;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
   font-size: 5em;
-  margin-bottom: 1;
+  margin-bottom: -1px;
 }
 
-h3 {
+h3[id="subtitle"] {
   color: #f0f0f0;
-  margin-top: -10px;
   text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.7);
   font-size: 2em;
+  margin-top: -1px;
+}
+
+h2 {
+  margin-top: -1px;
 }
 
 #openInitDialog {
   background-color: #4CAF50;
-  color: white;
   padding: 18px 35px;
   text-align: center;
   text-decoration: none;
@@ -53,6 +56,28 @@ h3 {
 
 #openInitDialog:hover {
   background-color: #45a049;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+#openMenuDialog {
+  background-color: rgb(238, 237, 237);
+  padding: 18px 35px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.2em;
+  margin: 4px 2px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+  font-family: sans-serif;
+}
+
+#openMenuDialog:hover {
+  background-color: rgb(212, 212, 212);
   transform: translateY(-3px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
@@ -155,6 +180,14 @@ button[id="backBtn"]:hover {
   background-color: rgb(212, 212, 212);
 }
 
+button[id="closeMenuDialogBtn"] {
+  background-color: rgb(238, 237, 237);
+}
+
+button[id="closeMenuDialogBtn"]:hover {
+  background-color: rgb(212, 212, 212);
+}
+
 .grid-player-color {
   display: flex;
   gap: 20px;
@@ -187,4 +220,14 @@ button[id="backBtn"]:hover {
   transition: transform 0.2s;
   align-items: center;
   padding-left: 10px;
+}
+
+dialog[id="menuDialog"] label {
+  display: flex;
+  padding-left: 15px;
+}
+
+input[id="volume-slider"] {
+  padding-top: 5px;
+  width: 350px;
 }
