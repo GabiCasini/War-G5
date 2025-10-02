@@ -172,7 +172,6 @@ button[id="closeInitDialogBtn"]:hover {
 button[id="backBtn"] {
   width: 100px;
   justify-content: center;
-  margin-bottom: -2px;
   background-color: rgb(238, 237, 237);
 }
 
