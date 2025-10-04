@@ -1,6 +1,6 @@
 
-from model.Jogador import Jogador
-from model.Territorio import Territorio
+from Jogador import Jogador
+from Territorio import Territorio
 
 class Partida:
     def __init__(self, qtd_humanos: int, qtd_ai: int, duracao_turno: int):
