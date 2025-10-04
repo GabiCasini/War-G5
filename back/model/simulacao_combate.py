@@ -1,7 +1,7 @@
 
-from model.Jogador import Jogador
-from model.Territorio import Territorio
-from model.Partida import Partida
+from Jogador import Jogador
+from Territorio import Territorio
+from Partida import Partida
 
 if __name__ == "__main__":
     # Cria partida

@@ -1,5 +1,5 @@
 import random
-from model.Territorio import Territorio
+from Territorio import Territorio
 
 class Jogador:
     def __init__(self, nome, cor, tipo='humano'):
