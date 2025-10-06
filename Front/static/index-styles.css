@@ -20,23 +20,26 @@ body {
   margin-top: -10vh;
 }
 
-h1 {
+h1[id="title"]{
   color: #FFFFFF;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
   font-size: 5em;
-  margin-bottom: 1;
+  margin-bottom: -1px;
 }
 
-h3 {
+h3[id="subtitle"] {
   color: #f0f0f0;
-  margin-top: -10px;
   text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.7);
   font-size: 2em;
+  margin-top: -1px;
 }
 
-#openDialog {
+h2 {
+  margin-top: -1px;
+}
+
+#openInitDialog {
   background-color: #4CAF50;
-  color: white;
   padding: 18px 35px;
   text-align: center;
   text-decoration: none;
@@ -51,8 +54,30 @@ h3 {
   font-family: sans-serif;
 }
 
-#openDialog:hover {
+#openInitDialog:hover {
   background-color: #45a049;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+#openMenuDialog {
+  background-color: rgb(238, 237, 237);
+  padding: 18px 35px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.2em;
+  margin: 4px 2px;
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+  font-family: sans-serif;
+}
+
+#openMenuDialog:hover {
+  background-color: rgb(212, 212, 212);
   transform: translateY(-3px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
@@ -62,7 +87,6 @@ dialog {
   border: none;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  padding: 2em;
   font-family: sans-serif;
 }
 
@@ -85,8 +109,10 @@ dialog label {
 
 dialog select {
   padding: 12px;
+  margin-top: 5px;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 10px;
   font-size: 1.1em;
   background-color: white;
   width: 100%;
@@ -102,6 +128,8 @@ dialog select {
 
 dialog button {
   padding: 12px 22px;
+  width: 100%;
+  margin-bottom: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -115,34 +143,90 @@ dialog button:hover {
     transform: translateY(-2px);
 }
 
-#total-jogadores-aviso {
-  color: red;
-  text-align: center;
-  margin-top: 10px;
-  transition: opacity 0.3s;
-  opacity: 1;
-  font-weight: bold;
-  font-size: 0.9em;
+button[id="continueBtn"] {
+  background-color: #4CAF59;
 }
 
-.aviso-hidden {
-  opacity: 0;
-}
-
-button[name="acao"][value="iniciar"] {
-  background-color: #4CAF50;
-  color: white;
-}
-
-button[name="acao"][value="iniciar"]:hover {
+button[id="continueBtn"]:hover {
   background-color: #45a049;
 }
 
-button[name="acao"][value="cancelar"] {
-  background-color: #f44336;
-  color: white;
+button[id="playBtn"] {
+  margin-top: 10px;
+  margin-bottom: -7px;
+  background-color: #4CAF59;
 }
 
-button[name="acao"][value="cancelar"]:hover {
+button[id="playBtn"]:hover {
+  background-color: #45a049;
+}
+
+button[id="closeInitDialogBtn"] {
+  background-color: #f44336;
+}
+
+button[id="closeInitDialogBtn"]:hover {
   background-color: #da190b;
+}
+
+button[id="backBtn"] {
+  width: 100px;
+  justify-content: center;
+  background-color: rgb(238, 237, 237);
+}
+
+button[id="backBtn"]:hover {
+  background-color: rgb(212, 212, 212);
+}
+
+button[id="closeMenuDialogBtn"] {
+  background-color: rgb(238, 237, 237);
+}
+
+button[id="closeMenuDialogBtn"]:hover {
+  background-color: rgb(212, 212, 212);
+}
+
+.grid-player-color {
+  display: flex;
+  gap: 20px;
+}
+
+.players, .colors {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.player {
+  display: flex;
+  height: 30px;
+  width: 120px;
+  background-color: #eee;
+  border: 1px solid #333;
+  border-radius: 999px;
+  align-items: center;
+  justify-content: center;
+}
+
+.color {
+  display: flex;
+  height: 30px;
+  width: 300px;
+  cursor: move;
+  border: 1px solid #333;
+  border-radius: 999px;
+  transition: transform 0.2s;
+  align-items: center;
+  padding-left: 10px;
+}
+
+dialog[id="menuDialog"] label {
+  display: flex;
+  padding-left: 15px;
+}
+
+input[id="volume-slider"] {
+  padding-top: 5px;
+  width: 350px;
 }
