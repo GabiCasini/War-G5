@@ -2,12 +2,17 @@ import random
 from Territorio import Territorio
 
 class Jogador:
-    def __init__(self, nome, cor, tipo='humano'):
+    def __init__(self, nome, cor, tipo="humano"):
         self.nome = nome
         self.cor = cor  # cor do jogador no mapa
         self.tipo = tipo  # 'humano' ou 'ai'
         self.territorios = []  # lista de objetos Territorio
-        self.exercitos_reserva = 0  # exércitos disponíveis para alocação
+        self.exercitos_reserva = [0, 0, 0, 0, 0, 0, 0]  # exércitos disponíveis para alocação para cada regiao e geral
+        self.cartas = []
+        self.objetivo = None
+
+    def __repr__(self):
+        return f"{self.nome} (Cor: {self.cor})"
 
     def adicionar_territorio(self, territorio: Territorio):
         if territorio not in self.territorios:
@@ -61,8 +66,8 @@ class Jogador:
         :param exercitos_defesa: int, quantidade de exércitos do defensor (máx 2)
         :return: (perdas_ataque, perdas_defesa)
         """
-        dados_ataque = sorted([random.randint(1, 6) for _ in range(min(3, exercitos_ataque))], reverse=True)
-        dados_defesa = sorted([random.randint(1, 6) for _ in range(min(2, exercitos_defesa))], reverse=True)
+        dados_ataque = sorted([random.randint(1, 6) for _ in range(min(3, exercitos_ataque - 1))], reverse=True)
+        dados_defesa = sorted([random.randint(1, 6) for _ in range(min(3, exercitos_defesa))], reverse=True)
 
         perdas_ataque = 0
         perdas_defesa = 0
