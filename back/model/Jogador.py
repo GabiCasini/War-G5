@@ -66,7 +66,9 @@ class Jogador:
         :param exercitos_defesa: int, quantidade de exércitos do defensor (máx 2)
         :return: (perdas_ataque, perdas_defesa)
         """
-        dados_ataque = sorted([random.randint(1, 6) for _ in range(min(3, exercitos_ataque - 1))], reverse=True)
+        print("exercitos_ataque =", exercitos_ataque)
+        print("exercitos_defesa =", exercitos_defesa)
+        dados_ataque = sorted([random.randint(1, 6) for _ in range(min(3, exercitos_ataque))], reverse=True)
         dados_defesa = sorted([random.randint(1, 6) for _ in range(min(3, exercitos_defesa))], reverse=True)
 
         perdas_ataque = 0

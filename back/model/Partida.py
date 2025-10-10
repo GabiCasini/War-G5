@@ -21,25 +21,56 @@ class Partida:
             lista.append(Jogador(i[0], i[1]))
         return lista
     
-    def resolver_combate(self, atacante: Jogador, defensor: Jogador, territorio_origem: Territorio, territorio_alvo: Territorio, exercitos_ataque: int, exercitos_defesa: int):
+    def resolver_combate(self, atacante: Jogador, defensor: Jogador, territorio_origem: Territorio, territorio_alvo: Territorio):
         """
         Resolve um combate entre atacante e defensor, atualizando exércitos e posse se necessário.
         """
-        perdas_ataque, perdas_defesa = atacante.combate(exercitos_ataque, exercitos_defesa)
+        
+        if atacante == defensor:
+            print("Atacante e defensor são o mesmo jogador.")
+            return False
+        
+        if atacante.exercitos_no_territorio(territorio_origem) <=1:
+            print("Atacante não possui exércitos suficientes para atacar.")
+            return False
+        
+        #Dados de ataque
+        if atacante.exercitos_no_territorio(territorio_origem) == 2:
+            dados_ataque = 1
+
+        elif atacante.exercitos_no_territorio(territorio_origem) == 3:
+            dados_ataque = 2
+            
+        elif atacante.exercitos_no_territorio(territorio_origem) >= 4:
+            dados_ataque = 3
+        
+        #Dados de defesa
+        if defensor.exercitos_no_territorio(territorio_alvo) == 1:
+            dados_defesa = 1
+
+        elif defensor.exercitos_no_territorio(territorio_alvo) == 2:
+            dados_defesa = 2
+
+        elif defensor.exercitos_no_territorio(territorio_alvo) >= 3:
+            dados_defesa = 3
+        
+        perdas_ataque, perdas_defesa = atacante.combate(dados_ataque, dados_defesa)
         atacante.remover_exercitos_territorio(territorio_origem, perdas_ataque)
         defensor.remover_exercitos_territorio(territorio_alvo, perdas_defesa)
 
         if territorio_alvo.exercitos == 0:
-            self.transferir_territorio(atacante, defensor, territorio_alvo, territorio_origem, exercitos_ataque)
+            self.transferir_territorio(atacante, defensor, territorio_alvo, territorio_origem, dados_ataque)
             return True  # território conquistado
         return False  # território não conquistado
 
-    def transferir_territorio(self, vencedor: Jogador, perdedor: Jogador, territorio: Territorio, origem: Territorio, exercitos_ataque: int):
+    def transferir_territorio(self, vencedor: Jogador, perdedor: Jogador, territorio: Territorio, origem: Territorio, dados_ataque: int):
         """
         Transfere a posse do território para o vencedor e move exércitos obrigatórios.
         """
         perdedor.remover_territorio(territorio)
         vencedor.adicionar_territorio(territorio)
-        # O atacante deve mover pelo menos o número de dados usados no ataque (exercitos_ataque)
-        exercitos_para_mover = min(exercitos_ataque, origem.exercitos)
+        territorio.cor = vencedor.cor  # Atualiza a cor do território para a do novo dono
+        
+        # O atacante deve mover pelo menos o número de dados usados no ataque (dados_ataque)
+        exercitos_para_mover = min(dados_ataque, origem.exercitos)
         vencedor.mover_exercitos(origem, territorio, exercitos_para_mover)
