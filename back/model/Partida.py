@@ -1,7 +1,7 @@
 import random
-from Jogador import Jogador
-from Tabuleiro import Tabuleiro
-from Territorio import Territorio
+from .Jogador import Jogador
+from .Tabuleiro import Tabuleiro
+from .Territorio import Territorio
 
 class Partida:
     def __init__(self, qtd_humanos: int, qtd_ai: int, duracao_turno: int, tupla_jogadores: list[tuple[str, str]]): # tupla representa o jogador (nome, cor)
