@@ -30,7 +30,7 @@ if __name__ == "__main__":
     # Simula ataque usando a lógica da Partida
     exercitos_ataque = 3  # Alice ataca com 3
     exercitos_defesa = 2  # Bob defende com 2
-    conquistado = partida.resolver_combate(jogador_a, jogador_b, territorio_a, territorio_b, exercitos_ataque, exercitos_defesa)
+    conquistado = partida.resolver_combate(jogador_a, jogador_b, territorio_a, territorio_b, exercitos_ataque)
 
     print("\nDepois do ataque:")
     print(territorio_a)
