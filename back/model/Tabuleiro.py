@@ -1,7 +1,7 @@
 import random
 import math
-from Territorio import Territorio
-from Jogador import Jogador
+from .Territorio import Territorio
+from .Jogador import Jogador
 
 # lista onde cada elemento é uma lista que possui informações de cada territorio do jogo -> [nome, regiao, lista de fronteiras]
 TERRITORIOS = [["Rio de Janeiro", "Regiao1", ["Niterói", "Mesquita"]], ["Niterói", "Regiao2", ["Rio de Janeiro", "Maricá"]],

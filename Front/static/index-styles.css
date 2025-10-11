@@ -83,7 +83,7 @@ h2 {
 }
 
 dialog {
-  width: 450px;
+  width: 550px;
   border: none;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -212,7 +212,7 @@ button[id="closeMenuDialogBtn"]:hover {
 .color {
   display: flex;
   height: 30px;
-  width: 300px;
+  width: 390px;
   cursor: move;
   border: 1px solid #333;
   border-radius: 999px;
@@ -228,5 +228,53 @@ dialog[id="menuDialog"] label {
 
 input[id="volume-slider"] {
   padding-top: 5px;
-  width: 350px;
+  margin-left: 10px;
+  width: 450px;
+}
+
+.container {
+  width: 90%;
+  max-width: 550px;
+  height: 300px;
+  background-color: #cccccc41;
+  border-radius: 30px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 25px;
+  cursor: pointer;
+  margin-bottom: -10px;
+}
+
+.left, .right {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  color: #33333362;
+  font-size: 1.5em;
+}
+
+.left {
+  left: 0;
+  justify-content: flex-start;
+  padding-left: 20px;
+}
+
+.right {
+  right: 0;
+  justify-content: flex-end;
+  padding-right: 20px;
+}
+
+.text {
+  padding-left: 30px;
+  padding-right: 30px;
+  font-size: 0.8em;
+  color: #333;
 }

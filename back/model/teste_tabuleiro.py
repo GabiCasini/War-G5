@@ -1,5 +1,4 @@
-from Partida import Partida
-from Jogador import Jogador
+from .Partida import Partida
 
 partida = Partida(3, 0, 120, [["Jogador1", "Vermelha"], ["Jogador2", "Azul"]])
 print("Ordem de turno:")
