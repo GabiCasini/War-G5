@@ -150,3 +150,43 @@ desenharFronteiraMunicipios("Paraíba do Sul", "Comendador Levy Gasparian");
 desenharFronteiraMunicipios("Nova Friburgo", "Cordeiro");
 desenharFronteiraMunicipios("Bom Jardim", "Trajano de Moraes");
 desenharFronteiraMunicipios("Teresópolis", "Nova Friburgo");
+
+
+
+
+// melhoria para o futuro...
+// mapa = document.getElementById("mapa");
+// const regioes = mapa.querySelectorAll('g[id^="Regiao"]');
+
+// regioes.forEach((regiao) => {
+
+// regiao.addEventListener("mouseenter", () => {
+	
+// 	regiao.querySelectorAll("path").forEach((p) => {
+// 	p.setAttribute("stroke", "#0088ff");
+// 	p.setAttribute("stroke-width", "1.2");
+// 	p.setAttribute("opacity", "1");
+// 	});
+
+// 	// Escurece as outras regiões
+// 	regioes.forEach((outra) => {
+// 	if (outra !== regiao) {
+// 		outra.querySelectorAll("path").forEach((p) => {
+// 		p.setAttribute("opacity", "0.4");
+// 		});
+// 	}
+// 	});
+// });
+
+// regiao.addEventListener("mouseleave", () => {
+// 	regioes.forEach((r) => {
+// 	r.querySelectorAll("path").forEach((p) => {
+// 		p.setAttribute("stroke", "#1F1A17");
+// 		p.setAttribute("stroke-width", "0.3");
+// 		p.setAttribute("opacity", "1");
+// 	});
+// 	});
+// });
+// });
+
+
