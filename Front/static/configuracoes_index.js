@@ -10,6 +10,12 @@ const audio = document.getElementById("audio");
 const dialogP1 = document.getElementById('dialogP1');
 const dialogP2 = document.getElementById('dialogP2');
 const volumeSlider = document.getElementById('volume-slider');
+const p4 = document.getElementById('p4');
+const cor_p4 = document.getElementById('cor_p4');
+const p5 = document.getElementById('p5');
+const cor_p5 = document.getElementById('cor_p5');
+const p6 = document.getElementById('p6');
+const cor_p6 = document.getElementById('cor_p6');
 
 openInitBtn.addEventListener('click', () => {
     audio.play();
@@ -21,6 +27,12 @@ openInitBtn.addEventListener('click', () => {
 
 closeInitDialogBtn.addEventListener('click', () => {
     initDialog.close();
+    p4.style.display = 'none';
+    cor_p4.style.display = 'none';
+    p5.style.display = 'none';
+    cor_p5.style.display = 'none';
+    p6.style.display = 'none';
+    cor_p6.style.display = 'none';
 });
 
 openMenuBtn.addEventListener('click', () => {
@@ -35,6 +47,12 @@ backBtn.addEventListener('click', () => {
     dialogP1.style.display = 'block';
     continueBtn.style.display = 'block';
     dialogP2.style.display = 'none';
+    p4.style.display = 'none';
+    cor_p4.style.display = 'none';
+    p5.style.display = 'none';
+    cor_p5.style.display = 'none';
+    p6.style.display = 'none';
+    cor_p6.style.display = 'none';
 });
 
 continueBtn.addEventListener('click', () => {
@@ -44,12 +62,6 @@ continueBtn.addEventListener('click', () => {
     return;
     }
 
-    const p4 = document.getElementById('p4');
-    const cor_p4 = document.getElementById('cor_p4');
-    const p5 = document.getElementById('p5');
-    const cor_p5 = document.getElementById('cor_p5');
-    const p6 = document.getElementById('p6');
-    const cor_p6 = document.getElementById('cor_p6');
     num_players = get_num_players()
     if (num_players >= 4){
     p4.style.display = 'flex';
