@@ -112,3 +112,81 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 });
 
+
+function desenharFronteiraMunicipios(nome1, nome2) {
+  const svg = document.getElementById("mapa");
+  const path1 = svg.querySelector(`path[name="${nome1}"]`);
+  const path2 = svg.querySelector(`path[name="${nome2}"]`);
+
+  const getCentro = (path) => {
+    const box = path.getBBox();
+    return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+  };
+
+  const c1 = getCentro(path1);
+  const c2 = getCentro(path2);
+ 
+  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  line.setAttribute("x1", c1.x);
+  line.setAttribute("y1", c1.y);
+  line.setAttribute("x2", c2.x);
+  line.setAttribute("y2", c2.y);
+
+  // Aplica estilos (com valores padrão)
+  line.setAttribute("stroke", "gray");
+  line.setAttribute("stroke-width", "1");
+  line.setAttribute("stroke-dasharray", "3,2");
+  line.setAttribute("pointer-events", "none");
+  line.setAttribute("opacity", "0.7");
+  // Adiciona ao SVG
+  svg.insertBefore(line, svg.firstChild);
+
+  return line;
+}
+
+
+desenharFronteiraMunicipios("Rio de Janeiro", "Niterói");
+desenharFronteiraMunicipios("Paraíba do Sul", "Comendador Levy Gasparian");
+desenharFronteiraMunicipios("Nova Friburgo", "Cordeiro");
+desenharFronteiraMunicipios("Bom Jardim", "Trajano de Moraes");
+desenharFronteiraMunicipios("Teresópolis", "Nova Friburgo");
+
+
+
+
+// melhoria para o futuro...
+// mapa = document.getElementById("mapa");
+// const regioes = mapa.querySelectorAll('g[id^="Regiao"]');
+
+// regioes.forEach((regiao) => {
+
+// regiao.addEventListener("mouseenter", () => {
+	
+// 	regiao.querySelectorAll("path").forEach((p) => {
+// 	p.setAttribute("stroke", "#0088ff");
+// 	p.setAttribute("stroke-width", "1.2");
+// 	p.setAttribute("opacity", "1");
+// 	});
+
+// 	// Escurece as outras regiões
+// 	regioes.forEach((outra) => {
+// 	if (outra !== regiao) {
+// 		outra.querySelectorAll("path").forEach((p) => {
+// 		p.setAttribute("opacity", "0.4");
+// 		});
+// 	}
+// 	});
+// });
+
+// regiao.addEventListener("mouseleave", () => {
+// 	regioes.forEach((r) => {
+// 	r.querySelectorAll("path").forEach((p) => {
+// 		p.setAttribute("stroke", "#1F1A17");
+// 		p.setAttribute("stroke-width", "0.3");
+// 		p.setAttribute("opacity", "1");
+// 	});
+// 	});
+// });
+// });
+
+
