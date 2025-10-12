@@ -52,3 +52,4 @@ class Tabuleiro:
         lista[6] = int(max(3, math.floor(jogador.numero_de_territorios()/2)))
         
         jogador.adicionar_exercitos_para_posicionamento(lista)
+        

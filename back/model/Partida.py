@@ -57,14 +57,18 @@ class Partida:
 
     def fase_de_posicionamento(self, jogador: Jogador):
         """Lógica para o jogador posicionar seus novos exércitos."""
-        exercitos_a_posicionar = self.calcular_exercitos_novos(jogador)
+        self.tabuleiro.calcula_tropas_a_receber(jogador=jogador)
+        lista_exercitos_a_posicionar = jogador.exercitos_reserva
+        print(f"Exércitos para posicionar: {lista_exercitos_a_posicionar}")
+        total_exercitos = sum(lista_exercitos_a_posicionar)
+        # TODO: Entender como sera o bonus de cada continente/regiao
         # TODO: Substituir lógica aleatória por input do usuário ou lógica da IA
         if jogador.tipo == 'humano':
-            print(f"Você tem {exercitos_a_posicionar} exércitos para posicionar.")
+            print(f"Você tem {total_exercitos} exércitos para posicionar.")
             # Coloca tudo no primeiro território
-            territorio_escolhido = jogador.territorios[0]
-            jogador.adicionar_exercitos_territorio(territorio_escolhido, exercitos_a_posicionar)
-            print(f"{jogador.nome} posicionou {exercitos_a_posicionar} em {territorio_escolhido.nome}.")
+            territorio_escolhido = jogador.territorios[0] # Necessita da api para saber qual territorio o jogador escolheu
+            jogador.adicionar_exercitos_territorio(territorio_escolhido, total_exercitos)
+            print(f"{jogador.nome} posicionou {total_exercitos} em {territorio_escolhido.nome}.")
 
     # cria os objetos jogador a partir da tupla contendo o nome do jogador e sua respectiva cor
     def criar_jogadores(self, tupla_jogadores):
