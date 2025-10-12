@@ -2,9 +2,9 @@ import random
 from .Territorio import Territorio
 
 class Jogador:
-    def __init__(self, nome, cor, tipo="humano"):
+    def __init__(self, nome: str, cor: str, tipo: str = "humano"):
         self.nome = nome
-        self.cor = cor  # cor do jogador no mapa
+        self.cor = cor  # red, blue, green, orange, purple, yellow
         self.tipo = tipo  # 'humano' ou 'ai'
         self.territorios = []  # lista de objetos Territorio
         self.exercitos_reserva = [0, 0, 0, 0, 0, 0, 0]  # exércitos disponíveis para alocação para cada regiao e geral

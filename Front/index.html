@@ -95,12 +95,24 @@
         <h2>Atribuição de cores</h2>
         <div class="grid-player-color">
           <div class="players">
-            <div id="p1" class="player">Jogador 1</div>
-            <div id="p2" class="player">Jogador 2</div>
-            <div id="p3" class="player">Jogador 3</div>
-            <div id="p4" class="player" style="display: none;">Jogador 4</div>
-            <div id="p5" class="player" style="display: none;">Jogador 5</div>
-            <div id="p6" class="player" style="display: none;">Jogador 6</div>
+            <div id="p1" class="player">
+              <input type="text" name="nome_player_1" value="Jogador 1" />
+            </div>
+            <div id="p2" class="player">
+              <input type="text" name="nome_player_2" value="Jogador 2" />
+            </div>
+            <div id="p3" class="player">
+              <input type="text" name="nome_player_3" value="Jogador 3" />
+            </div>
+            <div id="p4" class="player" style="display: none;">
+              <input type="text" name="nome_player_4" value="Jogador 4" />
+            </div>
+            <div id="p5" class="player" style="display: none;">
+              <input type="text" name="nome_player_5" value="Jogador 5" />
+            </div>
+            <div id="p6" class="player" style="display: none;">
+              <input type="text" name="nome_player_6" value="Jogador 6" />
+            </div>
           </div>
 
           <div class="colors" id="colorsColumn">
@@ -113,14 +125,13 @@
           </div>
         </div>
 
-        <input type="hidden" name="player_1" id="input_cor_p1" value="red">
-        <input type="hidden" name="player_2" id="input_cor_p2" value="blue">
-        <input type="hidden" name="player_3" id="input_cor_p3" value="green">
-        <input type="hidden" name="player_4" id="input_cor_p4" value="orange">
-        <input type="hidden" name="player_5" id="input_cor_p5" value="purple">
-        <input type="hidden" name="player_6" id="input_cor_p6" value="yellow">
+        <input type="hidden" name="cor_player_1" id="input_cor_p1" value="red">
+        <input type="hidden" name="cor_player_2" id="input_cor_p2" value="blue">
+        <input type="hidden" name="cor_player_3" id="input_cor_p3" value="green">
+        <input type="hidden" name="cor_player_4" id="input_cor_p4" value="orange">
+        <input type="hidden" name="cor_player_5" id="input_cor_p5" value="purple">
+        <input type="hidden" name="cor_player_6" id="input_cor_p6" value="yellow">
 
-        <!-- no back devemos selecionar aleatoriamente os territorios iniciar dos jogadores -->
         <br/><button id="playBtn" type="submit" name="acao" value="iniciar">Iniciar</button>
       </div>
     </form><br/>

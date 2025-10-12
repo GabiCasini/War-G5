@@ -13,8 +13,15 @@ class PaginaIndex:
                 qtd_humanos = int(request.form.get('qtd_humanos'))
                 qtd_ai = int(request.form.get('qtd_ai'))
                 duracao_turno = request.form.get('duracao_turno')
-                partida = Partida(qtd_humanos, qtd_ai, duracao_turno)
-                
+
+                tupla_jogadores = []
+                for i in range(qtd_humanos+qtd_ai):
+                    nome = request.form.get(f'nome_player_{i+1}')
+                    cor = request.form.get(f'cor_player_{i+1}')
+                    tipo = 'humano' if i < qtd_humanos else 'ai'
+                    tupla_jogadores.append((nome, cor, tipo))
+
+                partida = Partida(qtd_humanos, qtd_ai, duracao_turno, tupla_jogadores)
                 return render_template('mapa.html', partida=partida)
             
             return redirect('/')

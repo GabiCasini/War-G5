@@ -4,7 +4,7 @@ from .Tabuleiro import Tabuleiro
 from .Territorio import Territorio
 
 class Partida:
-    def __init__(self, qtd_humanos: int, qtd_ai: int, duracao_turno: int, tupla_jogadores: list[tuple[str, str]]): # tupla representa o jogador (nome, cor)
+    def __init__(self, qtd_humanos: int, qtd_ai: int, duracao_turno: int, tupla_jogadores: list[tuple[str, str, str]]): # tupla representa o jogador (nome, cor, tipo)
         assert 6 >= qtd_humanos + qtd_ai >= 3
         self.qtd_humanos = qtd_humanos
         self.qtd_ai = qtd_ai
@@ -74,7 +74,10 @@ class Partida:
     def criar_jogadores(self, tupla_jogadores):
         lista = []
         for i in tupla_jogadores:
-            lista.append(Jogador(i[0], i[1]))
+            if len(i) == 3:
+                lista.append(Jogador(i[0], i[1], i[2]))
+            else:
+                lista.append(Jogador(i[0], i[1]))
         return lista
     
     def resolver_combate(self, atacante: Jogador, defensor: Jogador, territorio_origem: Territorio, territorio_alvo: Territorio):
