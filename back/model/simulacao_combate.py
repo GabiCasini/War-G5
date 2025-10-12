@@ -1,6 +1,3 @@
-
-from .Jogador import Jogador
-from .Territorio import Territorio
 from .Partida import Partida
 
 if __name__ == "__main__":

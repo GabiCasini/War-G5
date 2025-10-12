@@ -1,7 +1,4 @@
-import random
 from .Partida import Partida
-from .Jogador import Jogador
-from .Territorio import Territorio
 
 if __name__ == "__main__":
     print("Inicio de simulação de turnos")
