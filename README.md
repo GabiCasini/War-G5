@@ -13,7 +13,7 @@ pip install -r requirements.txt
 ### Iniciando o servidor
 ```bash
 flask --app back.app run 
-or 
+ou
 python -m flask --app back.app run
 ```
 
