@@ -12,8 +12,7 @@ pip install -r requirements.txt
 
 ### Iniciando o servidor
 ```bash
-cd back
-flask run
+flask --app back.app run
 ```
 
 Autores: Gabriel Crisostomo, Gabriela Casini, Jeremias Ciriaco, Lucas Resende, Lucas Tosto, Pedro Lucas, Rafael Machado e Raian Pierre

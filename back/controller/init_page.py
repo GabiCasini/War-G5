@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, request
 
-from model.Partida import Partida
+from ..model.Partida import Partida
 
 init_page_bp = Blueprint('init_page', __name__)
 

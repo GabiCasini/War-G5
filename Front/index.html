@@ -6,64 +6,127 @@
   <link href="{{ url_for('static', filename='index-styles.css') }}" rel="stylesheet" />
 </head>
 <body>
-  <h1>Jogo War</h1>
-  <h3>Versão RJ</h3>
-  <button id="openDialog">Jogar</button>
+  <h1 id="title">Jogo War</h1>
+  <h3 id="subtitle">Versão RJ</h3>
+  <button id="openInitDialog">Jogar</button>
 
-  <audio id="audio" controls loop>
+  <audio id="audio" loop>
     <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg">
   </audio>
 
-  <dialog id="configDialog">
-    <form action="/inicializar_partida" method="POST">
-      <label for="duracao_turno">Duração do turno:</label>
-      <select name="duracao_turno" id="duracao_turno">
-        <option value="60">1 minuto</option>
-        <option value="120">2 minutos</option>
-        <option value="180" selected>3 minutos</option>
-        <option value="240">4 minutos</option>
-        <option value="300">5 minutos</option>
-      </select>
-      
-      <label for="qtd_humanos">Quantidade de jogadores humanos:</label>
-      <select name="qtd_humanos" id="qtd_humanos">
-        <option value="0">0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3" selected>3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-      </select>
-      
-      <label for="qtd_ai">Quantidade de jogadores artificiais:</label>
-      <select name="qtd_ai" id="qtd_ai">
-        <option value="0" selected>0</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-      </select>
+  <button id="openMenuDialog">Menu</button>
 
-      <p id="total-jogadores-aviso" style="color: red; display: none;">O total de jogadores deve ser entre 3 e 6.</p>
-     
-      <div class="dialog-actions">
-        <button type="submit" name="acao" value="cancelar">Cancelar</button>
-        <button type="submit" name="acao" value="iniciar">Iniciar</button>
+  <!-- add menu for audio config and game rules -->
+  <dialog id="menuDialog">
+    <!-- Regras -->
+    <div>
+      <h2>Regras do Jogo</h2>
+      <div class="container" id="pageContainer">
+        <div class="left" id="prev"><</div>
+        <div class="right" id="next">></div>
+        <div class="text" id="pageText">
+          Os territórios são distribuídos da maneira mais igualitária possível entre os jogadores,
+          contendo 1 exército cada um. Os jogadores começam sem cartas de troca,
+          e os objetivos são sorteados de forma que não exista 2 ou mais jogadores com o mesmo objetivo.
+          <br><br>
+          No primeiro turno de cada jogador, é possível apenas posicionar exércitos nos seus territórios,
+          já nos demais turnos será possível atacar e reposicionar. A ordem dos turnos é definida no início da partida,
+          e não será alterada até o fim da mesma.
+          <br><br>
+          Cada jogador recebe um número de exércitos equivalente à metade da quantidade de territórios que ele possui,
+          arredondado para baixo, entretanto, mesmo que ele possua 5 ou menos territórios,
+          a quantidade mínima de exércitos recebidos por turno (3 exércitos) deve ser respeitada.
+        </div>
       </div>
-    </form>
+    </div><br/><br/><br/>
+
+    <!-- Áudio -->
+    <div> 
+      <h2>Áudio</h2>
+      <label>
+        Volume:
+        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1">
+      </label>
+    </div>
+
+    <br/><br/><button id="closeMenuDialogBtn">Fechar</button>
   </dialog>
 
-  <script>
-    const dialog = document.getElementById('configDialog');
-    const openBtn = document.getElementById('openDialog');
-    const audio = document.getElementById("audio");
+  <dialog id="initDialog">
+    <form action="/inicializar_partida" method="POST">
 
-    openBtn.addEventListener('click', () => {
-      dialog.showModal();
-    });
-  </script>
+       <!-- PÁGINA 1 -->
+      <div id="dialogP1">
+        <label for="duracao_turno">Duração do turno:</label>
+        <select name="duracao_turno" id="duracao_turno">
+          <option value="60">1 minuto</option>
+          <option value="120">2 minutos</option>
+          <option value="180" selected>3 minutos</option>
+          <option value="240">4 minutos</option>
+          <option value="300">5 minutos</option>
+        </select>
+        
+        <label for="qtd_humanos">Quantidade de jogadores humanos:</label>
+        <select name="qtd_humanos" id="qtd_humanos">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+        
+        <label for="qtd_ai">Quantidade de jogadores artificiais:</label>
+        <select name="qtd_ai" id="qtd_ai">
+          <option value="0" selected>0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+      </div>
+
+      <!-- PÁGINA 2 -->
+      <div id="dialogP2" style="display: none;">
+        <button id="backBtn" type="button">Voltar</button><br/>
+        <h2>Atribuição de cores</h2>
+        <div class="grid-player-color">
+          <div class="players">
+            <div id="p1" class="player">Jogador 1</div>
+            <div id="p2" class="player">Jogador 2</div>
+            <div id="p3" class="player">Jogador 3</div>
+            <div id="p4" class="player" style="display: none;">Jogador 4</div>
+            <div id="p5" class="player" style="display: none;">Jogador 5</div>
+            <div id="p6" class="player" style="display: none;">Jogador 6</div>
+          </div>
+
+          <div class="colors" id="colorsColumn">
+            <div id="cor_p1" class="color" draggable="true" style="background-color: red;">:::</div>
+            <div id="cor_p2" class="color" draggable="true" style="background-color: blue;">:::</div>
+            <div id="cor_p3" class="color" draggable="true" style="background-color: green;">:::</div>
+            <div id="cor_p4" class="color" draggable="true" style="background-color: orange; display: none;">:::</div>
+            <div id="cor_p5" class="color" draggable="true" style="background-color: purple; display: none;">:::</div>
+            <div id="cor_p6" class="color" draggable="true" style="background-color: yellow; display: none;">:::</div>
+          </div>
+        </div>
+
+        <input type="hidden" name="player_1" id="input_cor_p1" value="red">
+        <input type="hidden" name="player_2" id="input_cor_p2" value="blue">
+        <input type="hidden" name="player_3" id="input_cor_p3" value="green">
+        <input type="hidden" name="player_4" id="input_cor_p4" value="orange">
+        <input type="hidden" name="player_5" id="input_cor_p5" value="purple">
+        <input type="hidden" name="player_6" id="input_cor_p6" value="yellow">
+
+        <!-- no back devemos selecionar aleatoriamente os territorios iniciar dos jogadores -->
+        <br/><button id="playBtn" type="submit" name="acao" value="iniciar">Iniciar</button>
+      </div>
+    </form><br/>
+    <button id="continueBtn">Continuar</button>
+    <button id="closeInitDialogBtn">Cancelar</button>
+  </dialog>
+  <script src="{{ url_for('static', filename='configuracoes_index.js') }}"></script>
 </body>
 </html>
