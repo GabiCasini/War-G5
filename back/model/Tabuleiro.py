@@ -49,6 +49,7 @@ class Tabuleiro:
     def calcula_tropas_a_receber(self, jogador: Jogador):
         lista = [0, 0, 0, 0, 0, 0, 0]
 
-        lista[6] = int(max(3, math.floor((len(jogador.territorios))/2)))
+        lista[6] = int(max(3, math.floor(jogador.numero_de_territorios()/2)))
         
-        return lista
+        jogador.adicionar_exercitos_para_posicionamento(lista)
+        

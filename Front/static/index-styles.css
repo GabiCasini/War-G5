@@ -143,6 +143,19 @@ dialog button:hover {
     transform: translateY(-2px);
 }
 
+dialog input[type="text"] {
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  font-size: 0.9em;
+  background-color: #eee;
+  width: 70%;
+  height: 7px;
+  font-family: sans-serif;
+}
+
 button[id="continueBtn"] {
   background-color: #4CAF59;
 }
