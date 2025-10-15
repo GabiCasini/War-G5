@@ -11,7 +11,7 @@
   <button id="openInitDialog">Jogar</button>
 
   <audio id="audio" loop>
-    <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg">
+    <!-- <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg"> -->
   </audio>
 
   <button id="openMenuDialog">Menu</button>
@@ -139,5 +139,6 @@
     <button id="closeInitDialogBtn">Cancelar</button>
   </dialog>
   <script src="{{ url_for('static', filename='configuracoes_index.js') }}"></script>
+  <script src="{{ url_for('static', filename='configuracoes_players.js') }}"></script>
 </body>
 </html>
