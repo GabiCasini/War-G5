@@ -50,8 +50,9 @@ TERRITORIOS = [["Rio de Janeiro", "Regiao_1", ["Nova Iguaçu", "Mesquita", "São
 
 class Tabuleiro:
     def __init__(self, jogadores):
+        # [nome da região, bônus, territórios pertences à região]
+        self.regioes_com_bonus = [["Regiao_1", 2, []], ["Regiao_2", 5, []], ["Regiao_3", 5, []], ["Regiao_4", 6, []], ["Regiao_5", 4, []], ["Regiao_6", 2, []]]
         self.territorios = self.gerar_territorios(len(jogadores), jogadores)
-        self.regioes_com_bonus = [["Regiao_1", 2], ["Regiao_2", 3]]
         
     #inicializa os territorios, atribui suas fronteiras, e atribui cada territorio a um jogador de acordo com a sua cor
     def gerar_territorios(self, num, jogadores):
@@ -63,6 +64,10 @@ class Tabuleiro:
             temp = Territorio(i[0], jogadores[count].cor, i[1])
             lista.append(temp)
             jogadores[count].adicionar_territorio(temp)
+
+            for i in self.regioes_com_bonus:
+                if i[0] == temp.regiao:
+                    i[2].append(temp)
             
             if count == num - 1:
                 count = 0
@@ -86,9 +91,17 @@ class Tabuleiro:
         return lista
     
     # calcula a quantidade de exercitos recebidos na fase de posicionamento
-    # ainda não foi implementada a lógica dos bônus de região
-    def calcula_tropas_a_receber(self, jogador: Jogador):
+    def calcula_exercitos_a_receber(self, jogador: Jogador):
         lista = [0, 0, 0, 0, 0, 0, 0]
+
+        for i in range(6):
+            dominado = True
+            for j in self.regioes_com_bonus[i][2]:
+                if j.cor != jogador.cor:
+                    dominado = False
+                    break
+            if dominado:
+                lista[i] = self.regioes_com_bonus[i][1]
 
         lista[6] = int(max(3, math.floor(jogador.numero_de_territorios()/2)))
         

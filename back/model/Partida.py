@@ -49,15 +49,9 @@ class Partida:
         print("O jogador decide se e como irá remanejar seus exércitos.")
         pass
 
-    def calcular_exercitos_novos(self, jogador: Jogador):
-        """Calcula a quantidade de exércitos que o jogador recebe."""
-        exercitos_ganhos = max(3, len(jogador.territorios) // 3)
-        print(f"{jogador.nome} recebe {exercitos_ganhos} novos exércitos.")
-        return exercitos_ganhos
-
     def fase_de_posicionamento(self, jogador: Jogador):
         """Lógica para o jogador posicionar seus novos exércitos."""
-        self.tabuleiro.calcula_tropas_a_receber(jogador=jogador)
+        self.tabuleiro.calcula_exercitos_a_receber(jogador=jogador)
         lista_exercitos_a_posicionar = jogador.exercitos_reserva
         print(f"Exércitos para posicionar: {lista_exercitos_a_posicionar}")
         total_exercitos = sum(lista_exercitos_a_posicionar)
