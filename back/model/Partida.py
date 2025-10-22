@@ -3,6 +3,7 @@ from .Jogador import Jogador
 from .Tabuleiro import Tabuleiro
 from .Territorio import Territorio
 from .Manager_de_Cartas import Manager_de_Cartas
+from .Manager_de_Objetivos import Manager_de_Objetivos
 
 class Partida:
     def __init__(self, qtd_humanos: int, qtd_ai: int, duracao_turno: int, tupla_jogadores: list[tuple[str, str, str]]): # tupla representa o jogador (nome, cor, tipo)
@@ -17,6 +18,7 @@ class Partida:
         self.fase_do_turno = "preparacao"  # 'preparacao', 'posicionamento', 'ataque', 'remanejamento'
         random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
         self.manager_de_cartas = Manager_de_Cartas()
+        self.manager_de_objetivos = Manager_de_Objetivos(self.jogadores)
         self.jogadores_status = self.criar_jogadores_status(self.jogadores) # cada item da lista contem (cor do jogador, vivo/morto, eliminado por...)
         self.valor_da_troca = 4
 
@@ -140,6 +142,7 @@ class Partida:
             for i in self.jogadores_status:
                 if i[0] == defensor.cor:
                     i[1] = "eliminado"
+                    i[2] = atacante.cor
 
             # transfere as cartas do jogador eliminado para o atacante até que o limite de 5 cartas seja atingido
             for i in defensor.cartas:
@@ -170,7 +173,7 @@ class Partida:
     def criar_jogadores_status(self, jogadores):
         lista = []
         for i in jogadores:
-            lista.append([i.cor, "vivo"])
+            lista.append([i.cor, "vivo", "nenhum"])
 
         return lista
     
