@@ -23,6 +23,8 @@ print(f"\nExercitos que não tem carta associada: {len(partida.manager_de_cartas
 
 print(f"Territórios com carta associada: {partida.manager_de_cartas.territorios_em_uso}")
 
+print(f"\nTerritórios do Jogador {jogador.cor}: {jogador.territorios}")
+
 print("\nIndique (um por um) o indice das cartas a serem trocadas: \n")
 
 lista = []
@@ -41,6 +43,8 @@ print(f"\nCartas do Jogador {jogador.cor}: {jogador.cartas}")
 print(f"\nExercitos que não tem carta associada: {len(partida.manager_de_cartas.territorios_disponiveis)}\n")
 
 print(partida.manager_de_cartas.territorios_disponiveis)
+
+print(f"\nTerritórios do Jogador {jogador.cor} após a troca: {jogador.territorios}")
 
 print(f"\nNovo valor da troca: {partida.valor_da_troca}")
 

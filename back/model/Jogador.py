@@ -106,6 +106,10 @@ class Jogador:
         self.adicionar_exercitos_para_posicionamento([0, 0, 0, 0, 0, 0, valor_da_troca])
 
         for i in cartas:
+            if i[0] != "Coringa":
+                for j in self.territorios:
+                    if j.nome == i[1]:
+                        self.adicionar_exercitos_territorio(j, 2)
             self.remover_carta(i)
 
     
