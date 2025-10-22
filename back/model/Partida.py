@@ -41,8 +41,21 @@ class Partida:
     
     def fase_de_ataque(self, jogador: Jogador):
         """Lógica para o jogador realizar ataques."""
-        print("O jogador decide se e como irá atacar.")
-        pass # 'pass' significa que o método não faz nada
+       
+
+        # Se for IA, usar a rotina de ataque da IA
+        if jogador.tipo == 'ai' and hasattr(jogador, 'executar_ataques'):
+            try:
+                import random
+                rng = random.Random()
+                # parâmetros básicos: agressividade baixa por padrão
+                ataques = jogador.executar_ataques(self, rng=rng, agressividade=0.0, max_ataques=10)
+                print(f'IA {jogador.nome} efetuou {ataques} ataques.')
+            except Exception as e:
+                print(f'Erro ao executar ataques da IA: {e}')
+        else:
+            print("O jogador decide se e como irá atacar.")
+            pass
 
     def fase_de_remanejamento(self, jogador: Jogador):
         """Lógica para o jogador mover exércitos."""
