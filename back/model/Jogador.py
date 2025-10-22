@@ -88,3 +88,24 @@ class Jogador:
     
     def numero_de_territorios(self):
         return len(self.territorios)
+    
+    def numero_de_exercitos(self):
+        soma = 0
+        for i in self.territorios:
+            soma += i.exercitos
+
+        return soma
+    
+    def adicionar_carta(self, carta):
+        self.cartas.append(carta)
+
+    def remover_carta(self, carta):
+        self.cartas.remove(carta)
+
+    def trocar_cartas(self, cartas, valor_da_troca):
+        self.adicionar_exercitos_para_posicionamento([0, 0, 0, 0, 0, 0, valor_da_troca])
+
+        for i in cartas:
+            self.remover_carta(i)
+
+    

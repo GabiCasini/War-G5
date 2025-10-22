@@ -2,6 +2,7 @@ import random
 from .Jogador import Jogador
 from .Tabuleiro import Tabuleiro
 from .Territorio import Territorio
+from .Manager_de_Cartas import Manager_de_Cartas
 
 class Partida:
     def __init__(self, qtd_humanos: int, qtd_ai: int, duracao_turno: int, tupla_jogadores: list[tuple[str, str, str]]): # tupla representa o jogador (nome, cor, tipo)
@@ -15,6 +16,9 @@ class Partida:
         self.jogador_atual_idx = 0
         self.fase_do_turno = "preparacao"  # 'preparacao', 'posicionamento', 'ataque', 'remanejamento'
         random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
+        self.manager_de_cartas = Manager_de_Cartas()
+        self.jogadores_status = self.criar_jogadores_status(self.jogadores) # cada item da lista contem (cor do jogador, vivo/morto, eliminado por...)
+        self.valor_da_troca = 4
 
     def proximo_jogador(self):
         """Passa a vez para o próximo jogador."""
@@ -129,9 +133,53 @@ class Partida:
 
     # verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero)
     # falta implementar a passagem das cartas do jogador eliminado para quem o eliminou, além da verificação de cumprimento dos objetivos
-    def verificar_eliminacao(self, jogador: Jogador):
-        if jogador.numero_de_territorios() == 0:
-            self.jogadores.remove(jogador)
-            print(f"\nJogador {jogador.cor} eliminado\n")
+    def verificar_eliminacao(self, atacante: Jogador, defensor: Jogador):
+        if defensor.numero_de_territorios() == 0:
+            self.jogadores.remove(defensor)
+
+            for i in self.jogadores_status:
+                if i[0] == defensor.cor:
+                    i[1] = "eliminado"
+
+            # transfere as cartas do jogador eliminado para o atacante até que o limite de 5 cartas seja atingido
+            for i in defensor.cartas:
+                if len(atacante.cartas) < 5:
+                    atacante.adicionar_carta(i)
+                else:
+                    self.manager_de_cartas.cartas_trocadas(i)
+
+            defensor.cartas = []
+                
+            print(f"\nJogador {defensor.cor} eliminado\n")
             return True
         return False
+
+    # Essa função deve ser utilizada ao final da fase ataque de cada jogador, passando um valor booleano que indica
+    # se ele conquistou ou não algum território durante o ataque
+    def verifica_ganho_de_carta(self, jogador: Jogador, conquistado: bool):
+        if conquistado and len(jogador.cartas) < 5:
+            jogador.adicionar_carta(self.manager_de_cartas.atribuir_carta())
+
+    def realizar_troca(self, jogador: Jogador, cartas):
+        if self.manager_de_cartas.validar_possivel_troca(cartas):
+            jogador.trocar_cartas(cartas, self.valor_da_troca)
+            self.manager_de_cartas.cartas_trocadas(cartas)
+            self.incrementar_troca()
+
+    # cria a lista de status dos jogadores
+    def criar_jogadores_status(self, jogadores):
+        lista = []
+        for i in jogadores:
+            lista.append([i.cor, "vivo"])
+
+        return lista
+    
+    def incrementar_troca(self):
+        if self.valor_da_troca < 12:
+            self.valor_da_troca += 2
+
+        elif self.valor_da_troca < 15:
+            self.valor_da_troca += 3
+
+        else:
+            self.valor_da_troca += 5
