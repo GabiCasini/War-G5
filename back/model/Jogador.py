@@ -10,6 +10,7 @@ class Jogador:
         self.exercitos_reserva = [0, 0, 0, 0, 0, 0, 0]  # exércitos disponíveis para alocação para cada regiao e geral
         self.cartas = []
         self.objetivo = None
+        self.eliminado_por = "nenhum"
 
     def __repr__(self):
         return f"{self.nome} (Cor: {self.cor})"

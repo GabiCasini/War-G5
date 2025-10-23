@@ -103,7 +103,7 @@ class Tabuleiro:
             if dominado:
                 lista[i] = self.regioes_com_bonus[i][1]
 
-        lista[6] = int(max(3, math.floor(jogador.numero_de_territorios()/2)))
+        lista[6] = int(max(3, math.floor(len(jogador.territorios)/2)))
         
         jogador.adicionar_exercitos_para_posicionamento(lista)
         

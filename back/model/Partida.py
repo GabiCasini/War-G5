@@ -13,13 +13,13 @@ class Partida:
         self.qtd_jogadores = qtd_humanos + qtd_ai
         self.duracao_turno = duracao_turno
         self.jogadores = self.criar_jogadores(tupla_jogadores)
+        self.jogadores_eliminados = []
         self.tabuleiro = Tabuleiro(self.jogadores) # cria o tabuleiro do jogo, que vai gerar todos os territórios, distribuindo eles para os jogadores
         self.jogador_atual_idx = 0
         self.fase_do_turno = "preparacao"  # 'preparacao', 'posicionamento', 'ataque', 'remanejamento'
         random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
         self.manager_de_cartas = Manager_de_Cartas()
         self.manager_de_objetivos = Manager_de_Objetivos(self.jogadores)
-        self.jogadores_status = self.criar_jogadores_status(self.jogadores) # cada item da lista contem (cor do jogador, vivo/morto, eliminado por...)
         self.valor_da_troca = 4
 
     def proximo_jogador(self):
@@ -138,11 +138,8 @@ class Partida:
     def verificar_eliminacao(self, atacante: Jogador, defensor: Jogador):
         if defensor.numero_de_territorios() == 0:
             self.jogadores.remove(defensor)
-
-            for i in self.jogadores_status:
-                if i[0] == defensor.cor:
-                    i[1] = "eliminado"
-                    i[2] = atacante.cor
+            defensor.eliminado_por = atacante.cor
+            self.jogadores_eliminados.append(defensor)
 
             # transfere as cartas do jogador eliminado para o atacante até que o limite de 5 cartas seja atingido
             for i in defensor.cartas:
@@ -168,14 +165,6 @@ class Partida:
             jogador.trocar_cartas(cartas, self.valor_da_troca)
             self.manager_de_cartas.cartas_trocadas(cartas)
             self.incrementar_troca()
-
-    # cria a lista de status dos jogadores
-    def criar_jogadores_status(self, jogadores):
-        lista = []
-        for i in jogadores:
-            lista.append([i.cor, "vivo", "nenhum"])
-
-        return lista
     
     def incrementar_troca(self):
         if self.valor_da_troca < 12:
