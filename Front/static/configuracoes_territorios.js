@@ -222,23 +222,25 @@ function ativarCliquePosicionamento() {
 
       else if (faseAtual === 'Ataque'){
         e.stopPropagation();
-
+        
         if (territorioSelecionado !== nomeTerritorio) {
-          console.log("Território clicado:", nomeTerritorio);
-          console.log("Território selecionado:", territorioSelecionado);
-          console.log("Possíveis alvos de ataque:", possiveisAlvosAtaque);
+          // console.log("Território clicado:", nomeTerritorio);
+          // console.log("Território selecionado:", territorioSelecionado);
+          // console.log("Possíveis alvos de ataque:", possiveisAlvosAtaque);
           if (possiveisAlvosAtaque.includes(nomeTerritorio)) {
             ataqueTerritorio(territorioSelecionado, nomeTerritorio);
-
             territorioSelecionado = null;
             possiveisAlvosAtaque = [];
             removerTodosDestaqueTerritorio();
+
             return;
           }
         }
 
+        if (!verificaDonoTerritorio(nomeTerritorio, jogadorAtual)) return;
 
-        territorioSelecionado = nomeTerritorio;
+        possiveisAlvosAtaque = [];
+        selecionarTerritorio(nomeTerritorio);
 
         removerTodosDestaqueTerritorio();
         let listaPossiveisAtaques = obterTerritoriosParaAtaque(jogadorAtual, nomeTerritorio);
@@ -252,7 +254,7 @@ function ativarCliquePosicionamento() {
       }
 
       else if (faseAtual === 'Reposicionamento'){
-        
+
       }
     });
   });
@@ -310,8 +312,10 @@ function destacarTerritorio(nomeTerritorio) {
   console.log("Destacando território:", nomeTerritorio);
   const path = Array.from(svg.querySelectorAll('path')).find(p => p.getAttribute('name') === nomeTerritorio);
   if (path) {
-    path.setAttribute('stroke', '#FFD700');
-    path.setAttribute('stroke-width', '3');
+    // path.setAttribute('stroke', '#FFD700');
+    // path.setAttribute('stroke-width', '3');
+    // path.classList.remove('blinking_territorio');
+    path.classList.add('blinking_territorio');
   }
 }
 
@@ -320,14 +324,32 @@ function removerDestaqueTerritorio(nomeTerritorio) {
   if (!svg) return;
   const path = Array.from(svg.querySelectorAll('path')).find(p => p.getAttribute('name') === nomeTerritorio);
   if (path) {
-    path.setAttribute('stroke', '#1F1A17');
-    path.setAttribute('stroke-width', '0.3');
+    // path.setAttribute('stroke', '#1F1A17');
+    // path.setAttribute('stroke-width', '0.3');
+    path.classList.remove('blinking_territorio');
   }
 }
 
 function removerTodosDestaqueTerritorio() {
   for (const territorio of territorios) {
     removerDestaqueTerritorio(territorio.nome);
+    // deselecionarTerritorio(territorio.nome);
+  }
+}
+
+function selecionarTerritorio(nomeTerritorio) {
+  territorioSelecionado = nomeTerritorio;
+  const svg = document.getElementById('mapa');
+  if (!svg) return;
+  const path = Array.from(svg.querySelectorAll('path'))
+  for (const p of path) {
+
+    p.classList.remove('selecionado_territorio');
+
+    if (p.getAttribute('name') === nomeTerritorio) {
+      p.classList.add('selecionado_territorio');
+    }
+
   }
 }
 
