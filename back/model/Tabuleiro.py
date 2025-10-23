@@ -107,3 +107,13 @@ class Tabuleiro:
         
         jogador.adicionar_exercitos_para_posicionamento(lista)
         
+    def regioes_dominadas_pelo_jogador(self, jogador: Jogador):
+        lista = [1, 1, 1, 1, 1, 1]
+
+        for i in range(6):
+            for j in self.regioes_com_bonus[i][2]:
+                if j.cor != jogador.cor:
+                    lista[i] = 0
+                    break
+
+        return lista

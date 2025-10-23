@@ -1,6 +1,7 @@
 import random
 
 from .Jogador import Jogador
+from .Tabuleiro import Tabuleiro
 
 class Manager_de_Objetivos:
     def __init__(self, jogadores):
@@ -30,16 +31,23 @@ class Manager_de_Objetivos:
             i.objetivo = objetivo
     
     # função para verificar se um único jogador específico cumpriu seu objetivo
-    def verifica_objetivo_do_jogador(self, jogador: Jogador, jogadores_eliminados):
-        return self.aux_confere_objetivo(jogador, jogadores_eliminados)
+    def verifica_objetivo_do_jogador(self, jogador: Jogador, jogadores_eliminados, tabuleiro: Tabuleiro):
+        return self.aux_confere_objetivo(jogador, jogadores_eliminados, tabuleiro)
     
     # verifica se qualquer jogador cumpriu seu objetivo, priorizando: 1 - o jogador do turno; 2 - a ordem dos turnos 
-    def verifica_objetivo_de_todos_os_jogadores(self, jogador_do_turno: Jogador, jogadores):
-        # implementar lógica
-        print("Não implementado ainda")
+    # retorna a cor do vencedor (se houver), e False se ninguém ganhou
+    def verifica_objetivo_de_todos_os_jogadores(self, jogador_do_turno: Jogador, jogadores_vivos, jogadores_eliminados, tabuleiro: Tabuleiro):
+        vencedor = False
+
+        for i in jogadores_vivos:
+            resultado = self.verifica_objetivo_do_jogador(i, jogadores_eliminados, tabuleiro)
+            if resultado and (jogador_do_turno == i or not vencedor):
+                vencedor = i.cor
+            
+        return vencedor
         
-    # função auxiliar exclusiva das 2 funções acima, não deve ser chamada por nenhum outro arquivo
-    def aux_confere_objetivo(self, jogador, jogadores_eliminados):
+    # função auxiliar exclusiva das 2 funções acima
+    def aux_confere_objetivo(self, jogador, jogadores_eliminados, tabuleiro: Tabuleiro):
         objetivo = jogador.objetivo
         
         match objetivo:
@@ -56,7 +64,32 @@ class Manager_de_Objetivos:
                     return True
             
             case obj if "Conquistar na totalidade" in obj:
-                # fazer lógica para cada caso
+                regioes_dominadas = tabuleiro.regioes_dominadas_pelo_jogador(jogador)
+
+                if "Região 2 e a Região 5" in obj:
+                    if regioes_dominadas[1] and regioes_dominadas[4]:
+                        return True
+                
+                elif "Região 4 e a Região 5" in obj:
+                    if regioes_dominadas[3] and regioes_dominadas[4]:
+                        return True
+                    
+                elif "Região 2 e a Região 6" in obj:
+                    if regioes_dominadas[1] and regioes_dominadas[5]:
+                        return True
+                    
+                elif "Região 1 e a Região 4" in obj:
+                    if regioes_dominadas[0] and regioes_dominadas[3]:
+                        return True
+                    
+                elif "Região 1, a Região 3 e mais uma Região à sua escolha" in obj:
+                    if regioes_dominadas[0] and regioes_dominadas[2] and sum(regioes_dominadas) > 2:
+                        return True
+
+                elif "Região 3, a Região 6 e mais uma Região à sua escolha" in obj:
+                    if regioes_dominadas[2] and regioes_dominadas[5] and sum(regioes_dominadas) > 2:
+                        return True
+
                 return False
             
             case obj if "Elimine" in obj:
