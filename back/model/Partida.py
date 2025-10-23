@@ -133,10 +133,9 @@ class Partida:
         exercitos_para_mover = 1
         vencedor.mover_exercitos(origem, territorio, exercitos_para_mover)
 
-    # verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero)
-    # falta implementar a passagem das cartas do jogador eliminado para quem o eliminou, além da verificação de cumprimento dos objetivos
+    # verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero) e trata a eliminação caso necessário
     def verificar_eliminacao(self, atacante: Jogador, defensor: Jogador):
-        if defensor.numero_de_territorios() == 0:
+        if len(defensor.territorios) == 0:
             self.jogadores.remove(defensor)
             defensor.eliminado_por = atacante.cor
             self.jogadores_eliminados.append(defensor)
