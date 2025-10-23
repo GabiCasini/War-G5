@@ -1,6 +1,7 @@
 
 class Player {
-    constructor(nome, cor, tipo) {
+    constructor(id, nome, cor, tipo) {
+        this.playerId = "p" + id;
         this.nome = nome;
         this.cor = cor;
         this.tipo = tipo; // 'humano' ou 'ia'
@@ -9,40 +10,11 @@ class Player {
 
 const players = [];
 
-function buildPlayers() {
-    players.length = 0; // reset
-
-    const qtd_humanos_el = document.getElementById('qtd_humanos');
-    const qtd_ai_el = document.getElementById('qtd_ai');
-
-    const qtd_humanos = qtd_humanos_el ? parseInt(qtd_humanos_el.value) : 0;
-    const qtd_ai = qtd_ai_el ? parseInt(qtd_ai_el.value) : 0;
-    const total = qtd_humanos + qtd_ai;
-
-    for (let i = 1; i <= total; i++) {
-        const nomeInput = document.querySelector(`#p${i} input`) || document.querySelector(`input[name=\"nome_player_${i}\"]`);
-        const nome = nomeInput ? nomeInput.value : `Jogador ${i}`;
-
-        const corInput = document.getElementById(`input_cor_p${i}`);
-        const cor = corInput ? corInput.value : null;
-
-        const tipo = (i <= qtd_humanos) ? 'humano' : 'ai';
-
-        players.push(new Player(nome, cor, tipo));
-    }
-
-    console.log(`Total players: ${players.length}`, players);
-    return players;
+function adicionarPlayer(nome, cor, tipo) {
+    const player = new Player(players.length + 1, nome, cor, tipo);
+    players.push(player);
 }
 
-window.buildPlayers = buildPlayers;
-window.getPlayers = () => players;
-
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('#initDialog form');
-    if (form) {
-        form.addEventListener('submit', () => {
-            buildPlayers();
-        });
-    }
-});
+adicionarPlayer("Jogador 1", "#01B57D", "humano");
+adicionarPlayer("Jogador 2", "#EC9151", "humano");
+adicionarPlayer("Jogador 3", "#8E5751", "humano");
