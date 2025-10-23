@@ -141,6 +141,8 @@ const territorios = [
 ];
 
 
+let territorioSelecionado = null;
+let possiveisAlvosAtaque = [];
 
 function colorirTerritoriosNoMapa() {
   const svg = document.getElementById('mapa');
@@ -217,17 +219,41 @@ function ativarCliquePosicionamento() {
           adicionarExercitos(nomeTerritorio, qtd);
         }
       }
+
       else if (faseAtual === 'Ataque'){
-        obterTerritoriosParaAtaque(jogadorAtual).forEach(ataque => {
-          if (ataque.de === nomeTerritorio) {
-            destacarTerritorio(ataque.para);
+        e.stopPropagation();
+
+        if (territorioSelecionado !== nomeTerritorio) {
+          console.log("Território clicado:", nomeTerritorio);
+          console.log("Território selecionado:", territorioSelecionado);
+          console.log("Possíveis alvos de ataque:", possiveisAlvosAtaque);
+          if (possiveisAlvosAtaque.includes(nomeTerritorio)) {
+            ataqueTerritorio(territorioSelecionado, nomeTerritorio);
+
+            territorioSelecionado = null;
+            possiveisAlvosAtaque = [];
+            removerTodosDestaqueTerritorio();
+            return;
           }
-          else {
-            removerDestaqueTerritorio(ataque.para);
+        }
+
+
+        territorioSelecionado = nomeTerritorio;
+
+        removerTodosDestaqueTerritorio();
+        let listaPossiveisAtaques = obterTerritoriosParaAtaque(jogadorAtual, nomeTerritorio);
+
+        listaPossiveisAtaques.forEach(ataque => {
+          if (ataque.de === nomeTerritorio) {
+            possiveisAlvosAtaque.push(ataque.para);
+            destacarTerritorio(ataque.para);
           }
         });
       }
-      
+
+      else if (faseAtual === 'Reposicionamento'){
+        
+      }
     });
   });
 }
@@ -252,8 +278,8 @@ function verificaDonoTerritorio(territorioNome, jogador) {
 
 
 
-function obterTerritoriosParaAtaque(jogador) {
-  const territoriosAtacantes = territorios.filter(t => t.jogador === jogador && t.exercitos >= 1);
+function obterTerritoriosParaAtaque(jogador, territorioNome) {
+  const territoriosAtacantes = territorios.filter(t => t.jogador === jogador && t.nome === territorioNome && t.exercitos >= 1);
   const ataquesPossiveis = [];
 
   territoriosAtacantes.forEach(territorio => {
@@ -272,6 +298,8 @@ function obterTerritoriosVizinhos(territorioNome) {
   const territorioInfo = territoriosFronteiras.find(t => t[0] === territorioNome);
   if (!territorioInfo) return [];
   const fronteiras = territorioInfo[2];
+
+  console.log(fronteiras, territorioNome);
   return territorios.filter(t => fronteiras.includes(t.nome));
 }
 
@@ -279,6 +307,7 @@ function obterTerritoriosVizinhos(territorioNome) {
 function destacarTerritorio(nomeTerritorio) {
   const svg = document.getElementById('mapa');
   if (!svg) return;
+  console.log("Destacando território:", nomeTerritorio);
   const path = Array.from(svg.querySelectorAll('path')).find(p => p.getAttribute('name') === nomeTerritorio);
   if (path) {
     path.setAttribute('stroke', '#FFD700');
@@ -294,4 +323,22 @@ function removerDestaqueTerritorio(nomeTerritorio) {
     path.setAttribute('stroke', '#1F1A17');
     path.setAttribute('stroke-width', '0.3');
   }
+}
+
+function removerTodosDestaqueTerritorio() {
+  for (const territorio of territorios) {
+    removerDestaqueTerritorio(territorio.nome);
+  }
+}
+
+
+function ataqueTerritorio(territorioDe, territorioPara) {
+
+  let exercitosAtaque = parseInt(prompt(`Quantos exércitos deseja atacar de "${territorioDe}" para "${territorioPara}"?`, "1"), 10);
+  if (isNaN(exercitosAtaque) || exercitosAtaque <= 0) {
+    alert("sem exercitos...");
+    return;
+  }
+  
+  alert(`Ataque de "${territorioDe}" para "${territorioPara}" com ${exercitosAtaque}`);
 }
