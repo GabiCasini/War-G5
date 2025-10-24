@@ -11,7 +11,7 @@ function fetchJogadores() {
       return resp.json();
     })
     .then(data => {
-      console.log('jogadores', data.jogadores);
+    //   console.log('jogadores', data.jogadores);
       for (let jogador of data.jogadores) {
         adicionarPlayer(jogador.nome, jogador.cor, jogador.tipo);
       }
@@ -35,9 +35,7 @@ function fetchTerritorios() {
       return resp.json();
     })
     .then(data => {
-      console.log('territórios', data.territorios);
       territorios = data.territorios;
-      console.log('territorios global', territorios);
       colorirTerritoriosNoMapa();
       desenharExercitosNoMapa()
       return data.territorios;
@@ -48,5 +46,29 @@ function fetchTerritorios() {
     });
 }
 
+
+function fetchEstadoAtual() {
+  return fetch(LOCALHOST + '/partida/estado_atual', { method: 'GET' })
+    .then(resp => {
+      if (!resp.ok) {
+        return resp.json()
+          .then(errBody => { throw new Error((errBody && (errBody.mensagem || errBody.message)) || `HTTP ${resp.status}`); })
+          .catch(() => { throw new Error(`HTTP ${resp.status}`); });
+      }
+      return resp.json();
+    })
+    .then(data => {
+        jogadorAtual = data.jogador_atual;
+        faseAtual = data.fase_atual;
+        console.log('Jogador atual:', jogadorAtual);    
+      return data;
+    })
+    .catch(err => {
+      console.error('Erro estado atual:', err.message);
+      throw err;
+    });
+}
+
 fetchJogadores();
 fetchTerritorios();
+fetchEstadoAtual();
