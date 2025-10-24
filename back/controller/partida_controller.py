@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 
-from ..state import partida_global 
+from .. import state
 from ..model.Jogador import Jogador
 from ..model.Territorio import Territorio
 
@@ -10,12 +10,12 @@ partida_bp = Blueprint('partida', __name__, url_prefix='/partida')
 @partida_bp.route("/jogadores", methods=["GET"])
 def get_jogadores():
     
-    if not partida_global:
+    if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
     
     jogadores_json = []
 
-    for i, jogador in enumerate(partida_global.jogadores):
+    for i, jogador in enumerate(state.partida_global.jogadores):
         jogadores_json.append({
             "jogador_id": jogador.cor,
             "nome": jogador.nome,
@@ -29,14 +29,14 @@ def get_jogadores():
 
 @partida_bp.route("/territorios", methods=["GET"])
 def get_territorios():
-    if not partida_global:
+    if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
 
     territorios_json = []
     
-    for territorio in partida_global.tabuleiro.territorios:
+    for territorio in state.partida_global.tabuleiro.territorios:
 
-        jogador_dono = next((j for j in partida_global.jogadores if j.cor == territorio.cor), None)
+        jogador_dono = next((j for j in state.partida_global.jogadores if j.cor == territorio.cor), None)
         
         territorios_json.append({
             "nome": territorio.nome,
@@ -53,12 +53,12 @@ def get_territorios():
 @partida_bp.route("/estado_atual", methods=["GET"])
 def get_estado_atual():
 
-    if not partida_global:
+    if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
 
-    jogador_atual = partida_global.jogadores[partida_global.jogador_atual_idx]
+    jogador_atual = state.partida_global.jogadores[state.partida_global.jogador_atual_idx]
 
-    fase_atual = partida_global.fase_do_turno 
+    fase_atual = state.partida_global.fase_do_turno 
     
     exercitos_disp_total = sum(jogador_atual.exercitos_reserva) #melhorar essa parte
 
@@ -75,7 +75,7 @@ def get_estado_atual():
             "jogador_nome": jogador_atual.nome,
             "jogador_cor": jogador_atual.cor,
             "fase": fase_atual,
-            "tempo_turno": int(partida_global.duracao_turno)
+            "tempo_turno": int(state.partida_global.duracao_turno)
         },
     
         "exercitos_disponiveis": {
@@ -93,7 +93,7 @@ def get_estado_atual():
 
 @partida_bp.route("/posicionamento", methods=["POST"])
 def post_posicionamento():
-    if not partida_global:
+    if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
 
     dados = request.get_json() 
@@ -103,7 +103,7 @@ def post_posicionamento():
     exercitos = int(dados.get("exercitos"))
 
     try:
-        exercitos_restantes = partida_global.fase_de_posicionamento_api(
+        exercitos_restantes = state.partida_global.fase_de_posicionamento_api(
             jogador_id, territorio_nome, exercitos
         )
         return jsonify({"status": "ok", "exercitos_restantes": exercitos_restantes})
@@ -113,7 +113,7 @@ def post_posicionamento():
 
 @partida_bp.route("/ataque", methods=["POST"])
 def post_ataque():
-    if not partida_global:
+    if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
 
     dados = request.get_json()
@@ -122,24 +122,21 @@ def post_ataque():
     nome_territorio_origem = dados.get("territorio_inicio")
     nome_territorio_ataque = dados.get("territorio_ataque")
 
-    atacante = partida_global.get_jogador_por_cor(jogador_id)
-    territorio_origem = partida_global.get_territorio_por_nome(nome_territorio_origem)
-    territorio_alvo = partida_global.get_territorio_por_nome(nome_territorio_ataque)
-    defensor = partida_global.get_jogador_por_cor(territorio_alvo.cor)
+    atacante = state.partida_global.get_jogador_por_cor(jogador_id)
+    territorio_origem = state.partida_global.get_territorio_por_nome(nome_territorio_origem)
+    territorio_alvo = state.partida_global.get_territorio_por_nome(nome_territorio_ataque)
+    defensor = state.partida_global.get_jogador_por_cor(territorio_alvo.cor)
     
     try:
-
-        resultado = partida_global.resolver_combate_api(atacante, defensor, territorio_origem, territorio_alvo)
+        resultado = state.partida_global.resolver_combate_api(atacante, defensor, territorio_origem, territorio_alvo)
         return jsonify({"status": "ok", **resultado})
-    
     except Exception as e:
-
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
 
 
 @partida_bp.route("/reposicionamento", methods=["POST"])
 def post_reposicionamento():
-    if not partida_global:
+    if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
 
     dados = request.get_json()
@@ -150,7 +147,7 @@ def post_reposicionamento():
     exercitos = int(dados.get("exercitos"))
     
     try:
-        resultado = partida_global.fase_de_remanejamento_api(
+        resultado = state.partida_global.fase_de_remanejamento_api(
             jogador_id, nome_origem, nome_destino, exercitos
         )
         return jsonify({"status": "ok", **resultado})
@@ -160,11 +157,11 @@ def post_reposicionamento():
 
 @partida_bp.route("/finalizar_turno", methods=["POST"])
 def post_finalizar_turno():
-    if not partida_global:
+    if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
 
     try:
-        proximo_jogador, nova_fase = partida_global.avancar_fase_ou_turno()
+        proximo_jogador, nova_fase = state.partida_global.avancar_fase_ou_turno()
         
         resposta = {
             "status": "ok",
