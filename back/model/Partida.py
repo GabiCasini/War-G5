@@ -16,7 +16,7 @@ class Partida:
         self.jogadores_eliminados = []
         self.tabuleiro = Tabuleiro(self.jogadores) # cria o tabuleiro do jogo, que vai gerar todos os territórios, distribuindo eles para os jogadores
         self.jogador_atual_idx = 0
-        self.fase_do_turno = "preparacao"  # 'preparacao', 'posicionamento', 'ataque', 'remanejamento'
+        self.fase_do_turno = "preparacao"  # 'preparacao', 'posicionamento', 'ataque', 'reposicionamento'
         random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
         self.manager_de_cartas = Manager_de_Cartas()
         self.manager_de_objetivos = Manager_de_Objetivos(self.jogadores)
@@ -38,10 +38,10 @@ class Partida:
         print(f"Fase de {self.fase_do_turno}...")
         self.fase_de_ataque(jogador)
 
-        # Fase de remanejamento
-        self.fase_do_turno = "remanejamento"
+        # Fase de reposicionamento
+        self.fase_do_turno = "reposicionamento"
         print(f"Fase de {self.fase_do_turno}...")
-        self.fase_de_remanejamento(jogador)
+        self.fase_de_reposicionamento(jogador)
         
         print(f"Fim do turno de {jogador.nome}")
     
@@ -50,18 +50,16 @@ class Partida:
         print("O jogador decide se e como irá atacar.")
         pass # 'pass' significa que o método não faz nada
 
-    def fase_de_remanejamento(self, jogador: Jogador):
+    def fase_de_reposicionamento(self, jogador: Jogador):
         """Lógica para o jogador mover exércitos."""
-        print("O jogador decide se e como irá remanejar seus exércitos.")
+        print("O jogador decide se e como irá reposicionar seus exércitos.")
         pass
 
     def fase_de_posicionamento(self, jogador: Jogador):
         """Lógica para o jogador posicionar seus novos exércitos."""
         self.tabuleiro.calcula_exercitos_a_receber(jogador=jogador)
-        lista_exercitos_a_posicionar = jogador.exercitos_reserva
-        print(f"Exércitos para posicionar: {lista_exercitos_a_posicionar}")
-        total_exercitos = sum(lista_exercitos_a_posicionar)
-        # TODO: Entender como sera o bonus de cada continente/regiao
+        total_exercitos = jogador.exercitos_reserva
+        print(f"Exércitos para posicionar: {total_exercitos}")
         # TODO: Substituir lógica aleatória por input do usuário ou lógica da IA
         if jogador.tipo == 'humano':
             print(f"Você tem {total_exercitos} exércitos para posicionar.")
@@ -162,7 +160,7 @@ class Partida:
     def realizar_troca(self, jogador: Jogador, cartas):
         if self.manager_de_cartas.validar_possivel_troca(cartas):
             jogador.trocar_cartas(cartas, self.valor_da_troca)
-            self.manager_de_cartas.cartas_trocadas(cartas)
+            self.manager_de_cartas.cartas_trocadas(cartas) # os territorios das cartas que foram trocados serão colocados na lista de disponíveis
             self.incrementar_troca()
     
     def incrementar_troca(self):

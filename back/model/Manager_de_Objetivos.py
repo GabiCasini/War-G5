@@ -89,19 +89,20 @@ class Manager_de_Objetivos:
                 return False
             
             case obj if "Elimine" in obj:
-                for i in jogadores_eliminados:
-                    if i.cor in obj:
-                        if i == jogador or (i.eliminado_por != "nenhum" and i.eliminado_por != jogador.cor):
-                            if len(jogador.territorios) >= 24:
-                                return True
-                            else:
-                                return False
+                if jogador.cor in obj and len(jogador.territorios) >= 24:
+                    return True
+                
+                else:
+                    for i in jogadores_eliminados:
+                        if i.cor in obj:
+                            if i.eliminado_por != jogador.cor:
+                                if len(jogador.territorios) >= 24:
+                                    return True
+                                else:
+                                    return False
                             
-                        elif i.eliminado_por == jogador.cor:
-                            return True
-                        
-                        else:
-                            return False
+                            else:
+                                return True
                         
                 return False
             

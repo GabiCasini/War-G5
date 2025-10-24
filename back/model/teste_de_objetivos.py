@@ -53,3 +53,30 @@ resultado = partida.manager_de_objetivos.verifica_objetivo_de_todos_os_jogadores
 
 if resultado:
     print(f"Jogador {resultado} venceu!")
+
+print(f"\nMudando objetivo do Jogador {jogador_a.cor} para ter que eliminar a si mesmo:\n")
+
+jogador_a.objetivo = "Elimine o jogador " + jogador_a.cor + ". Caso você seja esse jogador, ou ele já tenha sido eliminado, seu objetivo passa a ser conquistar 24 territórios"
+
+print(f"Objetivo do Jogador {jogador_a.cor}: {jogador_a.objetivo}\n")
+
+resultado = partida.manager_de_objetivos.verifica_objetivo_do_jogador(jogador_a, partida.jogadores_eliminados, partida.tabuleiro)
+
+if resultado:
+    print(f"Jogador {jogador_a.cor} venceu!")
+else:
+    print(f"Jogador {jogador_a.cor} não venceu")
+
+print(f"\nDando todos os territórios para o Jogador {jogador_a.cor}:\n")
+
+for i in partida.tabuleiro.territorios:
+    jogador_a.territorios.append(i)
+
+print(f"Territórios do Jogador {jogador_a.cor}: {jogador_a.territorios}\n")
+
+resultado = partida.manager_de_objetivos.verifica_objetivo_do_jogador(jogador_a, partida.jogadores_eliminados, partida.tabuleiro)
+
+if resultado:
+    print(f"Jogador {jogador_a.cor} venceu!")
+else:
+    print(f"Jogador {jogador_a.cor} não venceu")
