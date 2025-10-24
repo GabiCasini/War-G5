@@ -1,2 +1,2 @@
-let jogadorAtual = 'p2'; // Jogador 1, Jogador 2, ...
-let faseAtual = 'Ataque'; // Posicionamento, Ataque, Reposicionamento
+let jogadorAtual = null;
+let faseAtual = null;

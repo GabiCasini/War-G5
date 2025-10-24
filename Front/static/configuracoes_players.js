@@ -1,9 +1,10 @@
 
 class Player {
     constructor(id, nome, cor, tipo) {
-        this.playerId = "p" + id;
+        this.playerId = id;
         this.nome = nome;
         this.cor = cor;
+        this.corHex = atribuiCorHexJogador(cor);
         this.tipo = tipo; // 'humano' ou 'ia'
     }
 }
@@ -15,6 +16,22 @@ function adicionarPlayer(nome, cor, tipo) {
     players.push(player);
 }
 
-adicionarPlayer("Jogador 1", "#01B57D", "humano");
-adicionarPlayer("Jogador 2", "#EC9151", "humano");
-adicionarPlayer("Jogador 3", "#8E5751", "humano");
+function atribuiCorHexJogador(cor) {
+    if (cor === "verde") {
+        return "#4CAF50";
+    } else if (cor === "laranja") {
+        return "#FF9800";
+    } else if (cor === "vermelho") {
+        return "#F44336";
+    }
+    else if (cor === "azul") {
+        return "#2196F3";
+    }
+    else if (cor === "roxo") {
+        return "#9C27B0";
+    }
+    else if (cor === "amarelo") {
+        return "#FFEB3B";
+    }
+}
+

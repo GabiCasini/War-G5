@@ -197,15 +197,21 @@ colors.forEach(color => {
     color.addEventListener('drop', e => {
         e.preventDefault();
         if (dragged !== e.target) {
+            // troca visual de cores
             const tempColor = dragged.style.backgroundColor;
             dragged.style.backgroundColor = e.target.style.backgroundColor;
             e.target.style.backgroundColor = tempColor;
 
-            // Salvando mudanças no campo de input para form
+            // troca também o nome/identificador lógico da cor (data-color)
+            const tempName = dragged.dataset.color;
+            dragged.dataset.color = e.target.dataset.color;
+            e.target.dataset.color = tempName;
+
+            // Salvando mudanças no campo de input para form (usar nomes em pt-br)
             const playerDragged = document.getElementById('input_' + dragged.id);
             const playerDroped = document.getElementById('input_' + e.target.id);
-            playerDragged.value = dragged.style.backgroundColor;
-            playerDroped.value = e.target.style.backgroundColor;
+            playerDragged.value = dragged.dataset.color;
+            playerDroped.value = e.target.dataset.color;
         }
     });
 });

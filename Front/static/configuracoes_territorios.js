@@ -42,104 +42,59 @@ const territoriosFronteiras = [
   ["Trajano de Moraes", "Regiao_6", ["Nova Friburgo", "Cordeiro", "Macaé"]],
   ["Macaé", "Regiao_6", ["Trajano de Moraes", "Casimiro de Abreu"]],
   ["Casimiro de Abreu", "Regiao_6", ["Macaé"]]
-]
-
-
-// const territorios = [
-//   { nome: "Nova Iguaçu", jogador: "", exercitos: 1 },
-//   { nome: "Mesquita", jogador: "", exercitos: 1 },
-//   { nome: "São João de Meriti", jogador: "", exercitos: 1 },
-//   { nome: "Rio de Janeiro", jogador: "", exercitos: 1 },
-//   { nome: "Guapimirim", jogador: "", exercitos: 1 },
-//   { nome: "Itaboraí", jogador: "", exercitos: 1 },
-//   { nome: "Magé", jogador: "", exercitos: 1 },
-//   { nome: "Maricá", jogador: "", exercitos: 1 },
-//   { nome: "Niterói", jogador: "", exercitos: 1 },
-//   { nome: "São Gonçalo", jogador: "", exercitos: 1 },
-//   { nome: "Paracambi", jogador: "", exercitos: 1 },
-//   { nome: "Seropédica", jogador: "", exercitos: 1 },
-//   { nome: "Eng Paulo de Frontin", jogador: "", exercitos: 1 },
-//   { nome: "Japeri", jogador: "", exercitos: 1 },
-//   { nome: "Miguel Pereira", jogador: "", exercitos: 1 },
-//   { nome: "Queimados", jogador: "", exercitos: 1 },
-//   { nome: "Vassouras", jogador: "", exercitos: 1 },
-//   { nome: "Paty do Alferes", jogador: "", exercitos: 1 },
-//   { nome: "Paraíba do Sul", jogador: "", exercitos: 1 },
-//   { nome: "Petrópolis", jogador: "", exercitos: 1 },
-//   { nome: "Areal", jogador: "", exercitos: 1 },
-//   { nome: "Comendador Levy Gasparian", jogador: "", exercitos: 1 },
-//   { nome: "Três Rios", jogador: "", exercitos: 1 },
-//   { nome: "Sapucaia", jogador: "", exercitos: 1 },
-//   { nome: "Teresópolis", jogador: "", exercitos: 1 },
-//   { nome: "Cachoeiras de Macacu", jogador: "", exercitos: 1 },
-//   { nome: "Sumidouro", jogador: "", exercitos: 1 },
-//   { nome: "Carmo", jogador: "", exercitos: 1 },
-//   { nome: "São José do Vale do Rio Preto", jogador: "", exercitos: 1 },
-//   { nome: "Nova Friburgo", jogador: "", exercitos: 1 },
-//   { nome: "Santo Antônio de Pádua", jogador: "", exercitos: 1 },
-//   { nome: "Bom Jardim", jogador: "", exercitos: 1 },
-//   { nome: "Cantagalo", jogador: "", exercitos: 1 },
-//   { nome: "Duas Barras", jogador: "", exercitos: 1 },
-//   { nome: "Itaocara", jogador: "", exercitos: 1 },
-//   { nome: "Macuco", jogador: "", exercitos: 1 },
-//   { nome: "São Sebastião do Alto", jogador: "", exercitos: 1 },
-//   { nome: "Cambuci", jogador: "", exercitos: 1 },
-//   { nome: "Cordeiro", jogador: "", exercitos: 1 },
-//   { nome: "Trajano de Moraes", jogador: "", exercitos: 1 },
-//   { nome: "Casimiro de Abreu", jogador: "", exercitos: 1 },
-//   { nome: "Macaé", jogador: "", exercitos: 1 }
-// ];
-
-const territorios = [
-  // --- p1: Baixada e Capital ---
-  { nome: "Rio de Janeiro", jogador: "p1", exercitos: 1 },
-  { nome: "Nova Iguaçu", jogador: "p1", exercitos: 1 },
-  { nome: "Mesquita", jogador: "p1", exercitos: 1 },
-  { nome: "São João de Meriti", jogador: "p1", exercitos: 1 },
-  { nome: "Queimados", jogador: "p1", exercitos: 1 },
-  { nome: "Japeri", jogador: "p1", exercitos: 1 },
-  { nome: "Paracambi", jogador: "p1", exercitos: 1 },
-  { nome: "Seropédica", jogador: "p1", exercitos: 1 },
-  { nome: "Eng Paulo de Frontin", jogador: "p1", exercitos: 1 },
-  { nome: "Miguel Pereira", jogador: "p1", exercitos: 1 },
-  { nome: "Vassouras", jogador: "p1", exercitos: 1 },
-  { nome: "Paty do Alferes", jogador: "p1", exercitos: 1 },
-  { nome: "Guapimirim", jogador: "p1", exercitos: 1 },
-  { nome: "Magé", jogador: "p1", exercitos: 1 },
-
-  // --- p2: Região Serrana e Centro-Sul ---
-  { nome: "Petrópolis", jogador: "p2", exercitos: 1 },
-  { nome: "Teresópolis", jogador: "p2", exercitos: 1 },
-  { nome: "Areal", jogador: "p2", exercitos: 1 },
-  { nome: "Três Rios", jogador: "p2", exercitos: 1 },
-  { nome: "Comendador Levy Gasparian", jogador: "p2", exercitos: 1 },
-  { nome: "Paraíba do Sul", jogador: "p2", exercitos: 1 },
-  { nome: "Sapucaia", jogador: "p2", exercitos: 1 },
-  { nome: "Sumidouro", jogador: "p2", exercitos: 1 },
-  { nome: "São José do Vale do Rio Preto", jogador: "p2", exercitos: 1 },
-  { nome: "Carmo", jogador: "p2", exercitos: 1 },
-  { nome: "Bom Jardim", jogador: "p2", exercitos: 1 },
-  { nome: "Cantagalo", jogador: "p2", exercitos: 1 },
-  { nome: "Duas Barras", jogador: "p2", exercitos: 1 },
-  { nome: "Trajano de Moraes", jogador: "p2", exercitos: 1 },
-
-  // --- p3: Região Norte / Leste Fluminense ---
-  { nome: "Itaboraí", jogador: "p3", exercitos: 1 },
-  { nome: "Niterói", jogador: "p3", exercitos: 1 },
-  { nome: "São Gonçalo", jogador: "p3", exercitos: 1 },
-  { nome: "Maricá", jogador: "p3", exercitos: 1 },
-  { nome: "Cachoeiras de Macacu", jogador: "p3", exercitos: 1 },
-  { nome: "Casimiro de Abreu", jogador: "p3", exercitos: 1 },
-  { nome: "Macaé", jogador: "p3", exercitos: 1 },
-  { nome: "Cordeiro", jogador: "p3", exercitos: 1 },
-  { nome: "São Sebastião do Alto", jogador: "p3", exercitos: 1 },
-  { nome: "Itaocara", jogador: "p3", exercitos: 1 },
-  { nome: "Macuco", jogador: "p3", exercitos: 1 },
-  { nome: "Cambuci", jogador: "p3", exercitos: 1 },
-  { nome: "Santo Antônio de Pádua", jogador: "p3", exercitos: 1 },
-  { nome: "Nova Friburgo", jogador: "p3", exercitos: 1 }
 ];
 
+// let territorios = [
+//   // --- p1: Baixada e Capital ---
+//   { nome: "Rio de Janeiro", jogador: "p1", exercitos: 1 },
+//   { nome: "Nova Iguaçu", jogador: "p1", exercitos: 1 },
+//   { nome: "Mesquita", jogador: "p1", exercitos: 1 },
+//   { nome: "São João de Meriti", jogador: "p1", exercitos: 1 },
+//   { nome: "Queimados", jogador: "p1", exercitos: 1 },
+//   { nome: "Japeri", jogador: "p1", exercitos: 1 },
+//   { nome: "Paracambi", jogador: "p1", exercitos: 1 },
+//   { nome: "Seropédica", jogador: "p1", exercitos: 1 },
+//   { nome: "Eng Paulo de Frontin", jogador: "p1", exercitos: 1 },
+//   { nome: "Miguel Pereira", jogador: "p1", exercitos: 1 },
+//   { nome: "Vassouras", jogador: "p1", exercitos: 1 },
+//   { nome: "Paty do Alferes", jogador: "p1", exercitos: 1 },
+//   { nome: "Guapimirim", jogador: "p1", exercitos: 1 },
+//   { nome: "Magé", jogador: "p1", exercitos: 1 },
+
+//   // --- p2: Região Serrana e Centro-Sul ---
+//   { nome: "Petrópolis", jogador: "p2", exercitos: 1 },
+//   { nome: "Teresópolis", jogador: "p2", exercitos: 1 },
+//   { nome: "Areal", jogador: "p2", exercitos: 1 },
+//   { nome: "Três Rios", jogador: "p2", exercitos: 1 },
+//   { nome: "Comendador Levy Gasparian", jogador: "p2", exercitos: 1 },
+//   { nome: "Paraíba do Sul", jogador: "p2", exercitos: 1 },
+//   { nome: "Sapucaia", jogador: "p2", exercitos: 1 },
+//   { nome: "Sumidouro", jogador: "p2", exercitos: 1 },
+//   { nome: "São José do Vale do Rio Preto", jogador: "p2", exercitos: 1 },
+//   { nome: "Carmo", jogador: "p2", exercitos: 1 },
+//   { nome: "Bom Jardim", jogador: "p2", exercitos: 1 },
+//   { nome: "Cantagalo", jogador: "p2", exercitos: 1 },
+//   { nome: "Duas Barras", jogador: "p2", exercitos: 1 },
+//   { nome: "Trajano de Moraes", jogador: "p2", exercitos: 1 },
+
+//   // --- p3: Região Norte / Leste Fluminense ---
+//   { nome: "Itaboraí", jogador: "p3", exercitos: 1 },
+//   { nome: "Niterói", jogador: "p3", exercitos: 1 },
+//   { nome: "São Gonçalo", jogador: "p3", exercitos: 1 },
+//   { nome: "Maricá", jogador: "p3", exercitos: 1 },
+//   { nome: "Cachoeiras de Macacu", jogador: "p3", exercitos: 1 },
+//   { nome: "Casimiro de Abreu", jogador: "p3", exercitos: 1 },
+//   { nome: "Macaé", jogador: "p3", exercitos: 1 },
+//   { nome: "Cordeiro", jogador: "p3", exercitos: 1 },
+//   { nome: "São Sebastião do Alto", jogador: "p3", exercitos: 1 },
+//   { nome: "Itaocara", jogador: "p3", exercitos: 1 },
+//   { nome: "Macuco", jogador: "p3", exercitos: 1 },
+//   { nome: "Cambuci", jogador: "p3", exercitos: 1 },
+//   { nome: "Santo Antônio de Pádua", jogador: "p3", exercitos: 1 },
+//   { nome: "Nova Friburgo", jogador: "p3", exercitos: 1 }
+// ];
+
+let territorios = [];
 
 let territorioSelecionado = null;
 let possiveisAlvosAtaque = [];
@@ -150,14 +105,16 @@ function colorirTerritoriosNoMapa() {
   territorios.forEach(territorio => {
     const path = Array.from(svg.querySelectorAll('path')).find(p => p.getAttribute('name') === territorio.nome);
     if (path) {
-      let cor = players.find(p => p.playerId === territorio.jogador)?.cor;
+      console.log("Território encontrado no mapa:", territorio.nome);
+      let cor = players.find(p => p.cor === territorio.cor_jogador)?.corHex;
+      console.log("Cor do território", territorio.nome, ":", cor);
       if (!cor) cor = '#ccc'; // Cor padrão se não houver dono
       path.setAttribute('fill', cor);
     }
   });
 }
 
-colorirTerritoriosNoMapa();
+// colorirTerritoriosNoMapa();
 
 function desenharExercitosNoMapa() {
   const svg = document.getElementById('mapa');
@@ -176,28 +133,29 @@ function desenharExercitosNoMapa() {
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
     circle.setAttribute('cx', cx);
     circle.setAttribute('cy', cy);
-    circle.setAttribute('r', 6);
+  circle.setAttribute('r', 5);
     circle.setAttribute('fill', '#fff');
     circle.setAttribute('stroke', '#222');
     circle.setAttribute('stroke-width', '1');
     circle.setAttribute('class', 'exercito-marker');
 
     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('x', cx);
-    text.setAttribute('y', cy + 5);
-    text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('font-size', '8');
+  text.setAttribute('x', cx);
+  text.setAttribute('y', cy);
+  text.setAttribute('text-anchor', 'middle');
+  text.setAttribute('dominant-baseline', 'middle');
+  text.setAttribute('font-size', '7');
     text.setAttribute('font-family', 'Arial, sans-serif');
     text.setAttribute('fill', '#222');
     text.setAttribute('class', 'exercito-marker');
     text.textContent = territorio.exercitos;
 
-    svg.appendChild(circle);
-    svg.appendChild(text);
+  svg.appendChild(circle);
+  svg.appendChild(text);
   });
 }
 
-desenharExercitosNoMapa()
+// desenharExercitosNoMapa()
 
 // Adiciona evento de clique nos territórios do mapa para adicionar exércitos
 function ativarCliquePosicionamento() {
@@ -273,9 +231,9 @@ function adicionarExercitos(nome, quantidade) {
 }
 
 
-function verificaDonoTerritorio(territorioNome, jogador) {
+function verificaDonoTerritorio(territorioNome, jogadorCor) {
   const territorio = territorios.find(t => t.nome === territorioNome);
-  return territorio && territorio.jogador === jogador;
+  return territorio && territorio.cor_jogador === jogadorCor;
 }
 
 
