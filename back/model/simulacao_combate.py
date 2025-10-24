@@ -52,5 +52,5 @@ if __name__ == "__main__":
     print(f'jogador a = {jogador_a.territorios}')
     print(f'jogador b = {jogador_b.territorios}')
 
-    partida.tabuleiro.calcula_tropas_a_receber(jogador_a)
+    partida.tabuleiro.calcula_exercitos_a_receber(jogador_a)
     print(f"\nTerritorios a receber do Jogador {jogador_a.cor}: {jogador_a.exercitos_reserva}")

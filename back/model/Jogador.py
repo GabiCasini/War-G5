@@ -60,7 +60,7 @@ class Jogador:
 
     def mover_exercitos(self, origem, destino, quantidade):
         """Move exércitos de um território do jogador para outro."""
-        if origem in self.territorios and destino in self.territorios and origem != destino:
+        if origem in self.territorios and destino in self.territorios and origem != destino and destino in origem.fronteiras:
             quantidade = min(quantidade, origem.exercitos - 1)
             origem.exercitos -= quantidade
             destino.exercitos += quantidade
@@ -84,7 +84,7 @@ class Jogador:
             else:
                 perdas_defesa += 1
 
-        return perdas_ataque, perdas_defesa
+        return perdas_ataque, perdas_defesa, dados_ataque, dados_defesa
     
     def numero_de_territorios(self):
         return len(self.territorios)
