@@ -166,7 +166,8 @@ function ativarCliquePosicionamento() {
     path.style.cursor = 'pointer';
     path.addEventListener('click', function handler(e) {
       const nomeTerritorio = path.getAttribute('name');
-      if (faseAtual === 'Posicionamento'){
+
+      if (faseAtual === 'posicionamento'){
         
         if (!verificaDonoTerritorio(nomeTerritorio, jogadorAtual)) return;
   
@@ -178,13 +179,11 @@ function ativarCliquePosicionamento() {
         }
       }
 
-      else if (faseAtual === 'Ataque'){
+      else if (faseAtual === 'ataque'){
+
         e.stopPropagation();
         
         if (territorioSelecionado !== nomeTerritorio) {
-          // console.log("Território clicado:", nomeTerritorio);
-          // console.log("Território selecionado:", territorioSelecionado);
-          // console.log("Possíveis alvos de ataque:", possiveisAlvosAtaque);
           if (possiveisAlvosAtaque.includes(nomeTerritorio)) {
             ataqueTerritorio(territorioSelecionado, nomeTerritorio);
             territorioSelecionado = null;

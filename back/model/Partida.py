@@ -13,7 +13,7 @@ class Partida:
         self.jogadores = self.criar_jogadores(tupla_jogadores)
         self.tabuleiro = Tabuleiro(self.jogadores) # cria o tabuleiro do jogo, que vai gerar todos os territórios, distribuindo eles para os jogadores
         self.jogador_atual_idx = 0
-        self.fase_do_turno = "preparacao"  # 'preparacao', 'posicionamento', 'ataque', 'reposicionamento'
+        self.fase_do_turno = "posicionamento"  # 'preparacao', 'posicionamento', 'ataque', 'reposicionamento'
         random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
 
     def proximo_jogador(self):

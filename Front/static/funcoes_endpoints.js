@@ -58,8 +58,8 @@ function fetchEstadoAtual() {
       return resp.json();
     })
     .then(data => {
-        jogadorAtual = data.jogador_atual;
-        faseAtual = data.fase_atual;
+        jogadorAtual = data.turno.jogador_cor;
+        faseAtual = data.turno.fase;
         console.log('Jogador atual:', jogadorAtual);    
       return data;
     })
