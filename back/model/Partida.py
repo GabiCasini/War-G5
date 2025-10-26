@@ -96,8 +96,8 @@ class Partida:
             jogador.adicionar_exercitos_territorio(territorio_escolhido, total_exercitos)
             print(f"{jogador.nome} posicionou {total_exercitos} em {territorio_escolhido.nome}.")
 
-    def fase_de_posicionamento_api(self, jogador_id, territorio_nome, qtd_exercitos):
-        jogador = next((j for j in self.jogadores if j.cor == jogador_id), None)
+    def fase_de_posicionamento_api(self, jogador_id: str, territorio_nome: str, qtd_exercitos: int):
+        jogador: Jogador = next((j for j in self.jogadores if j.cor == jogador_id), None)
         if not jogador:
             raise Exception("Jogador não encontrado")
     
@@ -111,9 +111,7 @@ class Partida:
             raise Exception("Exércitos insuficientes na reserva")
         
         jogador.adicionar_exercitos_territorio(territorio, qtd_exercitos)
-        
-        jogador.remover_exercitos_para_posicionamento([0,0,0,0,0,0,qtd_exercitos]) # isso precisa ser consertado
-        
+        jogador.remover_exercitos_para_posicionamento(qtd_exercitos)
         return sum(jogador.exercitos_reserva)
     
 
