@@ -49,7 +49,8 @@ class Partida:
         elif self.fase_do_turno == "reposicionamento":
             self.fase_do_turno = "posicionamento"
             self.proximo_jogador()
-            jogador_atual = self.jogadores[self.jogador_atual_idx]
+        # garante que jogador_atual esteja sempre definido antes de retornar
+        jogador_atual = self.jogadores[self.jogador_atual_idx]
 
         return jogador_atual, self.fase_do_turno
     
