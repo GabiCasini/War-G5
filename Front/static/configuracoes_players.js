@@ -9,7 +9,7 @@ class Player {
     }
 }
 
-const players = [];
+let players = [];
 
 function adicionarPlayer(nome, cor, tipo) {
     const player = new Player(players.length + 1, nome, cor, tipo);

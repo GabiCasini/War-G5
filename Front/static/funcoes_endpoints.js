@@ -60,7 +60,9 @@ function fetchEstadoAtual() {
     .then(data => {
         jogadorAtual = data.turno.jogador_cor;
         faseAtual = data.turno.fase;
-        console.log('Jogador atual:', jogadorAtual);    
+        let faseAtualStringPrimeiraMaiuscula = faseAtual.charAt(0).toUpperCase() + faseAtual.slice(1);
+        let corHexJogador = players.find(p => p.cor === jogadorAtual).corHex;
+        atualizarHUD(data.turno.jogador_nome, corHexJogador, faseAtualStringPrimeiraMaiuscula);
       return data;
     })
     .catch(err => {

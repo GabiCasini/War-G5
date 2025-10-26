@@ -8,7 +8,7 @@ body {
   flex-direction: row;
 }
 #mapa-container {
-  width: 80vw;
+  width: 100vw;
   height: 100vh;
   overflow: hidden;
   /* position: fixed; */
@@ -61,10 +61,4 @@ body {
   /* stroke: ; */
   stroke: "black";
   stroke-width: 1;
-}
-
-
-#hud-container {
-  display: flex;
-  flex-direction: column;
 }

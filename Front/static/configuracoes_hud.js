@@ -7,5 +7,6 @@ function atualizarHUD(jogadorAtual, jogadorCor, faseAtual) {
     playerNomeElement.textContent = jogadorAtual;
     faseAtualElement.textContent = faseAtual;
 
-    
+    playerCorBoxElement.style.backgroundColor = jogadorCor;
 }
+
