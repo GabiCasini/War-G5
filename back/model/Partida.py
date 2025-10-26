@@ -15,6 +15,7 @@ class Partida:
         self.jogadores = self.criar_jogadores(tupla_jogadores)
         self.jogadores_eliminados = []
         self.tabuleiro = Tabuleiro(self.jogadores) # cria o tabuleiro do jogo, que vai gerar todos os territórios, distribuindo eles para os jogadores
+        self.tabuleiro.inicializar_exercitos_a_receber(self.jogadores)
         self.jogador_atual_idx = 0
         self.fase_do_turno = "posicionamento"  # 'posicionamento', 'ataque', 'reposicionamento'
         random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
@@ -35,6 +36,7 @@ class Partida:
 
         elif self.fase_do_turno == "reposicionamento":
             self.fase_do_turno = "posicionamento"
+            self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
             self.proximo_jogador()
         # garante que jogador_atual esteja sempre definido antes de retornar
         jogador_atual = self.jogadores[self.jogador_atual_idx]
@@ -81,7 +83,7 @@ class Partida:
             "territorio_destino": { "nome": destino.nome, "exercitos": destino.exercitos }
         }
 
-    def fase_de_posicionamento(self, jogador: Jogador,):
+    def fase_de_posicionamento(self, jogador: Jogador):
         """Lógica para o jogador posicionar seus novos exércitos."""
         self.tabuleiro.calcula_exercitos_a_receber(jogador=jogador)
         total_exercitos = jogador.exercitos_reserva
