@@ -60,7 +60,7 @@ def get_estado_atual():
 
     fase_atual = state.partida_global.fase_do_turno 
     
-    exercitos_disp_total = sum(jogador_atual.exercitos_reserva) #melhorar essa parte
+    exercitos_disp_total = jogador_atual.exercitos_reserva
 
     territorios_do_jogador_obj = jogador_atual.territorios
    

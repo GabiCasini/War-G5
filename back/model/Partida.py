@@ -26,25 +26,6 @@ class Partida:
         """Passa a vez para o próximo jogador."""
         self.jogador_atual_idx = (self.jogador_atual_idx + 1) % self.qtd_jogadores
 
-    # def gerenciar_turno(self, jogador: Jogador):
-    #     """Orquestra as três fases do turno de um jogador."""
-    #     # Fase de Posicionamento
-    #     self.fase_do_turno = "posicionamento"
-    #     print(f"Fase de {self.fase_do_turno}...")
-    #     self.fase_de_posicionamento(jogador)
-
-    #     # Fase de Ataque
-    #     self.fase_do_turno = "ataque"
-    #     print(f"Fase de {self.fase_do_turno}...")
-    #     self.fase_de_ataque(jogador)
-
-        # Fase de reposicionamento
-        self.fase_do_turno = "reposicionamento"
-        print(f"Fase de {self.fase_do_turno}...")
-        self.fase_de_reposicionamento(jogador)
-        
-    #     print(f"Fim do turno de {jogador.nome}")
-
     def avancar_fase_ou_turno(self):
         if self.fase_do_turno == "posicionamento":
             self.fase_do_turno = "ataque"
