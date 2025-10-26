@@ -49,13 +49,13 @@ TERRITORIOS = [["Rio de Janeiro", "Regiao_1", ["Nova Iguaçu", "Mesquita", "São
                ]
 
 class Tabuleiro:
-    def __init__(self, jogadores):
+    def __init__(self, jogadores: list[Jogador]):
         # [nome da região, bônus, territórios pertences à região]
         self.regioes_com_bonus = [["Regiao_1", 2, []], ["Regiao_2", 5, []], ["Regiao_3", 5, []], ["Regiao_4", 6, []], ["Regiao_5", 4, []], ["Regiao_6", 2, []]]
         self.territorios = self.gerar_territorios(len(jogadores), jogadores)
         
     #inicializa os territorios, atribui suas fronteiras, e atribui cada territorio a um jogador de acordo com a sua cor
-    def gerar_territorios(self, num, jogadores):
+    def gerar_territorios(self, num: int, jogadores: list[Jogador]):
         lista = []
         count = 0
         random.shuffle(TERRITORIOS)
@@ -80,6 +80,10 @@ class Tabuleiro:
                     lista[i].fronteiras.append(lista[j])
 
         return lista
+    
+    def inicializar_exercitos_a_receber(self, jogadores: list[Jogador]):
+        for jogador in jogadores:
+            self.calcula_exercitos_a_receber(jogador=jogador)
     
     # calcula a quantidade de exercitos recebidos na fase de posicionamento
     def calcula_exercitos_a_receber(self, jogador: Jogador):
