@@ -71,6 +71,30 @@ function fetchEstadoAtual() {
     });
 }
 
+
+function postPassarTurno() {
+  return fetch(LOCALHOST + '/partida/finalizar_turno', { method: 'POST' })
+    .then(resp => {
+      if (!resp.ok) {
+        return resp.json()
+          .then(errBody => { throw new Error((errBody && (errBody.mensagem || errBody.message)) || `HTTP ${resp.status}`); })
+          .catch(() => { throw new Error(`HTTP ${resp.status}`); });
+      }
+      return resp.json();
+    })
+    .then(data => {
+      console.log('Turno finalizado com sucesso:', data);
+      fetchJogadores();
+      fetchTerritorios();
+      fetchEstadoAtual();
+      return data;
+    })
+    .catch(err => {
+      console.error('Erro ao finalizar turno:', err.message);
+      throw err;
+    });
+}
+
 fetchJogadores();
 fetchTerritorios();
 fetchEstadoAtual();
