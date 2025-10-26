@@ -4,14 +4,16 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: row;
 }
 #mapa-container {
   width: 80vw;
   height: 100vh;
   overflow: hidden;
-  position: fixed;
-  top: 0;
-  left: 0;
+  /* position: fixed; */
+  /* top: 0;
+  left: 0; */
   border: none;
   margin: 0;
   touch-action: none;
@@ -59,4 +61,10 @@ body {
   /* stroke: ; */
   stroke: "black";
   stroke-width: 1;
+}
+
+
+#hud-container {
+  display: flex;
+  flex-direction: column;
 }

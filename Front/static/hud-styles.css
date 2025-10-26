@@ -1,0 +1,121 @@
+/* HUD CSS adaptado à marcação de `mapa.html`
+	 Elementos alvo:
+	 - #hud-container
+	 - #turno-wrapper > [span] (label, cor, nome)
+	 - #player-cor-box (quadrado colorido à esquerda)
+	 - #turno-player-name (nome do jogador em destaque)
+	 - #fase-wrapper / #fase-nome (badge do estágio atual)
+	 - #btn-passar-turno (botão simples)
+*/
+
+:root{
+	--hud-bg: rgba(200, 209, 219, 0.72);
+	/* --hud-accent: #524a1d; */
+	--hud-text: #000000;
+	--hud-muted: #000101;
+}
+
+/* container principal do HUD */
+#hud-container{
+	position: fixed;
+	top: 16px;
+	right: 16px;
+	display: flex;
+	gap: 14px;
+	align-items: center;
+	background: var(--hud-bg);
+	padding: 10px 14px;
+	border-radius: 10px;
+	box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+	backdrop-filter: blur(6px);
+	color: var(--hud-text);
+	font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+	z-index: 9999;
+}
+
+/* rótulos pequenos ("Turno de:", "Fase atual:") */
+#turno-wrapper > span:first-child,
+#fase-wrapper > span:first-child{
+	font-size: 11px;
+	color: var(--hud-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.6px;
+	margin-right: 6px;
+}
+
+/* linha com cor + nome do jogador */
+#turno-wrapper{
+	display:flex;
+	align-items:center;
+	flex-direction: column;
+	gap:10px;
+}
+
+/* pequeno quadrado colorido à esquerda do nome — cor setada via JS inline */
+#player-cor-box{
+	width:20px;
+	height:20px;
+	border-radius:6px;
+	border:2px solid rgba(0,0,0,0.25);
+	box-shadow: 0 2px 6px rgba(0,0,0,0.35) inset;
+	flex: none;
+	background: transparent; /* js deve inserir a cor */
+}
+
+/* nome do jogador em destaque */
+#turno-player-name{
+	font-size:18px;
+	font-weight:700;
+	color:var(--hud-text);
+	text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+}
+
+/* badge para a fase/turno atual */
+#fase-wrapper{
+	display:flex;
+	align-items:center;
+	flex-direction: column;
+	gap:8px;
+}
+
+#fase-nome{
+	font-size:13px;
+	font-weight:600;
+	color:var(--hud-text);
+	background: rgba(255,255,255,0.04);
+	padding:6px 10px;
+	border-radius:8px;
+	border:1px solid rgba(255,255,255,0.04);
+}
+
+/* botão de passar turno simples */
+#passar-turno-wrapper{ display:flex; align-items:center }
+
+#btn-passar-turno{
+	background: transparent;
+	color: var(--hud-text);
+	border: 1px solid rgba(255,255,255,0.07);
+	padding:8px 12px;
+	border-radius:8px;
+	cursor:pointer;
+	font-weight:600;
+	transition: background .12s ease, transform .08s ease;
+}
+
+#btn-passar-turno:hover{ background: rgba(255,255,255,0.03); transform: translateY(-1px) }
+#btn-passar-turno:active{ transform: translateY(0) }
+
+/* pequenas utilitárias caso queira aplicar por classe (opcional) */
+.hud-player-red{ background:#d9534f }
+.hud-player-blue{ background:#337ab7 }
+.hud-player-green{ background:#5cb85c }
+
+/* responsividade */
+@media (max-width:540px){
+	#hud-container{ top:10px; right:10px; padding:8px; gap:8px }
+	#turno-player-name{ font-size:15px }
+	#player-cor-box{ width:16px; height:16px }
+	#fase-nome{ font-size:12px; padding:5px 8px }
+	#btn-passar-turno{ padding:6px 10px }
+}
+
