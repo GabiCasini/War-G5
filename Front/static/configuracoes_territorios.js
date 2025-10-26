@@ -302,14 +302,8 @@ function posicionarExercitos(nomeTerritorio) {
 
 function ataqueTerritorio(territorioDe, territorioPara) {
   // TODO: Implementar lógica de ataque real com os endpoints
-
-  let exercitosAtaque = parseInt(prompt(`Quantos exércitos deseja atacar de "${territorioDe}" para "${territorioPara}"?`, "1"), 10);
-  if (isNaN(exercitosAtaque) || exercitosAtaque <= 0) {
-    alert("sem exercitos...");
-    return;
-  }
-  
-  alert(`Ataque de "${territorioDe}" para "${territorioPara}" com ${exercitosAtaque}`);
+  alert(`Atacando de "${territorioDe}" para "${territorioPara}"`);
+  postAtaque(jogadorAtual, territorioDe, territorioPara);
 }
 
 
