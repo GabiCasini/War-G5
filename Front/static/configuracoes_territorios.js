@@ -1,48 +1,48 @@
 //  lista onde cada elemento é uma lista que possui informações de cada territorio do jogo -> [nome, regiao, lista de fronteiras]
-const territoriosFronteiras = [
-  ["Rio de Janeiro", "Regiao_1", ["Nova Iguaçu", "Mesquita", "São João de Meriti", "Niterói"]],
-  ["Nova Iguaçu", "Regiao_1", ["Rio de Janeiro", "Mesquita", "Seropédica"]],
-  ["Mesquita", "Regiao_1", ["Rio de Janeiro", "Nova Iguaçu", "São João de Meriti"]],
-  ["São João de Meriti", "Regiao_1", ["Rio de Janeiro", "Mesquita"]], 
-  ["Seropédica", "Regiao_2", ["Nova Iguaçu", "Queimados", "Japeri", "Paracambi"]],
-  ["Queimados", "Regiao_2", ["Japeri", "Seropédica"]],
-  ["Japeri", "Regiao_2", ["Miguel Pereira", "Queimados", "Seropédica", "Paracambi"]],
-  ["Paracambi", "Regiao_2", ["Miguel Pereira", "Eng Paulo de Frontin", "Seropédica", "Japeri"]],
-  ["Miguel Pereira", "Regiao_2", ["Paty do Alferes", "Vassouras", "Eng Paulo de Frontin", "Japeri", "Paracambi"]],
-  ["Eng Paulo de Frontin", "Regiao_2", ["Vassouras", "Miguel Pereira", "Paracambi"]],
-  ["Vassouras", "Regiao_2", ["Paty do Alferes", "Miguel Pereira", "Eng Paulo de Frontin", "Paraíba do Sul"]],
-  ["Paty do Alferes", "Regiao_2", ["Vassouras", "Miguel Pereira", "Paraíba do Sul"]],
-  ["Paraíba do Sul", "Regiao_2", ["Paty do Alferes", "Vassouras", "Comendador Levy Gasparian"]],
-  ["Comendador Levy Gasparian", "Regiao_3", ["Três Rios", "Paraíba do Sul"]],
-  ["Três Rios", "Regiao_3", ["Comendador Levy Gasparian", "Sapucaia", "Areal"]],
-  ["Areal", "Regiao_3", ["Petrópolis", "Três Rios"]],
-  ["Sapucaia", "Regiao_3", ["Três Rios", "Teresópolis", "São José do Vale do Rio Preto"]],
-  ["Petrópolis", "Regiao_3", ["Areal", "Teresópolis", "Magé", "Guapimirim"]],
-  ["Teresópolis", "Regiao_3", ["Sapucaia", "Petrópolis", "Cachoeiras de Macacu", "Guapimirim", "Nova Friburgo"]],
-  ["Cachoeiras de Macacu", "Regiao_3", ["Teresópolis", "Guapimirim", "Itaboraí"]],
-  ["São José do Vale do Rio Preto", "Regiao_4", ["Sapucaia", "Sumidouro"]],
-  ["Sumidouro", "Regiao_4", ["São José do Vale do Rio Preto", "Carmo", "Duas Barras", "Nova Friburgo"]],
-  ["Nova Friburgo", "Regiao_4", ["Teresópolis", "Sumidouro", "Duas Barras", "Bom Jardim", "Cordeiro", "Trajano de Moraes"]],
-  ["Bom Jardim", "Regiao_4", ["Duas Barras", "Nova Friburgo", "Macuco"]],
-  ["Duas Barras", "Regiao_4", ["Cantagalo", "Carmo", "Sumidouro", "Nova Friburgo", "Bom Jardim"]],
-  ["Carmo", "Regiao_4", ["Cantagalo", "Duas Barras", "Sumidouro"]],
-  ["Cantagalo", "Regiao_4", ["Duas Barras", "Carmo", "Macuco", "São Sebastião do Alto", "Itaocara", "Santo Antônio de Pádua"]],
-  ["Macuco", "Regiao_4", ["Cantagalo", "São Sebastião do Alto", "Bom Jardim"]],
-  ["São Sebastião do Alto", "Regiao_4", ["Cantagalo", "Macuco", "Itaocara"]],
-  ["Itaocara", "Regiao_4", ["Cantagalo", "São Sebastião do Alto", "Santo Antônio de Pádua", "Cambuci"]],
-  ["Santo Antônio de Pádua", "Regiao_4", ["Cantagalo", "Itaocara", "Cambuci"]],
-  ["Cambuci", "Regiao_4", ["Santo Antônio de Pádua", "Itaocara"]],
-  ["Magé", "Regiao_5", ["Petrópolis", "Guapimirim"]],
-  ["Guapimirim", "Regiao_5", ["Petrópolis", "Magé", "Teresópolis", "Cachoeiras de Macacu", "Itaboraí"]],
-  ["Itaboraí", "Regiao_5", ["Guapimirim", "Cachoeiras de Macacu", "São Gonçalo", "Maricá"]],
-  ["São Gonçalo", "Regiao_5", ["Itaboraí", "Maricá", "Niterói"]],
-  ["Maricá", "Regiao_5", ["Itaboraí", "São Gonçalo", "Niterói"]],
-  ["Niterói", "Regiao_5", ["São Gonçalo", "Maricá", "Rio de Janeiro"]],
-  ["Cordeiro", "Regiao_6", ["Nova Friburgo", "Trajano de Moraes"]],
-  ["Trajano de Moraes", "Regiao_6", ["Nova Friburgo", "Cordeiro", "Macaé"]],
-  ["Macaé", "Regiao_6", ["Trajano de Moraes", "Casimiro de Abreu"]],
-  ["Casimiro de Abreu", "Regiao_6", ["Macaé"]]
-];
+// const territoriosFronteiras = [
+//   ["Rio de Janeiro", "Regiao_1", ["Nova Iguaçu", "Mesquita", "São João de Meriti", "Niterói"]],
+//   ["Nova Iguaçu", "Regiao_1", ["Rio de Janeiro", "Mesquita", "Seropédica"]],
+//   ["Mesquita", "Regiao_1", ["Rio de Janeiro", "Nova Iguaçu", "São João de Meriti"]],
+//   ["São João de Meriti", "Regiao_1", ["Rio de Janeiro", "Mesquita"]], 
+//   ["Seropédica", "Regiao_2", ["Nova Iguaçu", "Queimados", "Japeri", "Paracambi"]],
+//   ["Queimados", "Regiao_2", ["Japeri", "Seropédica"]],
+//   ["Japeri", "Regiao_2", ["Miguel Pereira", "Queimados", "Seropédica", "Paracambi"]],
+//   ["Paracambi", "Regiao_2", ["Miguel Pereira", "Eng Paulo de Frontin", "Seropédica", "Japeri"]],
+//   ["Miguel Pereira", "Regiao_2", ["Paty do Alferes", "Vassouras", "Eng Paulo de Frontin", "Japeri", "Paracambi"]],
+//   ["Eng Paulo de Frontin", "Regiao_2", ["Vassouras", "Miguel Pereira", "Paracambi"]],
+//   ["Vassouras", "Regiao_2", ["Paty do Alferes", "Miguel Pereira", "Eng Paulo de Frontin", "Paraíba do Sul"]],
+//   ["Paty do Alferes", "Regiao_2", ["Vassouras", "Miguel Pereira", "Paraíba do Sul"]],
+//   ["Paraíba do Sul", "Regiao_2", ["Paty do Alferes", "Vassouras", "Comendador Levy Gasparian"]],
+//   ["Comendador Levy Gasparian", "Regiao_3", ["Três Rios", "Paraíba do Sul"]],
+//   ["Três Rios", "Regiao_3", ["Comendador Levy Gasparian", "Sapucaia", "Areal"]],
+//   ["Areal", "Regiao_3", ["Petrópolis", "Três Rios"]],
+//   ["Sapucaia", "Regiao_3", ["Três Rios", "Teresópolis", "São José do Vale do Rio Preto"]],
+//   ["Petrópolis", "Regiao_3", ["Areal", "Teresópolis", "Magé", "Guapimirim"]],
+//   ["Teresópolis", "Regiao_3", ["Sapucaia", "Petrópolis", "Cachoeiras de Macacu", "Guapimirim", "Nova Friburgo"]],
+//   ["Cachoeiras de Macacu", "Regiao_3", ["Teresópolis", "Guapimirim", "Itaboraí"]],
+//   ["São José do Vale do Rio Preto", "Regiao_4", ["Sapucaia", "Sumidouro"]],
+//   ["Sumidouro", "Regiao_4", ["São José do Vale do Rio Preto", "Carmo", "Duas Barras", "Nova Friburgo"]],
+//   ["Nova Friburgo", "Regiao_4", ["Teresópolis", "Sumidouro", "Duas Barras", "Bom Jardim", "Cordeiro", "Trajano de Moraes"]],
+//   ["Bom Jardim", "Regiao_4", ["Duas Barras", "Nova Friburgo", "Macuco"]],
+//   ["Duas Barras", "Regiao_4", ["Cantagalo", "Carmo", "Sumidouro", "Nova Friburgo", "Bom Jardim"]],
+//   ["Carmo", "Regiao_4", ["Cantagalo", "Duas Barras", "Sumidouro"]],
+//   ["Cantagalo", "Regiao_4", ["Duas Barras", "Carmo", "Macuco", "São Sebastião do Alto", "Itaocara", "Santo Antônio de Pádua"]],
+//   ["Macuco", "Regiao_4", ["Cantagalo", "São Sebastião do Alto", "Bom Jardim"]],
+//   ["São Sebastião do Alto", "Regiao_4", ["Cantagalo", "Macuco", "Itaocara"]],
+//   ["Itaocara", "Regiao_4", ["Cantagalo", "São Sebastião do Alto", "Santo Antônio de Pádua", "Cambuci"]],
+//   ["Santo Antônio de Pádua", "Regiao_4", ["Cantagalo", "Itaocara", "Cambuci"]],
+//   ["Cambuci", "Regiao_4", ["Santo Antônio de Pádua", "Itaocara"]],
+//   ["Magé", "Regiao_5", ["Petrópolis", "Guapimirim"]],
+//   ["Guapimirim", "Regiao_5", ["Petrópolis", "Magé", "Teresópolis", "Cachoeiras de Macacu", "Itaboraí"]],
+//   ["Itaboraí", "Regiao_5", ["Guapimirim", "Cachoeiras de Macacu", "São Gonçalo", "Maricá"]],
+//   ["São Gonçalo", "Regiao_5", ["Itaboraí", "Maricá", "Niterói"]],
+//   ["Maricá", "Regiao_5", ["Itaboraí", "São Gonçalo", "Niterói"]],
+//   ["Niterói", "Regiao_5", ["São Gonçalo", "Maricá", "Rio de Janeiro"]],
+//   ["Cordeiro", "Regiao_6", ["Nova Friburgo", "Trajano de Moraes"]],
+//   ["Trajano de Moraes", "Regiao_6", ["Nova Friburgo", "Cordeiro", "Macaé"]],
+//   ["Macaé", "Regiao_6", ["Trajano de Moraes", "Casimiro de Abreu"]],
+//   ["Casimiro de Abreu", "Regiao_6", ["Macaé"]]
+// ];
 
 // let territorios = [
 //   // --- p1: Baixada e Capital ---
@@ -105,9 +105,9 @@ function colorirTerritoriosNoMapa() {
   territorios.forEach(territorio => {
     const path = Array.from(svg.querySelectorAll('path')).find(p => p.getAttribute('name') === territorio.nome);
     if (path) {
-      console.log("Território encontrado no mapa:", territorio.nome);
+      // console.log("Território encontrado no mapa:", territorio.nome);
       let cor = players.find(p => p.cor === territorio.cor_jogador)?.corHex;
-      console.log("Cor do território", territorio.nome, ":", cor);
+      // console.log("Cor do território", territorio.nome, ":", cor);
       if (!cor) cor = '#ccc'; // Cor padrão se não houver dono
       path.setAttribute('fill', cor);
     }
@@ -180,7 +180,7 @@ function ativarCliquePosicionamento() {
       }
 
       else if (faseAtual === 'ataque'){
-
+        // console.log(territorios)
         e.stopPropagation();
         
         if (territorioSelecionado !== nomeTerritorio) {
@@ -238,13 +238,13 @@ function verificaDonoTerritorio(territorioNome, jogadorCor) {
 
 
 function obterTerritoriosParaAtaque(jogador, territorioNome) {
-  const territoriosAtacantes = territorios.filter(t => t.jogador === jogador && t.nome === territorioNome && t.exercitos >= 1);
+  const territoriosAtacantes = territorios.filter(t => t.jogador_id === jogador && t.nome === territorioNome && t.exercitos >= 1);
   const ataquesPossiveis = [];
 
   territoriosAtacantes.forEach(territorio => {
     const vizinhos = obterTerritoriosVizinhos(territorio.nome);
     vizinhos.forEach(vizinho => {
-      if (vizinho.jogador !== jogador) {
+      if (vizinho.jogador_id !== jogador) {
         ataquesPossiveis.push({ de: territorio.nome, para: vizinho.nome });
       }
     });
@@ -254,11 +254,12 @@ function obterTerritoriosParaAtaque(jogador, territorioNome) {
 }
 
 function obterTerritoriosVizinhos(territorioNome) {
-  const territorioInfo = territoriosFronteiras.find(t => t[0] === territorioNome);
+  console.log(territorios)
+  const territorioInfo = territorios.find(t => t.nome === territorioNome);
   if (!territorioInfo) return [];
-  const fronteiras = territorioInfo[2];
+  const fronteiras = territorioInfo.fronteiras;
 
-  console.log(fronteiras, territorioNome);
+  // console.log(fronteiras, territorioNome);
   return territorios.filter(t => fronteiras.includes(t.nome));
 }
 
@@ -266,7 +267,7 @@ function obterTerritoriosVizinhos(territorioNome) {
 function destacarTerritorio(nomeTerritorio) {
   const svg = document.getElementById('mapa');
   if (!svg) return;
-  console.log("Destacando território:", nomeTerritorio);
+  // console.log("Destacando território:", nomeTerritorio);
   const path = Array.from(svg.querySelectorAll('path')).find(p => p.getAttribute('name') === nomeTerritorio);
   if (path) {
     // path.setAttribute('stroke', '#FFD700');
@@ -320,4 +321,12 @@ function ataqueTerritorio(territorioDe, territorioPara) {
   }
   
   alert(`Ataque de "${territorioDe}" para "${territorioPara}" com ${exercitosAtaque}`);
+}
+
+
+
+function refreshTerritorios() {
+  removerTodosDestaqueTerritorio();
+  territorioSelecionado = null;
+  possiveisAlvosAtaque = [];
 }
