@@ -92,6 +92,7 @@ function postPassarTurno() {
       fetchJogadores();
       fetchTerritorios();
       fetchEstadoAtual();
+      refreshTerritorios();
       return data;
     })
     .catch(err => {

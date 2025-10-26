@@ -1,103 +1,7 @@
-//  lista onde cada elemento é uma lista que possui informações de cada territorio do jogo -> [nome, regiao, lista de fronteiras]
-// const territoriosFronteiras = [
-//   ["Rio de Janeiro", "Regiao_1", ["Nova Iguaçu", "Mesquita", "São João de Meriti", "Niterói"]],
-//   ["Nova Iguaçu", "Regiao_1", ["Rio de Janeiro", "Mesquita", "Seropédica"]],
-//   ["Mesquita", "Regiao_1", ["Rio de Janeiro", "Nova Iguaçu", "São João de Meriti"]],
-//   ["São João de Meriti", "Regiao_1", ["Rio de Janeiro", "Mesquita"]], 
-//   ["Seropédica", "Regiao_2", ["Nova Iguaçu", "Queimados", "Japeri", "Paracambi"]],
-//   ["Queimados", "Regiao_2", ["Japeri", "Seropédica"]],
-//   ["Japeri", "Regiao_2", ["Miguel Pereira", "Queimados", "Seropédica", "Paracambi"]],
-//   ["Paracambi", "Regiao_2", ["Miguel Pereira", "Eng Paulo de Frontin", "Seropédica", "Japeri"]],
-//   ["Miguel Pereira", "Regiao_2", ["Paty do Alferes", "Vassouras", "Eng Paulo de Frontin", "Japeri", "Paracambi"]],
-//   ["Eng Paulo de Frontin", "Regiao_2", ["Vassouras", "Miguel Pereira", "Paracambi"]],
-//   ["Vassouras", "Regiao_2", ["Paty do Alferes", "Miguel Pereira", "Eng Paulo de Frontin", "Paraíba do Sul"]],
-//   ["Paty do Alferes", "Regiao_2", ["Vassouras", "Miguel Pereira", "Paraíba do Sul"]],
-//   ["Paraíba do Sul", "Regiao_2", ["Paty do Alferes", "Vassouras", "Comendador Levy Gasparian"]],
-//   ["Comendador Levy Gasparian", "Regiao_3", ["Três Rios", "Paraíba do Sul"]],
-//   ["Três Rios", "Regiao_3", ["Comendador Levy Gasparian", "Sapucaia", "Areal"]],
-//   ["Areal", "Regiao_3", ["Petrópolis", "Três Rios"]],
-//   ["Sapucaia", "Regiao_3", ["Três Rios", "Teresópolis", "São José do Vale do Rio Preto"]],
-//   ["Petrópolis", "Regiao_3", ["Areal", "Teresópolis", "Magé", "Guapimirim"]],
-//   ["Teresópolis", "Regiao_3", ["Sapucaia", "Petrópolis", "Cachoeiras de Macacu", "Guapimirim", "Nova Friburgo"]],
-//   ["Cachoeiras de Macacu", "Regiao_3", ["Teresópolis", "Guapimirim", "Itaboraí"]],
-//   ["São José do Vale do Rio Preto", "Regiao_4", ["Sapucaia", "Sumidouro"]],
-//   ["Sumidouro", "Regiao_4", ["São José do Vale do Rio Preto", "Carmo", "Duas Barras", "Nova Friburgo"]],
-//   ["Nova Friburgo", "Regiao_4", ["Teresópolis", "Sumidouro", "Duas Barras", "Bom Jardim", "Cordeiro", "Trajano de Moraes"]],
-//   ["Bom Jardim", "Regiao_4", ["Duas Barras", "Nova Friburgo", "Macuco"]],
-//   ["Duas Barras", "Regiao_4", ["Cantagalo", "Carmo", "Sumidouro", "Nova Friburgo", "Bom Jardim"]],
-//   ["Carmo", "Regiao_4", ["Cantagalo", "Duas Barras", "Sumidouro"]],
-//   ["Cantagalo", "Regiao_4", ["Duas Barras", "Carmo", "Macuco", "São Sebastião do Alto", "Itaocara", "Santo Antônio de Pádua"]],
-//   ["Macuco", "Regiao_4", ["Cantagalo", "São Sebastião do Alto", "Bom Jardim"]],
-//   ["São Sebastião do Alto", "Regiao_4", ["Cantagalo", "Macuco", "Itaocara"]],
-//   ["Itaocara", "Regiao_4", ["Cantagalo", "São Sebastião do Alto", "Santo Antônio de Pádua", "Cambuci"]],
-//   ["Santo Antônio de Pádua", "Regiao_4", ["Cantagalo", "Itaocara", "Cambuci"]],
-//   ["Cambuci", "Regiao_4", ["Santo Antônio de Pádua", "Itaocara"]],
-//   ["Magé", "Regiao_5", ["Petrópolis", "Guapimirim"]],
-//   ["Guapimirim", "Regiao_5", ["Petrópolis", "Magé", "Teresópolis", "Cachoeiras de Macacu", "Itaboraí"]],
-//   ["Itaboraí", "Regiao_5", ["Guapimirim", "Cachoeiras de Macacu", "São Gonçalo", "Maricá"]],
-//   ["São Gonçalo", "Regiao_5", ["Itaboraí", "Maricá", "Niterói"]],
-//   ["Maricá", "Regiao_5", ["Itaboraí", "São Gonçalo", "Niterói"]],
-//   ["Niterói", "Regiao_5", ["São Gonçalo", "Maricá", "Rio de Janeiro"]],
-//   ["Cordeiro", "Regiao_6", ["Nova Friburgo", "Trajano de Moraes"]],
-//   ["Trajano de Moraes", "Regiao_6", ["Nova Friburgo", "Cordeiro", "Macaé"]],
-//   ["Macaé", "Regiao_6", ["Trajano de Moraes", "Casimiro de Abreu"]],
-//   ["Casimiro de Abreu", "Regiao_6", ["Macaé"]]
-// ];
-
-// let territorios = [
-//   // --- p1: Baixada e Capital ---
-//   { nome: "Rio de Janeiro", jogador: "p1", exercitos: 1 },
-//   { nome: "Nova Iguaçu", jogador: "p1", exercitos: 1 },
-//   { nome: "Mesquita", jogador: "p1", exercitos: 1 },
-//   { nome: "São João de Meriti", jogador: "p1", exercitos: 1 },
-//   { nome: "Queimados", jogador: "p1", exercitos: 1 },
-//   { nome: "Japeri", jogador: "p1", exercitos: 1 },
-//   { nome: "Paracambi", jogador: "p1", exercitos: 1 },
-//   { nome: "Seropédica", jogador: "p1", exercitos: 1 },
-//   { nome: "Eng Paulo de Frontin", jogador: "p1", exercitos: 1 },
-//   { nome: "Miguel Pereira", jogador: "p1", exercitos: 1 },
-//   { nome: "Vassouras", jogador: "p1", exercitos: 1 },
-//   { nome: "Paty do Alferes", jogador: "p1", exercitos: 1 },
-//   { nome: "Guapimirim", jogador: "p1", exercitos: 1 },
-//   { nome: "Magé", jogador: "p1", exercitos: 1 },
-
-//   // --- p2: Região Serrana e Centro-Sul ---
-//   { nome: "Petrópolis", jogador: "p2", exercitos: 1 },
-//   { nome: "Teresópolis", jogador: "p2", exercitos: 1 },
-//   { nome: "Areal", jogador: "p2", exercitos: 1 },
-//   { nome: "Três Rios", jogador: "p2", exercitos: 1 },
-//   { nome: "Comendador Levy Gasparian", jogador: "p2", exercitos: 1 },
-//   { nome: "Paraíba do Sul", jogador: "p2", exercitos: 1 },
-//   { nome: "Sapucaia", jogador: "p2", exercitos: 1 },
-//   { nome: "Sumidouro", jogador: "p2", exercitos: 1 },
-//   { nome: "São José do Vale do Rio Preto", jogador: "p2", exercitos: 1 },
-//   { nome: "Carmo", jogador: "p2", exercitos: 1 },
-//   { nome: "Bom Jardim", jogador: "p2", exercitos: 1 },
-//   { nome: "Cantagalo", jogador: "p2", exercitos: 1 },
-//   { nome: "Duas Barras", jogador: "p2", exercitos: 1 },
-//   { nome: "Trajano de Moraes", jogador: "p2", exercitos: 1 },
-
-//   // --- p3: Região Norte / Leste Fluminense ---
-//   { nome: "Itaboraí", jogador: "p3", exercitos: 1 },
-//   { nome: "Niterói", jogador: "p3", exercitos: 1 },
-//   { nome: "São Gonçalo", jogador: "p3", exercitos: 1 },
-//   { nome: "Maricá", jogador: "p3", exercitos: 1 },
-//   { nome: "Cachoeiras de Macacu", jogador: "p3", exercitos: 1 },
-//   { nome: "Casimiro de Abreu", jogador: "p3", exercitos: 1 },
-//   { nome: "Macaé", jogador: "p3", exercitos: 1 },
-//   { nome: "Cordeiro", jogador: "p3", exercitos: 1 },
-//   { nome: "São Sebastião do Alto", jogador: "p3", exercitos: 1 },
-//   { nome: "Itaocara", jogador: "p3", exercitos: 1 },
-//   { nome: "Macuco", jogador: "p3", exercitos: 1 },
-//   { nome: "Cambuci", jogador: "p3", exercitos: 1 },
-//   { nome: "Santo Antônio de Pádua", jogador: "p3", exercitos: 1 },
-//   { nome: "Nova Friburgo", jogador: "p3", exercitos: 1 }
-// ];
-
 let territorios = [];
-
 let territorioSelecionado = null;
 let possiveisAlvosAtaque = [];
+let possiveisAlvosReposicionamento = [];
 
 function colorirTerritoriosNoMapa() {
   const svg = document.getElementById('mapa');
@@ -114,7 +18,6 @@ function colorirTerritoriosNoMapa() {
   });
 }
 
-// colorirTerritoriosNoMapa();
 
 function desenharExercitosNoMapa() {
   const svg = document.getElementById('mapa');
@@ -155,36 +58,35 @@ function desenharExercitosNoMapa() {
   });
 }
 
-// desenharExercitosNoMapa()
 
-// Adiciona evento de clique nos territórios do mapa para adicionar exércitos
 function ativarCliquePosicionamento() {
   const svg = document.getElementById('mapa');
   if (!svg) return;
   const paths = svg.querySelectorAll('path[name]');
+
   paths.forEach(path => {
+
     path.style.cursor = 'pointer';
+
     path.addEventListener('click', function handler(e) {
+
+      e.stopPropagation();
+
       const nomeTerritorio = path.getAttribute('name');
 
       if (faseAtual === 'posicionamento'){
         
         if (!verificaDonoTerritorio(nomeTerritorio, jogadorAtual)) return;
-  
-        e.stopPropagation();
-        const valor = prompt(`Adicionar quantos exércitos para "${nomeTerritorio}"?`, "1");
-        const qtd = parseInt(valor, 10);
-        if (!isNaN(qtd) && qtd !== 0) {
-          adicionarExercitos(nomeTerritorio, qtd);
-        }
+        
+        posicionarExercitos(nomeTerritorio);
+
       }
 
       else if (faseAtual === 'ataque'){
-        // console.log(territorios)
-        e.stopPropagation();
         
         if (territorioSelecionado !== nomeTerritorio) {
           if (possiveisAlvosAtaque.includes(nomeTerritorio)) {
+
             ataqueTerritorio(territorioSelecionado, nomeTerritorio);
             territorioSelecionado = null;
             possiveisAlvosAtaque = [];
@@ -208,11 +110,39 @@ function ativarCliquePosicionamento() {
             destacarTerritorio(ataque.para);
           }
         });
-      }
-
-      else if (faseAtual === 'Reposicionamento'){
 
       }
+
+      else if (faseAtual === 'reposicionamento'){
+
+        e.stopPropagation();
+
+        if (territorioSelecionado !== nomeTerritorio) {
+          if (possiveisAlvosReposicionamento.includes(nomeTerritorio)) {
+            reposicionarTerritorio(territorioSelecionado, nomeTerritorio);
+            territorioSelecionado = null;
+            possiveisAlvosReposicionamento = [];
+            removerTodosDestaqueTerritorio();
+
+          }
+        }
+
+        if (!verificaDonoTerritorio(nomeTerritorio, jogadorAtual)) return;
+
+        possiveisAlvosReposicionamento = [];
+        selecionarTerritorio(nomeTerritorio);
+        removerTodosDestaqueTerritorio();
+
+        let listaPossiveisReposicionamentos = obterTerritoriosReposicionamento(jogadorAtual, nomeTerritorio);
+
+        listaPossiveisReposicionamentos.forEach(reposicionamento => {
+          if (reposicionamento.de === nomeTerritorio) {
+            possiveisAlvosReposicionamento.push(reposicionamento.para);
+            destacarTerritorio(reposicionamento.para);
+          }
+        });
+      }
+
     });
   });
 }
@@ -236,7 +166,6 @@ function verificaDonoTerritorio(territorioNome, jogadorCor) {
 }
 
 
-
 function obterTerritoriosParaAtaque(jogador, territorioNome) {
   const territoriosAtacantes = territorios.filter(t => t.jogador_id === jogador && t.nome === territorioNome && t.exercitos >= 1);
   const ataquesPossiveis = [];
@@ -252,6 +181,23 @@ function obterTerritoriosParaAtaque(jogador, territorioNome) {
 
   return ataquesPossiveis;
 }
+
+
+function obterTerritoriosReposicionamento(jogador, territorioNome) {
+  const territoriosReposicionamento = territorios.filter(t => t.jogador_id === jogador && t.nome === territorioNome && t.exercitos >= 1);
+  const reposicionamentosPossiveis = [];
+  territoriosReposicionamento.forEach(territorio => {
+    const vizinhos = obterTerritoriosVizinhos(territorio.nome);
+    vizinhos.forEach(vizinho => {
+      if (vizinho.jogador_id === jogador) {
+        reposicionamentosPossiveis.push({ de: territorio.nome, para: vizinho.nome });
+      }
+    });
+  });
+
+  return reposicionamentosPossiveis;
+}
+
 
 function obterTerritoriosVizinhos(territorioNome) {
   console.log(territorios)
@@ -277,6 +223,7 @@ function destacarTerritorio(nomeTerritorio) {
   }
 }
 
+
 function removerDestaqueTerritorio(nomeTerritorio) {
   const svg = document.getElementById('mapa');
   if (!svg) return;
@@ -288,12 +235,14 @@ function removerDestaqueTerritorio(nomeTerritorio) {
   }
 }
 
+
 function removerTodosDestaqueTerritorio() {
   for (const territorio of territorios) {
     removerDestaqueTerritorio(territorio.nome);
     // deselecionarTerritorio(territorio.nome);
   }
 }
+
 
 function selecionarTerritorio(nomeTerritorio) {
   territorioSelecionado = nomeTerritorio;
@@ -312,7 +261,27 @@ function selecionarTerritorio(nomeTerritorio) {
 }
 
 
+function refreshTerritorios() {
+  removerTodosDestaqueTerritorio();
+  territorioSelecionado = null;
+  possiveisAlvosAtaque = [];
+  possiveisAlvosReposicionamento = [];
+}
+
+
+function posicionarExercitos(nomeTerritorio) {
+  // TODO: Implementar lógica de posicionamento real com os endpoints
+
+  const valor = prompt(`Adicionar quantos exércitos para "${nomeTerritorio}"?`, "1");
+  const qtd = parseInt(valor, 10);
+  if (!isNaN(qtd) && qtd !== 0) {
+    // adicionarExercitos(nomeTerritorio, qtd);
+    alert(`Posicionando ${qtd} exércitos em "${nomeTerritorio}"`);
+  }
+}
+
 function ataqueTerritorio(territorioDe, territorioPara) {
+  // TODO: Implementar lógica de ataque real com os endpoints
 
   let exercitosAtaque = parseInt(prompt(`Quantos exércitos deseja atacar de "${territorioDe}" para "${territorioPara}"?`, "1"), 10);
   if (isNaN(exercitosAtaque) || exercitosAtaque <= 0) {
@@ -324,9 +293,16 @@ function ataqueTerritorio(territorioDe, territorioPara) {
 }
 
 
+function reposicionarTerritorio(territorioDe, territorioPara) {
+  // TODO: Implementar lógica de reposicionamento real com os endpoints
 
-function refreshTerritorios() {
-  removerTodosDestaqueTerritorio();
-  territorioSelecionado = null;
-  possiveisAlvosAtaque = [];
+  let exercitosReposicionar = parseInt(prompt(`Quantos exércitos deseja reposicionar de "${territorioDe}" para "${territorioPara}"?`, "1"), 10);
+  if (isNaN(exercitosReposicionar) || exercitosReposicionar <= 0) {
+    alert("sem exercitos...");
+    return;
+  }
+
+  alert(`Reposicionamento de "${territorioDe}" para "${territorioPara}" com ${exercitosReposicionar}`);
 }
+
+
