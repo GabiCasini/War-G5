@@ -5,7 +5,8 @@ class Player {
         this.nome = nome;
         this.cor = cor;
         this.corHex = atribuiCorHexJogador(cor);
-        this.tipo = tipo; // 'humano' ou 'ia'
+        this.tipo = tipo;
+        this.exercitosDisponiveisPosicionamento = 0;
     }
 }
 
