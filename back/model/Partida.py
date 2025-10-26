@@ -46,7 +46,6 @@ class Partida:
     def fase_de_ataque(self, jogador: Jogador):
         """Lógica para o jogador realizar ataques."""
        
-
         # Se for IA, usar a rotina de ataque da IA
         if jogador.tipo == 'ai' and hasattr(jogador, 'executar_ataques'):
             try:
@@ -66,15 +65,18 @@ class Partida:
         print("O jogador decide se e como irá reposicionar seus exércitos.")
         pass
     
-    def fase_de_reposicionamento_api(self, jogador_id, nome_origem, nome_destino, qtd_exercitos):
-        jogador = next((j for j in self.jogadores if j.cor == jogador_id), None)
-        if not jogador: raise Exception("Jogador não encontrado")
+    def fase_de_reposicionamento_api(self, jogador_id: str, nome_origem: str, nome_destino: str, qtd_exercitos: int):
+        jogador: Jogador = next((j for j in self.jogadores if j.cor == jogador_id), None)
+        if not jogador:
+            raise Exception("Jogador não encontrado")
     
         origem = next((t for t in jogador.territorios if t.nome == nome_origem), None)
-        if not origem: raise Exception("Território de origem não é seu")
+        if not origem:
+            raise Exception("Território de origem não é seu")
     
         destino = next((t for t in jogador.territorios if t.nome == nome_destino), None)
-        if not destino: raise Exception("Território de destino não é seu")
+        if not destino:
+            raise Exception("Território de destino não é seu")
     
         jogador.mover_exercitos(origem, destino, qtd_exercitos)
     
