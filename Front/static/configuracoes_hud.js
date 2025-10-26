@@ -6,7 +6,6 @@ const btnPassarTurno = document.getElementById('btn-passar-turno');
 function atualizarHUD(jogadorAtual, jogadorCor, faseAtual) {
     playerNomeElement.textContent = jogadorAtual;
     faseAtualElement.textContent = faseAtual;
-
     playerCorBoxElement.style.backgroundColor = jogadorCor;
 }
 

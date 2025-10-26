@@ -36,3 +36,9 @@ function atribuiCorHexJogador(cor) {
     }
 }
 
+function atualizarExercitosParaPosicionar(corJogador, quantidade) {
+    const jogador = players.find(p => p.cor === corJogador);
+    if (jogador) {
+        jogador.exercitosDisponiveisPosicionamento = quantidade;
+    }
+}

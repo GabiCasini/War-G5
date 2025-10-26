@@ -64,8 +64,10 @@ function fetchEstadoAtual() {
     .then(data => {
         jogadorAtual = data.turno.jogador_cor;
         faseAtual = data.turno.fase;
+        let exercitosParaPosicionar = data.exercitos_disponiveis.total;
         let faseAtualStringPrimeiraMaiuscula = faseAtual.charAt(0).toUpperCase() + faseAtual.slice(1);
         let corHexJogador = players.find(p => p.cor === jogadorAtual).corHex;
+        atualizarExercitosParaPosicionar(jogadorAtual,exercitosParaPosicionar);
         atualizarHUD(data.turno.jogador_nome, corHexJogador, faseAtualStringPrimeiraMaiuscula);
         console.log(data)
       return data;
@@ -119,6 +121,7 @@ function postPosicionarExercitos(jogador_cor, territorio, quantidade) {
     .then(data => {
       console.log('Exércitos posicionados com sucesso:', data);
       fetchTerritorios();
+      fetchEstadoAtual();
       return data;
     })
     .catch(err => {

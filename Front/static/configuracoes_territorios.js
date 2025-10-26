@@ -272,12 +272,20 @@ function refreshTerritorios() {
 function posicionarExercitos(nomeTerritorio) {
   // TODO: Implementar lógica de posicionamento real com os endpoints
 
-  const valor = prompt(`Adicionar quantos exércitos para "${nomeTerritorio}"?`, "1");
+  let maximoExercitos = players.find(p => p.cor === jogadorAtual).exercitosDisponiveisPosicionamento;
+  const valor = prompt(`Adicionar quantos exércitos em "${nomeTerritorio}"?. Máximo: ${maximoExercitos}`, "1");
   const qtd = parseInt(valor, 10);
   if (!isNaN(qtd) && qtd !== 0) {
     // adicionarExercitos(nomeTerritorio, qtd);
     alert(`Posicionando ${qtd} exércitos em "${nomeTerritorio}"`);
   }
+
+  if (qtd > maximoExercitos) {
+    alert(`Você não pode posicionar mais de ${maximoExercitos} exércitos.`);
+    return;
+  }
+
+  postPosicionarExercitos(jogadorAtual, nomeTerritorio, qtd);
 }
 
 function ataqueTerritorio(territorioDe, territorioPara) {
