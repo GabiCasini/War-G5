@@ -468,25 +468,34 @@
       </svg>
     </div>
     <div id="hud-container">
-      
-      <div id="turno-wrapper">
-        <span class="turno-label">Turno de:</span>
-        <div id="turno-player-row">
-          <span id="player-cor-box"></span>
-          <span id="turno-player-name">Lucas</span>
+
+      <div id="hud-wrapper-first-line">
+        <div id="turno-wrapper">
+          <span class="turno-label">Turno de:</span>
+          <div id="turno-player-row">
+            <span id="player-cor-box"></span>
+            <span id="turno-player-name"></span>
+          </div>
+        </div>
+
+        <div id="fase-wrapper">
+          <span>Fase atual:</span>
+          <span id="fase-nome"></span>
+        </div>
+
+        <div id="passar-turno-wrapper">
+          <button id="btn-passar-turno">Passar turno</button>
+        </div>
+
+      </div>
+
+      <div id="hud-wrapper-first-line">
+        <div id="info-exercitos-wrapper">
         </div>
       </div>
-
-      <div id="fase-wrapper">
-        <span>Fase atual:</span>
-        <span id="fase-nome">Posicionamento</span>
-      </div>
-
-      <div id="passar-turno-wrapper">
-        <button id="btn-passar-turno">Passar turno</button>
-      </div>
-
+    
     </div>
+
     <script src="{{ url_for('static', filename='configuracoes_mapa.js') }}"></script>
     <script src="{{ url_for('static', filename='configuracoes_players.js') }}"></script>
     <script src="{{ url_for('static', filename='configuracoes_territorios.js') }}"></script>

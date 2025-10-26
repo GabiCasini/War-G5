@@ -304,5 +304,3 @@ function reposicionarTerritorio(territorioDe, territorioPara) {
 
   alert(`Reposicionamento de "${territorioDe}" para "${territorioPara}" com ${exercitosReposicionar}`);
 }
-
-

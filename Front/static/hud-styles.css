@@ -10,6 +10,7 @@
 	top: 16px;
 	left: 16px; /* movido para o lado esquerdo */
 	display: flex;
+	flex-direction: column;
 	gap: 14px;
 	align-items: center;
 	background: var(--hud-bg);
@@ -20,6 +21,11 @@
 	color: var(--hud-text);
 	font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 	z-index: 9999;
+}
+
+#hud-wrapper-first-line{
+	display: flex;
+	flex-direction: row;
 }
 
 #turno-wrapper > span:first-child,
