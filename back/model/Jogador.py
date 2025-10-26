@@ -7,9 +7,10 @@ class Jogador:
         self.cor = cor  # red, blue, green, orange, purple, yellow
         self.tipo = tipo  # 'humano' ou 'ai'
         self.territorios = []  # lista de objetos Territorio
-        self.exercitos_reserva = [0, 0, 0, 0, 0, 0, 0]  # exércitos disponíveis para alocação para cada regiao e geral
+        self.exercitos_reserva = 0  # exércitos disponíveis para alocação
         self.cartas = []
         self.objetivo = None
+        self.eliminado_por = "nenhum"
 
     def __repr__(self):
         return f"{self.nome} (Cor: {self.cor})"
@@ -23,16 +24,12 @@ class Jogador:
         if territorio in self.territorios:
             self.territorios.remove(territorio)
 
-    # adiciona na lista exercitos_reserva os exércitos que o jogador poderá adicionar aos seus territórios na fase de posicionamento
-    def adicionar_exercitos_para_posicionamento(self, quantidade: list[int]):
-        for i in range (7):
-            self.exercitos_reserva[i] = quantidade[i]
+    # adiciona os exércitos que o jogador poderá adicionar aos seus territórios na fase de posicionamento
+    def adicionar_exercitos_para_posicionamento(self, quantidade: int):
+        self.exercitos_reserva = quantidade
 
-    # recebe uma lista com a quantidade de territórios que deve ser removida em cada índice
-    # [regiao1, regiao2, regiao3, regiao4, regiao5, regiao6, geral]
-    def remover_exercitos_para_posicionamento(self, quantidade: list[int]):
-        for i in range (7):
-            self.exercitos_reserva[i] = max(0, self.exercitos_reserva[i] - quantidade[i])
+    def remover_exercitos_para_posicionamento(self, quantidade: int):
+        self.exercitos_reserva -= quantidade
 
     def possui_territorio(self, territorio: Territorio):
         return territorio in self.territorios
@@ -53,7 +50,7 @@ class Jogador:
     def remover_exercitos_territorio(self, territorio, quantidade):
         """Remove exércitos de um território do jogador."""
         if territorio in self.territorios:
-            territorio.exercitos = max(0, territorio.exercitos - quantidade)
+            territorio.exercitos -= quantidade
             print(f'Quantidade de exercito removido do {self.nome}: {quantidade}')
         else:
             print("Território não pertence ao jogador.")
@@ -88,3 +85,28 @@ class Jogador:
     
     def numero_de_territorios(self):
         return len(self.territorios)
+    
+    def numero_de_exercitos(self):
+        soma = 0
+        for i in self.territorios:
+            soma += i.exercitos
+
+        return soma
+    
+    def adicionar_carta(self, carta):
+        self.cartas.append(carta)
+
+    def remover_carta(self, carta):
+        self.cartas.remove(carta)
+
+    def trocar_cartas(self, cartas, valor_da_troca):
+        self.adicionar_exercitos_para_posicionamento(valor_da_troca)
+
+        for i in cartas:
+            if i[0] != "Coringa":
+                for j in self.territorios:
+                    if j.nome == i[1]:
+                        self.adicionar_exercitos_territorio(j, 2)
+            self.remover_carta(i)
+
+    

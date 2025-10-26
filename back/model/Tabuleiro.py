@@ -81,29 +81,26 @@ class Tabuleiro:
 
         return lista
     
-    #Retorna a lista de territorios que o jogador daquela cor possui
-    def recuperar_territorios_por_cor(self, cor):
-        lista = []
-        for i in self.territorios:
-            if i.cor == cor:
-                lista.append(i)
-
-        return lista
-    
     # calcula a quantidade de exercitos recebidos na fase de posicionamento
     def calcula_exercitos_a_receber(self, jogador: Jogador):
-        lista = [0, 0, 0, 0, 0, 0, 0]
+        valor = 0
+        regioes_dominadas = self.regioes_dominadas_pelo_jogador(jogador)
 
         for i in range(6):
-            dominado = True
+            if regioes_dominadas[i]:
+                valor += self.regioes_com_bonus[i][1]
+
+        valor += int(max(3, math.floor(len(jogador.territorios)/2)))
+        
+        jogador.adicionar_exercitos_para_posicionamento(valor)
+        
+    def regioes_dominadas_pelo_jogador(self, jogador: Jogador):
+        lista = [1, 1, 1, 1, 1, 1]
+
+        for i in range(6):
             for j in self.regioes_com_bonus[i][2]:
                 if j.cor != jogador.cor:
-                    dominado = False
+                    lista[i] = 0
                     break
-            if dominado:
-                lista[i] = self.regioes_com_bonus[i][1]
 
-        lista[6] = int(max(3, math.floor(jogador.numero_de_territorios()/2)))
-        
-        jogador.adicionar_exercitos_para_posicionamento(lista)
-        
+        return lista

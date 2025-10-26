@@ -3,7 +3,7 @@ class Territorio:
         self.nome = nome
         self.exercitos = 1  # quantidade de exércitos no território
         self.cor = cor
-        self.regiao = regiao
+        self.regiao = regiao # nome da regiao
         self.fronteiras = []
 
 

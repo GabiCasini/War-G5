@@ -2,6 +2,8 @@ import random
 from .Jogador import Jogador
 from .Tabuleiro import Tabuleiro
 from .Territorio import Territorio
+from .Manager_de_Cartas import Manager_de_Cartas
+from .Manager_de_Objetivos import Manager_de_Objetivos
 
 class Partida:
     def __init__(self, qtd_humanos: int, qtd_ai: int, duracao_turno: int, tupla_jogadores: list[tuple[str, str, str]]): # tupla representa o jogador (nome, cor, tipo)
@@ -11,10 +13,14 @@ class Partida:
         self.qtd_jogadores = qtd_humanos + qtd_ai
         self.duracao_turno = duracao_turno
         self.jogadores = self.criar_jogadores(tupla_jogadores)
+        self.jogadores_eliminados = []
         self.tabuleiro = Tabuleiro(self.jogadores) # cria o tabuleiro do jogo, que vai gerar todos os territórios, distribuindo eles para os jogadores
         self.jogador_atual_idx = 0
-        self.fase_do_turno = "posicionamento"  # 'preparacao', 'posicionamento', 'ataque', 'reposicionamento'
+        self.fase_do_turno = "posicionamento"  # 'posicionamento', 'ataque', 'reposicionamento'
         random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
+        self.manager_de_cartas = Manager_de_Cartas()
+        self.manager_de_objetivos = Manager_de_Objetivos(self.jogadores)
+        self.valor_da_troca = 4
 
     def proximo_jogador(self):
         """Passa a vez para o próximo jogador."""
@@ -32,10 +38,10 @@ class Partida:
     #     print(f"Fase de {self.fase_do_turno}...")
     #     self.fase_de_ataque(jogador)
 
-    #     # Fase de reposicionamento
-    #     self.fase_do_turno = "reposicionamento"
-    #     print(f"Fase de {self.fase_do_turno}...")
-    #     self.fase_de_reposicionamento(jogador)
+        # Fase de reposicionamento
+        self.fase_do_turno = "reposicionamento"
+        print(f"Fase de {self.fase_do_turno}...")
+        self.fase_de_reposicionamento(jogador)
         
     #     print(f"Fim do turno de {jogador.nome}")
 
@@ -59,9 +65,9 @@ class Partida:
         print("O jogador decide se e como irá atacar.")
         pass # 'pass' significa que o método não faz nada
 
-    def fase_de_reposicionamento(self, jogador: Jogador, territorio_origem : Territorio, territorio_destino : Territorio, qnt_exercitos : int):
+    def fase_de_reposicionamento(self, jogador: Jogador):
         """Lógica para o jogador mover exércitos."""
-        print("O jogador decide se e como irá remanejar seus exércitos.")
+        print("O jogador decide se e como irá reposicionar seus exércitos.")
         pass
     
     def fase_de_reposicionamento_api(self, jogador_id, nome_origem, nome_destino, qtd_exercitos):
@@ -84,10 +90,8 @@ class Partida:
     def fase_de_posicionamento(self, jogador: Jogador,):
         """Lógica para o jogador posicionar seus novos exércitos."""
         self.tabuleiro.calcula_exercitos_a_receber(jogador=jogador)
-        lista_exercitos_a_posicionar = jogador.exercitos_reserva
-        print(f"Exércitos para posicionar: {lista_exercitos_a_posicionar}")
-        total_exercitos = sum(lista_exercitos_a_posicionar)
-        # TODO: Entender como sera o bonus de cada continente/regiao
+        total_exercitos = jogador.exercitos_reserva
+        print(f"Exércitos para posicionar: {total_exercitos}")
         # TODO: Substituir lógica aleatória por input do usuário ou lógica da IA
         if jogador.tipo == 'humano':
             print(f"Você tem {total_exercitos} exércitos para posicionar.")
@@ -229,17 +233,26 @@ class Partida:
         exercitos_para_mover = 1
         vencedor.mover_exercitos(origem, territorio, exercitos_para_mover)
 
-    # verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero)
-    # falta implementar a passagem das cartas do jogador eliminado para quem o eliminou, além da verificação de cumprimento dos objetivos
-    def verificar_eliminacao(self, jogador: Jogador):
-        if jogador.numero_de_territorios() == 0:
-            self.jogadores.remove(jogador)
-            print(f"\nJogador {jogador.cor} eliminado\n")
+    # verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero) e trata a eliminação caso necessário
+    def verificar_eliminacao(self, atacante: Jogador, defensor: Jogador):
+        if len(defensor.territorios) == 0:
+            self.jogadores.remove(defensor)
+            defensor.eliminado_por = atacante.cor
+            self.jogadores_eliminados.append(defensor)
+
+            # transfere as cartas do jogador eliminado para o atacante até que o limite de 5 cartas seja atingido
+            for i in defensor.cartas:
+                if len(atacante.cartas) < 5:
+                    atacante.adicionar_carta(i)
+                else:
+                    self.manager_de_cartas.cartas_trocadas(i)
+
+            defensor.cartas = []
+                
+            print(f"\nJogador {defensor.cor} eliminado\n")
             return True
         return False
     
-    
-
     def transferir_territorio(self, vencedor: Jogador, perdedor: Jogador, territorio: Territorio, origem: Territorio):
         """
         Transfere a posse do território para o vencedor e move exércitos obrigatórios.
@@ -274,3 +287,25 @@ class Partida:
             if jogador.cor == cor_jogador:
                 return jogador
         return None
+
+    # Essa função deve ser utilizada ao final da fase ataque de cada jogador, passando um valor booleano que indica
+    # se ele conquistou ou não algum território durante o ataque
+    def verifica_ganho_de_carta(self, jogador: Jogador, conquistado: bool):
+        if conquistado and len(jogador.cartas) < 5:
+            jogador.adicionar_carta(self.manager_de_cartas.atribuir_carta())
+
+    def realizar_troca(self, jogador: Jogador, cartas):
+        if self.manager_de_cartas.validar_possivel_troca(cartas):
+            jogador.trocar_cartas(cartas, self.valor_da_troca)
+            self.manager_de_cartas.cartas_trocadas(cartas) # os territorios das cartas que foram trocados serão colocados na lista de disponíveis
+            self.incrementar_troca()
+    
+    def incrementar_troca(self):
+        if self.valor_da_troca < 12:
+            self.valor_da_troca += 2
+
+        elif self.valor_da_troca < 15:
+            self.valor_da_troca += 3
+
+        else:
+            self.valor_da_troca += 5
