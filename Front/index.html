@@ -11,7 +11,7 @@
   <button id="openInitDialog">Jogar</button>
 
   <audio id="audio" loop>
-    <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg">
+    <!-- <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg"> -->
   </audio>
 
   <button id="openMenuDialog">Menu</button>
@@ -116,21 +116,21 @@
           </div>
 
           <div class="colors" id="colorsColumn">
-            <div id="cor_p1" class="color" draggable="true" style="background-color: red;">:::</div>
-            <div id="cor_p2" class="color" draggable="true" style="background-color: blue;">:::</div>
-            <div id="cor_p3" class="color" draggable="true" style="background-color: green;">:::</div>
-            <div id="cor_p4" class="color" draggable="true" style="background-color: orange; display: none;">:::</div>
-            <div id="cor_p5" class="color" draggable="true" style="background-color: purple; display: none;">:::</div>
-            <div id="cor_p6" class="color" draggable="true" style="background-color: yellow; display: none;">:::</div>
+            <div id="cor_p1" class="color" draggable="true" style="background-color: red;" data-color="vermelho">:::</div>
+            <div id="cor_p2" class="color" draggable="true" style="background-color: blue;" data-color="azul">:::</div>
+            <div id="cor_p3" class="color" draggable="true" style="background-color: green;" data-color="verde">:::</div>
+            <div id="cor_p4" class="color" draggable="true" style="background-color: orange; display: none;" data-color="laranja">:::</div>
+            <div id="cor_p5" class="color" draggable="true" style="background-color: purple; display: none;" data-color="roxo">:::</div>
+            <div id="cor_p6" class="color" draggable="true" style="background-color: yellow; display: none;" data-color="amarelo">:::</div>
           </div>
         </div>
 
-        <input type="hidden" name="cor_player_1" id="input_cor_p1" value="red">
-        <input type="hidden" name="cor_player_2" id="input_cor_p2" value="blue">
-        <input type="hidden" name="cor_player_3" id="input_cor_p3" value="green">
-        <input type="hidden" name="cor_player_4" id="input_cor_p4" value="orange">
-        <input type="hidden" name="cor_player_5" id="input_cor_p5" value="purple">
-        <input type="hidden" name="cor_player_6" id="input_cor_p6" value="yellow">
+        <input type="hidden" name="cor_player_1" id="input_cor_p1" value="vermelho">
+        <input type="hidden" name="cor_player_2" id="input_cor_p2" value="azul">
+        <input type="hidden" name="cor_player_3" id="input_cor_p3" value="verde">
+        <input type="hidden" name="cor_player_4" id="input_cor_p4" value="laranja">
+        <input type="hidden" name="cor_player_5" id="input_cor_p5" value="roxo">
+        <input type="hidden" name="cor_player_6" id="input_cor_p6" value="amarelo">
 
         <br/><button id="playBtn" type="submit" name="acao" value="iniciar">Iniciar</button>
       </div>
@@ -139,5 +139,6 @@
     <button id="closeInitDialogBtn">Cancelar</button>
   </dialog>
   <script src="{{ url_for('static', filename='configuracoes_index.js') }}"></script>
+  <script src="{{ url_for('static', filename='configuracoes_players.js') }}"></script>
 </body>
 </html>
