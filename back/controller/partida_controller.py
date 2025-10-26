@@ -106,6 +106,7 @@ def post_posicionamento():
         exercitos_restantes = state.partida_global.fase_de_posicionamento_api(
             jogador_id, territorio_nome, exercitos
         )
+        print("Exércitos restantes após posicionamento:", exercitos_restantes)
         return jsonify({"status": "ok", "exercitos_restantes": exercitos_restantes})
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400

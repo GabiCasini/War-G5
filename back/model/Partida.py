@@ -107,14 +107,14 @@ class Partida:
         if not territorio:
             raise Exception("Território não pertence ao jogador")
     
-        total_reserva = sum(jogador.exercitos_reserva)
+        total_reserva = jogador.exercitos_reserva
 
         if qtd_exercitos > total_reserva:
             raise Exception("Exércitos insuficientes na reserva")
         
         jogador.adicionar_exercitos_territorio(territorio, qtd_exercitos)
         jogador.remover_exercitos_para_posicionamento(qtd_exercitos)
-        return sum(jogador.exercitos_reserva)
+        return jogador.exercitos_reserva
     
 
     # cria os objetos jogador a partir da tupla contendo o nome do jogador e sua respectiva cor
