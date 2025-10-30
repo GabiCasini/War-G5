@@ -1,4 +1,5 @@
 import random
+import re
 
 from .Jogador import Jogador
 from .Tabuleiro import Tabuleiro
@@ -28,7 +29,54 @@ class Manager_de_Objetivos:
         for i in jogadores:
             objetivo = random.choice(self.objetivos_disponiveis)
             self.objetivos_disponiveis.remove(objetivo)
-            i.objetivo = objetivo
+
+            # Para jogadores humanos, manter o texto original (legível).
+            # Para IAs, mapear para uma estrutura (dict) quando possível para evitar tratamentos condicionais
+            # no código da IA (que espera dicts) — caso não seja possível mapear, atribuímos None.
+            if getattr(i, 'tipo', 'humano') == 'ai':
+                i.objetivo = self._map_objetivo_para_dict(objetivo)
+            else:
+                i.objetivo = objetivo
+
+    def _map_objetivo_para_dict(self, objetivo_str: str):
+        """
+        Tenta converter um objetivo textual em um dicionário com campos explícitos que a IA entende.
+        Retorna None se o objetivo não puder ser mapeado de forma conservadora.
+        """
+        if not isinstance(objetivo_str, str):
+            return None
+
+        s = objetivo_str.strip()
+
+        # Conquistar N territórios
+        if s.startswith("Conquistar 24"):
+            return {"tipo": "conquistar_territorios", "quantidade": 24}
+
+        if "Conquistar 18 territórios" in s:
+            return {"tipo": "conquistar_territorios_exercitos", "quantidade": 18, "min_exercitos": 2}
+
+        # Conquistar na totalidade a Região X e a Região Y
+        m = re.search(r"Reg[ií]o\s*(\d+).*Reg[ií]o\s*(\d+)", s)
+        if m:
+            reg1 = f"Região {m.group(1)}"
+            reg2 = f"Região {m.group(2)}"
+            return {"tipo": "conquistar_continentes", "continentes": [reg1, reg2]}
+
+        # Casos com 3 regiões ("Região 1, a Região 3 e mais uma Região à sua escolha")
+        m3 = re.search(r"Reg[ií]o\s*(\d+),\s*a\s*Reg[ií]o\s*(\d+).*mais uma Reg[ií]o", s)
+        if m3:
+            reg1 = f"Região {m3.group(1)}"
+            reg2 = f"Região {m3.group(2)}"
+            return {"tipo": "conquistar_continentes", "continentes": [reg1, reg2], "min_total": 3}
+
+        # Elimine o jogador X
+        m_elim = re.search(r"Elimine o jogador\s+(\w+)", s)
+        if m_elim:
+            cor_alvo = m_elim.group(1)
+            return {"tipo": "destruir_jogador", "cor_alvo": cor_alvo}
+
+        # Não foi possível mapear de forma confiável
+        return None
     
     # verifica se qualquer jogador cumpriu seu objetivo, priorizando: 1 - o jogador do turno; 2 - a ordem dos turnos 
     # retorna a cor do vencedor (se houver), e False se ninguém ganhou

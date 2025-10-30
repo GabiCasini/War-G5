@@ -48,6 +48,22 @@ def get_territorios():
     return jsonify({"territorios": territorios_json})
 
 
+@partida_bp.route('/debug_jogadores', methods=['GET'])
+def debug_jogadores():
+    if not state.partida_global:
+        return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
+
+    lista = []
+    for j in state.partida_global.jogadores:
+        lista.append({
+            'nome': j.nome,
+            'cor': j.cor,
+            'tipo': j.tipo,
+            'class': j.__class__.__name__
+        })
+    return jsonify({'jogadores': lista})
+
+
 @partida_bp.route("/estado_atual", methods=["GET"])
 def get_estado_atual():
 
@@ -158,10 +174,9 @@ def post_reposicionamento():
 def post_finalizar_turno():
     if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
-
     try:
         proximo_jogador, nova_fase = state.partida_global.avancar_fase_ou_turno()
-        
+
         resposta = {
             "status": "ok",
             "proximo_jogador": {
@@ -171,6 +186,16 @@ def post_finalizar_turno():
                 "fase": nova_fase 
             }
         }
+
+        # Não executar turnos da IA de forma síncrona aqui — isso faz com que
+        # as ações da IA ocorram instantaneamente no cliente. Em vez disso,
+        # o cliente deve detectar que o próximo jogador é IA (via /partida/estado_atual)
+        # e abrir a stream SSE (`/ia/stream`) para receber ações em tempo real.
+        partida = state.partida_global
+        proximo = partida.jogadores[partida.jogador_atual_idx]
+        resposta['proximo_e_ia'] = (proximo.tipo == 'ai')
+        # Nota: mantemos a informação do próximo jogador em `resposta['proximo_jogador']`.
+
         return jsonify(resposta)
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
