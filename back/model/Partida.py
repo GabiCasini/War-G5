@@ -36,11 +36,20 @@ class Partida:
 
         elif self.fase_do_turno == "reposicionamento":
             self.fase_do_turno = "posicionamento"
-            self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
             self.proximo_jogador()
+            self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
         # garante que jogador_atual esteja sempre definido antes de retornar
         jogador_atual = self.jogadores[self.jogador_atual_idx]
 
+        return jogador_atual, self.fase_do_turno
+    
+    def finalizar_turno_atual(self):
+        self.fase_do_turno = "posicionamento"
+        self.proximo_jogador()
+        self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
+
+        # garante que jogador_atual esteja sempre definido antes de retornar
+        jogador_atual = self.jogadores[self.jogador_atual_idx]
         return jogador_atual, self.fase_do_turno
     
     def fase_de_ataque(self, jogador: Jogador):
