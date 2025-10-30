@@ -270,7 +270,6 @@ function refreshTerritorios() {
 
 
 function posicionarExercitos(nomeTerritorio) {
-  // TODO: Implementar lógica de posicionamento real com os endpoints
 
   let maximoExercitos = players.find(p => p.cor === jogadorAtual).exercitosDisponiveisPosicionamento;
 
@@ -279,25 +278,6 @@ function posicionarExercitos(nomeTerritorio) {
     return;
   }
 
-  const valor = prompt(`Adicionar quantos exércitos em "${nomeTerritorio}"?. Máximo: ${maximoExercitos}`, "1");
-  const qtd = parseInt(valor, 10);
-  
-  if (isNaN(qtd)) {
-    return;
-  }
-
-  if (qtd <= 0) {
-    alert("Quantidade inválida de exércitos.");
-    return;
-  }
-  
-  if (qtd > maximoExercitos) {
-    alert(`Você não pode posicionar mais de ${maximoExercitos} exércitos.`);
-    return;
-  }
-  
-  alert(`Posicionando ${qtd} exércitos em "${nomeTerritorio}"`);
-  postPosicionarExercitos(jogadorAtual, nomeTerritorio, qtd);
   const dialog = document.getElementById('posicionamentoDialog');
   const form = document.getElementById('posicionamentoForm');
   const titulo = document.getElementById('posicionamentoTitulo');
@@ -338,6 +318,7 @@ function posicionarExercitos(nomeTerritorio) {
     const qtd = parseInt(input.value, 10);
     if (!isNaN(qtd) && qtd > 0) {
       console.log(`Posicionando ${qtd} exércitos em "${nomeTerritorio}"`);
+      postPosicionarExercitos(jogadorAtual, nomeTerritorio, qtd);
     }
     cleanup();
   };
@@ -346,9 +327,7 @@ function posicionarExercitos(nomeTerritorio) {
 }
 
 function ataqueTerritorio(territorioDe, territorioPara) {
-  // TODO: Implementar lógica de ataque real com os endpoints
-  alert(`Atacando de "${territorioDe}" para "${territorioPara}"`);
-  postAtaque(jogadorAtual, territorioDe, territorioPara);
+  
   const dialog = document.getElementById('ataqueDialog');
   const form = document.getElementById('ataqueForm');
   const titulo = document.getElementById('ataqueTitulo');
@@ -378,6 +357,7 @@ function ataqueTerritorio(territorioDe, territorioPara) {
   form.onsubmit = (e) => {
     e.preventDefault();
     console.log(`Ataque de "${territorioDe}" para "${territorioPara}" confirmado.`);
+    postAtaque(jogadorAtual, territorioDe, territorioPara);
     cleanup();
   };
 
