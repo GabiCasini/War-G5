@@ -1,8 +1,6 @@
 from flask import Blueprint, jsonify, request
 
 from .. import state
-from ..model.Jogador import Jogador
-from ..model.Territorio import Territorio
 
 partida_bp = Blueprint('partida', __name__, url_prefix='/partida')
 
