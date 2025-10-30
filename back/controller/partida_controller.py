@@ -160,6 +160,27 @@ def post_finalizar_turno():
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
 
     try:
+        proximo_jogador, nova_fase = state.partida_global.finalizar_turno_atual()
+        
+        resposta = {
+            "status": "ok",
+            "proximo_jogador": {
+                "jogador_id": proximo_jogador.cor,
+                "nome": proximo_jogador.nome,
+                "cor": proximo_jogador.cor,
+                "fase": nova_fase 
+            }
+        }
+        return jsonify(resposta)
+    except Exception as e:
+        return jsonify({"status": "erro", "mensagem": str(e)}), 400
+
+@partida_bp.route("/avancar_turno", methods=["POST"])
+def post_avancar_turno():
+    if not state.partida_global:
+        return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
+
+    try:
         proximo_jogador, nova_fase = state.partida_global.avancar_fase_ou_turno()
         
         resposta = {

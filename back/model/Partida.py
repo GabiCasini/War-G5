@@ -36,11 +36,20 @@ class Partida:
 
         elif self.fase_do_turno == "reposicionamento":
             self.fase_do_turno = "posicionamento"
-            self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
             self.proximo_jogador()
+            self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
         # garante que jogador_atual esteja sempre definido antes de retornar
         jogador_atual = self.jogadores[self.jogador_atual_idx]
 
+        return jogador_atual, self.fase_do_turno
+    
+    def finalizar_turno_atual(self):
+        self.fase_do_turno = "posicionamento"
+        self.proximo_jogador()
+        self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
+
+        # garante que jogador_atual esteja sempre definido antes de retornar
+        jogador_atual = self.jogadores[self.jogador_atual_idx]
         return jogador_atual, self.fase_do_turno
     
     def fase_de_ataque(self, jogador: Jogador):
@@ -181,21 +190,11 @@ class Partida:
             print("Atacante não possui exércitos suficientes para atacar.")
             return False
         
-        
         #Dados de ataque
-        if atacante.exercitos_no_territorio(territorio_origem) >= 4:
-            dados_ataque = 3
-        
-        else:
-            dados_ataque = atacante.exercitos_no_territorio(territorio_origem) - 1
+        dados_ataque = 3 if atacante.exercitos_no_territorio(territorio_origem) >= 4 else atacante.exercitos_no_territorio(territorio_origem) - 1
 
-        
         #Dados de defesa
-        if defensor.exercitos_no_territorio(territorio_alvo) >= 3:
-            dados_defesa = 3
-
-        else:
-            dados_defesa = defensor.exercitos_no_territorio(territorio_alvo)
+        dados_defesa = 3 if defensor.exercitos_no_territorio(territorio_alvo) >= 3 else defensor.exercitos_no_territorio(territorio_alvo)
         
         perdas_ataque, perdas_defesa, num_dados_ataque, num_dados_defesa = atacante.combate(dados_ataque, dados_defesa)
 
@@ -271,14 +270,12 @@ class Partida:
         return False
     
     def get_territorio_por_nome(self, nome_territorio: str):
-
         for territorio in self.tabuleiro.territorios:
             if territorio.nome == nome_territorio:
                 return territorio
         return None
     
     def get_jogador_por_cor(self, cor_jogador: str):
-        
         for jogador in self.jogadores:
             if jogador.cor == cor_jogador:
                 return jogador
@@ -299,9 +296,7 @@ class Partida:
     def incrementar_troca(self):
         if self.valor_da_troca < 12:
             self.valor_da_troca += 2
-
         elif self.valor_da_troca < 15:
             self.valor_da_troca += 3
-
         else:
             self.valor_da_troca += 5
