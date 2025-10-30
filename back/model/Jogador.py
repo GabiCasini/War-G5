@@ -61,6 +61,18 @@ class Jogador:
             quantidade = min(quantidade, origem.exercitos - 1)
             origem.exercitos -= quantidade
             destino.exercitos += quantidade
+    
+    def reposicionar_exercitos(self, origem, destino, quantidade):
+        if origem.exercitos <= 1:
+            return "Não é possível reposicionar de um território com apenas 1 exército."
+        if quantidade > origem.exercitos - 1:
+            return f"Você só pode mover até {origem.exercitos - 1} exércitos."
+        if destino not in origem.fronteiras:
+            return "Os territórios não são vizinhos."
+        # Executa o reposicionamento
+        origem.exercitos -= quantidade
+        destino.exercitos += quantidade
+        return "Reposicionamento realizado com sucesso."
 
     def combate(self, exercitos_ataque, exercitos_defesa):
         """
