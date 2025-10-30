@@ -8,7 +8,6 @@ let timerInterval = null;
 function atualizarHUD(jogadorAtual, jogadorCor, faseAtual, tempoTurno) {
     playerNomeElement.textContent = jogadorAtual;
     faseAtualElement.textContent = faseAtual;
-
     playerCorBoxElement.style.backgroundColor = jogadorCor;
 
     if (faseAtual.toLowerCase() === 'posicionamento') {

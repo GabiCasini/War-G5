@@ -64,9 +64,11 @@ function fetchEstadoAtual() {
     .then(data => {
         jogadorAtual = data.turno.jogador_cor;
         faseAtual = data.turno.fase;
+        let exercitosParaPosicionar = data.exercitos_disponiveis.total;
         tempoTurno = data.turno.tempo_turno;
         let faseAtualStringPrimeiraMaiuscula = faseAtual.charAt(0).toUpperCase() + faseAtual.slice(1);
         let corHexJogador = players.find(p => p.cor === jogadorAtual).corHex;
+        atualizarExercitosParaPosicionar(jogadorAtual,exercitosParaPosicionar);
         atualizarHUD(data.turno.jogador_nome, corHexJogador, faseAtualStringPrimeiraMaiuscula, tempoTurno);
         console.log(data)
       return data;
@@ -131,7 +133,7 @@ function postPosicionarExercitos(jogador_cor, territorio, quantidade) {
   return fetch(LOCALHOST + '/partida/posicionamento', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ jogador_id: jogador_cor, territorio: territorio, quantidade: quantidade })
+    body: JSON.stringify({ jogador_id: jogador_cor, territorio: territorio, exercitos: quantidade })
   })
     .then(resp => {
       if (!resp.ok) {
@@ -144,10 +146,39 @@ function postPosicionarExercitos(jogador_cor, territorio, quantidade) {
     .then(data => {
       console.log('Exércitos posicionados com sucesso:', data);
       fetchTerritorios();
+      fetchEstadoAtual();
       return data;
     })
     .catch(err => {
       console.error('Erro ao posicionar exércitos:', err.message);
+      throw err;
+    });
+}
+
+
+function postAtaque(jogador_cor, territorio_origem, territorio_ataque) {
+  return fetch(LOCALHOST + '/partida/ataque', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ jogador_id: jogador_cor, territorio_origem: territorio_origem, territorio_ataque: territorio_ataque })
+  })
+    .then(resp => {
+      if (!resp.ok) {
+        return resp.json()
+          .then(errBody => { throw new Error((errBody && (errBody.mensagem || errBody.message)) || `HTTP ${resp.status}`); })
+          .catch(() => { throw new Error(`HTTP ${resp.status}`); });
+      }
+      return resp.json();
+    }
+    )
+    .then(data => {
+      console.log('Ataque realizado com sucesso:', data);
+      fetchTerritorios();
+      fetchEstadoAtual();
+      return data;
+    })
+    .catch(err => {
+      console.error('Erro ao realizar ataque:', err.message);
       throw err;
     });
 }
