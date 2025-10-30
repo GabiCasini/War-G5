@@ -24,6 +24,11 @@ class PaginaIndex:
                     tupla_jogadores.append((nome, cor, tipo))
 
                 state.partida_global = Partida(qtd_humanos, qtd_ai, duracao_turno, tupla_jogadores)
+                # Se a primeira jogada já for de uma IA, executar automaticamente seus turnos antes de renderizar o mapa
+                try:
+                    state.partida_global.executar_turnos_ia_consecutivos()
+                except Exception:
+                    pass
                 return render_template('mapa.html', partida=state.partida_global)
             
             return redirect('/')

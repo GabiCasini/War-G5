@@ -1,8 +1,6 @@
 from flask import Blueprint, jsonify, request
 
 from .. import state
-from ..model.Jogador import Jogador
-from ..model.Territorio import Territorio
 
 partida_bp = Blueprint('partida', __name__, url_prefix='/partida')
 
@@ -48,6 +46,22 @@ def get_territorios():
         })
 
     return jsonify({"territorios": territorios_json})
+
+
+@partida_bp.route('/debug_jogadores', methods=['GET'])
+def debug_jogadores():
+    if not state.partida_global:
+        return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
+
+    lista = []
+    for j in state.partida_global.jogadores:
+        lista.append({
+            'nome': j.nome,
+            'cor': j.cor,
+            'tipo': j.tipo,
+            'class': j.__class__.__name__
+        })
+    return jsonify({'jogadores': lista})
 
 
 @partida_bp.route("/estado_atual", methods=["GET"])
@@ -106,6 +120,7 @@ def post_posicionamento():
         exercitos_restantes = state.partida_global.fase_de_posicionamento_api(
             jogador_id, territorio_nome, exercitos
         )
+        print("Exércitos restantes após posicionamento:", exercitos_restantes)
         return jsonify({"status": "ok", "exercitos_restantes": exercitos_restantes})
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
@@ -119,7 +134,7 @@ def post_ataque():
     dados = request.get_json()
 
     jogador_id = dados.get("jogador_id")
-    nome_territorio_origem = dados.get("territorio_inicio")
+    nome_territorio_origem = dados.get("territorio_origem")
     nome_territorio_ataque = dados.get("territorio_ataque")
 
     atacante = state.partida_global.get_jogador_por_cor(jogador_id)
@@ -147,7 +162,7 @@ def post_reposicionamento():
     exercitos = int(dados.get("exercitos"))
     
     try:
-        resultado = state.partida_global.fase_de_remanejamento_api(
+        resultado = state.partida_global.fase_de_reposicionamento_api(
             jogador_id, nome_origem, nome_destino, exercitos
         )
         return jsonify({"status": "ok", **resultado})
@@ -159,10 +174,9 @@ def post_reposicionamento():
 def post_finalizar_turno():
     if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
-
     try:
         proximo_jogador, nova_fase = state.partida_global.avancar_fase_ou_turno()
-        
+
         resposta = {
             "status": "ok",
             "proximo_jogador": {
@@ -172,6 +186,16 @@ def post_finalizar_turno():
                 "fase": nova_fase 
             }
         }
+
+        # Não executar turnos da IA de forma síncrona aqui — isso faz com que
+        # as ações da IA ocorram instantaneamente no cliente. Em vez disso,
+        # o cliente deve detectar que o próximo jogador é IA (via /partida/estado_atual)
+        # e abrir a stream SSE (`/ia/stream`) para receber ações em tempo real.
+        partida = state.partida_global
+        proximo = partida.jogadores[partida.jogador_atual_idx]
+        resposta['proximo_e_ia'] = (proximo.tipo == 'ai')
+        # Nota: mantemos a informação do próximo jogador em `resposta['proximo_jogador']`.
+
         return jsonify(resposta)
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
