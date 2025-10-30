@@ -64,9 +64,10 @@ function fetchEstadoAtual() {
     .then(data => {
         jogadorAtual = data.turno.jogador_cor;
         faseAtual = data.turno.fase;
+        tempoTurno = data.turno.tempo_turno;
         let faseAtualStringPrimeiraMaiuscula = faseAtual.charAt(0).toUpperCase() + faseAtual.slice(1);
         let corHexJogador = players.find(p => p.cor === jogadorAtual).corHex;
-        atualizarHUD(data.turno.jogador_nome, corHexJogador, faseAtualStringPrimeiraMaiuscula);
+        atualizarHUD(data.turno.jogador_nome, corHexJogador, faseAtualStringPrimeiraMaiuscula, tempoTurno);
         console.log(data)
       return data;
     })
@@ -78,6 +79,30 @@ function fetchEstadoAtual() {
 
 
 function postPassarTurno() {
+  return fetch(LOCALHOST + '/partida/avancar_turno', { method: 'POST' })
+    .then(resp => {
+      if (!resp.ok) {
+        return resp.json()
+          .then(errBody => { throw new Error((errBody && (errBody.mensagem || errBody.message)) || `HTTP ${resp.status}`); })
+          .catch(() => { throw new Error(`HTTP ${resp.status}`); });
+      }
+      return resp.json();
+    })
+    .then(data => {
+      console.log('Turno passado com sucesso:', data);
+      fetchJogadores();
+      fetchTerritorios();
+      fetchEstadoAtual();
+      refreshTerritorios();
+      return data;
+    })
+    .catch(err => {
+      console.error('Erro ao passar turno:', err.message);
+      throw err;
+    });
+}
+
+function postFinalizarTurno() {
   return fetch(LOCALHOST + '/partida/finalizar_turno', { method: 'POST' })
     .then(resp => {
       if (!resp.ok) {
