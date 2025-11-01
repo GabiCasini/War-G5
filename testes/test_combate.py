@@ -1,5 +1,6 @@
 import pytest
 
+from back.model.Jogador import Jogador
 from back.model.Partida import Partida
 
 # Mocks auxiliares
@@ -12,9 +13,9 @@ def tupla_jogadores():
 def partida(tupla_jogadores):
     return Partida(qtd_humanos=3, qtd_ai=0, duracao_turno=60, tupla_jogadores=tupla_jogadores)
 
-def test_resolver_combate(partida):
-    jogador_a = partida.jogadores[0]
-    jogador_b = partida.jogadores[1]
+def test_resolver_combate(partida: Partida):
+    jogador_a: Jogador = partida.jogadores[0]
+    jogador_b: Jogador = partida.jogadores[1]
 
     territorio_a = jogador_a.territorios[0]
     territorio_b = jogador_b.territorios[0]

@@ -153,8 +153,8 @@ class Partida:
 
         else:
             dados_defesa = defensor.exercitos_no_territorio(territorio_alvo)
-        
-        perdas_ataque, perdas_defesa = atacante.combate(dados_ataque, dados_defesa)
+
+        perdas_ataque, perdas_defesa, num_dados_ataque, num_dados_defesa = atacante.combate(dados_ataque, dados_defesa)
         atacante.remover_exercitos_territorio(territorio_origem, perdas_ataque)
         defensor.remover_exercitos_territorio(territorio_alvo, perdas_defesa)
         

@@ -1,6 +1,3 @@
-# conftest.py
-# (Coloque este arquivo na pasta de testes)
-
 import pytest
 from flask import Flask
 from back import state  # Importa o 'state' global

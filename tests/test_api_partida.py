@@ -1,4 +1,3 @@
-import pytest
 from back import state 
 
 def test_get_jogadores_sem_partida(client):
@@ -35,7 +34,7 @@ def test_get_jogadores_com_partida(client_com_partida):
     assert jogador_alice is not None, "Jogador 'Alice' não foi encontrado na resposta da API"
     assert jogador_alice['cor'] == 'vermelho'
     assert jogador_alice['jogador_id'] == 'vermelho'
-    assert jogador_alice['ia'] == False
+    assert not jogador_alice['ia']
 
 
 def test_api_ataque_ignora_exercitos(client_com_partida):
@@ -73,7 +72,7 @@ def test_api_ataque_ignora_exercitos(client_com_partida):
     assert response.status_code == 200
     json_data = response.get_json()
     assert json_data['status'] == 'ok'
-    assert json_data['territorio_conquistado'] == True 
+    assert json_data['territorio_conquistado']
     assert territorio_b.cor == jogador_a.cor 
 
 def test_api_finalizar_turno_ignora_body(client_com_partida):
@@ -85,6 +84,8 @@ def test_api_finalizar_turno_ignora_body(client_com_partida):
     partida = state.partida_global
     
     partida.jogador_atual_idx = 0
+    partida.jogadores = 0 # evitar suffle aqui
+
     jogador_atual_antes = partida.jogadores[0]
     proximo_jogador_esperado = partida.jogadores[1]
     
@@ -101,5 +102,4 @@ def test_api_finalizar_turno_ignora_body(client_com_partida):
     assert 'proximo_jogador' in json_data
     assert json_data['proximo_jogador']['jogador_id'] == proximo_jogador_esperado.cor
     assert json_data['proximo_jogador']['nome'] == proximo_jogador_esperado.nome
-    
     assert state.partida_global.jogador_atual_idx == 1
