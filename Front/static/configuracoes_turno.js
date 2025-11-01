@@ -147,6 +147,7 @@ function postPosicionarExercitos(jogador_cor, territorio, quantidade) {
       console.log('Exércitos posicionados com sucesso:', data);
       fetchTerritorios();
       fetchEstadoAtual();
+      fetchEstadoAtual();
       return data;
     })
     .catch(err => {

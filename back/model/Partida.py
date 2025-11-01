@@ -16,6 +16,7 @@ class Partida:
         self.jogadores_eliminados = []
         self.tabuleiro = Tabuleiro(self.jogadores) # cria o tabuleiro do jogo, que vai gerar todos os territórios, distribuindo eles para os jogadores
         self.tabuleiro.inicializar_exercitos_a_receber(self.jogadores)
+        self.tabuleiro.inicializar_exercitos_a_receber(self.jogadores)
         self.jogador_atual_idx = 0
         self.fase_do_turno = "posicionamento"  # 'posicionamento', 'ataque', 'reposicionamento'
         random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
@@ -36,6 +37,7 @@ class Partida:
 
         elif self.fase_do_turno == "reposicionamento":
             self.fase_do_turno = "posicionamento"
+            self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
             self.proximo_jogador()
             self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
         # garante que jogador_atual esteja sempre definido antes de retornar
@@ -54,6 +56,7 @@ class Partida:
     
     def fase_de_ataque(self, jogador: Jogador):
         """Lógica para o jogador realizar ataques."""
+       
        
         # Se for IA, usar a rotina de ataque da IA
         if jogador.tipo == 'ai' and hasattr(jogador, 'executar_ataques'):
@@ -86,8 +89,15 @@ class Partida:
         destino = next((t for t in jogador.territorios if t.nome == nome_destino), None)
         if not destino:
             raise Exception("Território de destino não é seu")
+        
+        if origem.exercitos <= 1:
+            raise Exception("Não é possível reposicionar de um território com apenas 1 exército.")
+        
+        max_reposicionar = origem.exercitos - 1
+        if qtd_exercitos > max_reposicionar:
+            raise Exception(f"Você só pode reposicionar até {max_reposicionar} exércitos.")
     
-        jogador.mover_exercitos(origem, destino, qtd_exercitos)
+        jogador.reposicionar_exercitos(origem, destino, qtd_exercitos)
     
         return {
             "territorio_origem": { "nome": origem.nome, "exercitos": origem.exercitos },

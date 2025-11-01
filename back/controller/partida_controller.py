@@ -146,7 +146,7 @@ def post_reposicionamento():
     exercitos = int(dados.get("exercitos"))
     
     try:
-        resultado = state.partida_global.fase_de_remanejamento_api(
+        resultado = state.partida_global.fase_de_reposicionamento_api(
             jogador_id, nome_origem, nome_destino, exercitos
         )
         return jsonify({"status": "ok", **resultado})
