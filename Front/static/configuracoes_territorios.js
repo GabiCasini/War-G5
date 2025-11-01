@@ -167,7 +167,7 @@ function verificaDonoTerritorio(territorioNome, jogadorCor) {
 
 
 function obterTerritoriosParaAtaque(jogador, territorioNome) {
-  const territoriosAtacantes = territorios.filter(t => t.jogador_id === jogador && t.nome === territorioNome && t.exercitos >= 1);
+  const territoriosAtacantes = territorios.filter(t => t.jogador_id === jogador && t.nome === territorioNome && t.exercitos >= 2);
   const ataquesPossiveis = [];
 
   territoriosAtacantes.forEach(territorio => {
@@ -270,37 +270,151 @@ function refreshTerritorios() {
 
 
 function posicionarExercitos(nomeTerritorio) {
-  // TODO: Implementar lógica de posicionamento real com os endpoints
 
-  const valor = prompt(`Adicionar quantos exércitos para "${nomeTerritorio}"?`, "1");
-  const qtd = parseInt(valor, 10);
-  if (!isNaN(qtd) && qtd !== 0) {
-    // adicionarExercitos(nomeTerritorio, qtd);
-    alert(`Posicionando ${qtd} exércitos em "${nomeTerritorio}"`);
+  let maximoExercitos = players.find(p => p.cor === jogadorAtual).exercitosDisponiveisPosicionamento;
+
+  if (maximoExercitos <= 0) {
+    alert("Você não tem exércitos disponíveis para posicionar.");
+    return;
   }
+
+  const dialog = document.getElementById('posicionamentoDialog');
+  const form = document.getElementById('posicionamentoForm');
+  const titulo = document.getElementById('posicionamentoTitulo');
+  const label = document.getElementById('posicionamentoLabel');
+  const input = document.getElementById('posicionamentoQtd');
+  const btnCancel = dialog.querySelector('.btn-cancelar');
+  const btnDecrement = dialog.querySelector('.btn-decrement');
+  const btnIncrement = dialog.querySelector('.btn-increment');
+
+  titulo.textContent = `Posicionar em ${nomeTerritorio}`;
+  label.textContent = `Quantos exércitos deseja posicionar em ${nomeTerritorio}?`;
+  input.value = 1;
+  input.min = 1;
+
+  btnDecrement.onclick = () => {
+    let val = parseInt(input.value, 10);
+    if (val > 1) {
+      input.value = val - 1;
+    }
+  };
+
+  btnIncrement.onclick = () => {
+    input.value = parseInt(input.value, 10) + 1;
+  };
+  
+  dialog.showModal();
+
+  const cleanup = () => {
+    dialog.close();
+    form.onsubmit = null;
+    btnCancel.onclick = null;
+    btnDecrement.onclick = null;
+    btnIncrement.onclick = null;
+  };
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    const qtd = parseInt(input.value, 10);
+    if (!isNaN(qtd) && qtd > 0) {
+      console.log(`Posicionando ${qtd} exércitos em "${nomeTerritorio}"`);
+      postPosicionarExercitos(jogadorAtual, nomeTerritorio, qtd);
+    }
+    cleanup();
+  };
+
+  btnCancel.onclick = cleanup;
 }
 
 function ataqueTerritorio(territorioDe, territorioPara) {
-  // TODO: Implementar lógica de ataque real com os endpoints
-
-  let exercitosAtaque = parseInt(prompt(`Quantos exércitos deseja atacar de "${territorioDe}" para "${territorioPara}"?`, "1"), 10);
-  if (isNaN(exercitosAtaque) || exercitosAtaque <= 0) {
-    alert("sem exercitos...");
-    return;
-  }
   
-  alert(`Ataque de "${territorioDe}" para "${territorioPara}" com ${exercitosAtaque}`);
+  const dialog = document.getElementById('ataqueDialog');
+  const form = document.getElementById('ataqueForm');
+  const titulo = document.getElementById('ataqueTitulo');
+  const label = document.getElementById('ataqueLabel');
+  const btnCancel = dialog.querySelector('.btn-cancelar');
+
+  const territorioDeObj = territorios.find(t => t.nome === territorioDe);
+  const territorioParaObj = territorios.find(t => t.nome === territorioPara);
+  
+  if (!territorioDeObj || !territorioParaObj) return;
+
+  const exercitosAtacantes = territorioDeObj.exercitos >= 4 ? 3 : (territorioDeObj.exercitos - 1);
+  
+  titulo.textContent = `Confirmar Ataque`;
+  label.innerHTML = `Atacar <strong>${territorioPara}</strong> 
+                       usando <strong>${territorioDeObj.exercitos}</strong> exército(s) de <strong>${territorioDe}</strong> ? <br> 
+                       (Ataque: ${territorioDeObj.exercitos}) (Defesa: ${territorioParaObj.exercitos})`;
+
+  dialog.showModal();
+
+  const cleanup = () => {
+    dialog.close();
+    form.onsubmit = null;
+    btnCancel.onclick = null;
+  };
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    console.log(`Ataque de "${territorioDe}" para "${territorioPara}" confirmado.`);
+    postAtaque(jogadorAtual, territorioDe, territorioPara);
+    cleanup();
+  };
+
+  btnCancel.onclick = cleanup;
 }
 
 
 function reposicionarTerritorio(territorioDe, territorioPara) {
-  // TODO: Implementar lógica de reposicionamento real com os endpoints
+  const dialog = document.getElementById('reposicionamentoDialog');
+  const form = document.getElementById('reposicionamentoForm');
+  const titulo = document.getElementById('reposicionamentoTitulo');
+  const label = document.getElementById('reposicionamentoLabel');
+  const input = document.getElementById('reposicionamentoQtd');
+  const btnCancel = dialog.querySelector('.btn-cancelar');
+  const btnDecrement = dialog.querySelector('.btn-decrement');
+  const btnIncrement = dialog.querySelector('.btn-increment');
 
-  let exercitosReposicionar = parseInt(prompt(`Quantos exércitos deseja reposicionar de "${territorioDe}" para "${territorioPara}"?`, "1"), 10);
-  if (isNaN(exercitosReposicionar) || exercitosReposicionar <= 0) {
-    alert("sem exercitos...");
-    return;
-  }
+  const territorioDeObj = territorios.find(t => t.nome === territorioDe);
+  const maxQtd = territorioDeObj ? (territorioDeObj.exercitos - 1) : 1;
 
-  alert(`Reposicionamento de "${territorioDe}" para "${territorioPara}" com ${exercitosReposicionar}`);
+  titulo.textContent = 'Reposicionar Exércitos';
+  label.textContent = `Mover quantos exércitos de ${territorioDe} para ${territorioPara}?`;
+  input.value = 1;
+  input.min = 1;
+
+  btnDecrement.onclick = () => {
+    let val = parseInt(input.value, 10);
+    if (val > 1) {
+      input.value = val - 1;
+    }
+  };
+
+  btnIncrement.onclick = () => {
+    input.value = parseInt(input.value, 10) + 1;
+  };
+
+  dialog.showModal();
+
+  const cleanup = () => {
+    dialog.close();
+    form.onsubmit = null;
+    btnCancel.onclick = null;
+    btnDecrement.onclick = null;
+    btnIncrement.onclick = null;
+  };
+
+  form.onsubmit = (e) => {
+    e.preventDefault();
+    const exercitosReposicionar = parseInt(input.value, 10);
+    if (isNaN(exercitosReposicionar) || exercitosReposicionar <= 0) {
+      alert("sem exercitos...");
+      return;
+    }
+    
+    console.log(`Reposicionamento de "${territorioDe}" para "${territorioPara}" com ${exercitosReposicionar}`);
+    cleanup();
+  };
+
+  btnCancel.onclick = cleanup;
 }
