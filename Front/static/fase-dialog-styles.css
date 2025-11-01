@@ -123,3 +123,36 @@
   font-weight: 600;
   color: #000;
 }
+
+#ataqueResultadoConteudo {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 15px;
+}
+
+.dados-container {
+  text-align: center;
+}
+
+.dados-container h3 {
+  margin: 0 0 10px 0;
+  font-weight: 600;
+}
+
+.dados-imgs {
+  display: flex;
+  gap: 8px;
+  min-height: 50px;
+}
+
+.dados-imgs img {
+  width: 45px;
+  height: 45px;
+}
+
+#ataqueResultadoTexto {
+  font-size: 1.1em;
+  font-weight: 600;
+  text-align: center;
+  margin: 20px 0 10px 0;
+}

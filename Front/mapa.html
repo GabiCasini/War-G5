@@ -548,6 +548,26 @@
     </form>
     </dialog>
 
+    <dialog id="ataqueResultadoDialog" class="fase-dialog">
+      <h2 id="ataqueResultadoTitulo">Resultado do Combate</h2>
+      <div id="ataqueResultadoConteudo">
+        <div class="dados-container">
+          <h3>Ataque</h3>
+          <div id="dados-ataque-imgs" class="dados-imgs">
+          </div>
+        </div>
+        <div class="dados-container">
+          <h3>Defesa</h3>
+          <div id="dados-defesa-imgs" class="dados-imgs">
+          </div>
+        </div>
+      </div>
+      <p id="ataqueResultadoTexto"></p>
+      <div class="dialog-actions">
+        <button type="button" id="ataqueResultadoFechar" class="btn-confirmar">Fechar</button>
+      </div>
+    </dialog>
+
     <script src="{{ url_for('static', filename='configuracoes_mapa.js') }}"></script>
     <script src="{{ url_for('static', filename='configuracoes_players.js') }}"></script>
     <script src="{{ url_for('static', filename='configuracoes_territorios.js') }}"></script>

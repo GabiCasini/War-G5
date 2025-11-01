@@ -210,6 +210,10 @@ class Partida:
         return {
              "dados_ataque": dados_ataque,
              "dados_defesa": dados_defesa,
+             "rolagens_ataque": num_dados_ataque,
+             "rolagens_defesa": num_dados_defesa,
+             "perdas_ataque": perdas_ataque,
+             "perdas_defesa": perdas_defesa,
              "territorio_conquistado": territorio_foi_conquistado,
              "exercitos_restantes_no_inicio": territorio_origem.exercitos,
              "exercitos_restantes_no_defensor": territorio_alvo.exercitos,

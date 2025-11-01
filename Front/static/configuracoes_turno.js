@@ -173,14 +173,76 @@ function postAtaque(jogador_cor, territorio_origem, territorio_ataque) {
     )
     .then(data => {
       console.log('Ataque realizado com sucesso:', data);
-      fetchTerritorios();
-      fetchEstadoAtual();
+      
+      if (data.rolagens_ataque && data.rolagens_defesa) {
+        mostrarResultadoAtaque(data);
+      } else {
+        alert(data.territorio_conquistado ? 'Território conquistado!' : 'Ataque finalizado.');
+        fetchTerritorios();
+        fetchEstadoAtual();
+      }
+      
       return data;
     })
     .catch(err => {
       console.error('Erro ao realizar ataque:', err.message);
+      alert(`Erro no ataque: ${err.message}`);
       throw err;
     });
+}
+
+function mostrarResultadoAtaque(data) {
+  const dialog = document.getElementById('ataqueResultadoDialog');
+  const titulo = document.getElementById('ataqueResultadoTitulo');
+  const imgsAtaque = document.getElementById('dados-ataque-imgs');
+  const imgsDefesa = document.getElementById('dados-defesa-imgs');
+  const resultadoTexto = document.getElementById('ataqueResultadoTexto');
+  const btnFechar = document.getElementById('ataqueResultadoFechar');
+
+  imgsAtaque.innerHTML = '';
+  imgsDefesa.innerHTML = '';
+
+  if (data.rolagens_ataque && Array.isArray(data.rolagens_ataque)) {
+    data.rolagens_ataque.forEach(num => {
+      const img = document.createElement('img');
+      img.src = `static/d${num}.png`;
+      img.alt = `Dado ${num}`;
+      imgsAtaque.appendChild(img);
+    });
+  }
+
+  if (data.rolagens_defesa && Array.isArray(data.rolagens_defesa)) {
+    data.rolagens_defesa.forEach(num => {
+      const img = document.createElement('img');
+      img.src = `static/d${num}.png`;
+      img.alt = `Dado ${num}`;
+      imgsDefesa.appendChild(img);
+    });
+  }
+
+  let mensagem = `Ataque perdeu: ${data.perdas_ataque}. Defesa perdeu: ${data.perdas_defesa}.<br>`;
+  if (data.territorio_conquistado) {
+    titulo.textContent = 'Território Conquistado!';
+    mensagem += '<strong>O ataque foi bem-sucedido!</strong>';
+  } else {
+    titulo.textContent = 'Combate Realizado';
+    if (data.perdas_ataque > data.perdas_defesa) {
+        mensagem += '<strong>A defesa venceu a troca.';
+    } else if (data.perdas_defesa > data.perdas_ataque) {
+        mensagem += '<strong>O ataque venceu a troca.';
+    } else {
+        mensagem += '<strong>Houve um empate na troca (defesa vence).';
+    }
+  }
+  resultadoTexto.innerHTML = mensagem;
+
+  btnFechar.onclick = () => {
+    dialog.close();
+    fetchTerritorios();
+    fetchEstadoAtual();
+  };
+
+  dialog.showModal();
 }
 
 
