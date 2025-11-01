@@ -296,6 +296,7 @@ function posicionarExercitos(nomeTerritorio) {
   };
 
   btnIncrement.onclick = () => {
+    if (parseInt(input.value, 10) >= maximoExercitos) return;
     input.value = parseInt(input.value, 10) + 1;
   };
   
@@ -408,6 +409,7 @@ function reposicionarTerritorio(territorioDe, territorioPara) {
     }
     
     console.log(`Reposicionamento de "${territorioDe}" para "${territorioPara}" com ${exercitosReposicionar}`);
+    postReposicionamento(jogadorAtual, territorioDe, territorioPara, exercitosReposicionar);
     cleanup();
   };
 

@@ -3,12 +3,14 @@ const playerNomeElement = document.getElementById('turno-player-name');
 const faseAtualElement = document.getElementById('fase-nome');
 const btnPassarTurno = document.getElementById('btn-passar-turno');
 const timerDisplay = document.getElementById('timer');
+const infoExercitosQtdElement = document.getElementById('info-exercitos-qtd');
 let timerInterval = null;
 
-function atualizarHUD(jogadorAtual, jogadorCor, faseAtual, tempoTurno) {
+function atualizarHUD(jogadorAtual, jogadorCor, faseAtual, tempoTurno, exercitosParaPosicionar) {
     playerNomeElement.textContent = jogadorAtual;
     faseAtualElement.textContent = faseAtual;
     playerCorBoxElement.style.backgroundColor = jogadorCor;
+    infoExercitosQtdElement.textContent = exercitosParaPosicionar;
 
     if (faseAtual.toLowerCase() === 'posicionamento') {
         iniciarTimerTurno(tempoTurno);

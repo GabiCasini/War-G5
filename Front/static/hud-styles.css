@@ -12,7 +12,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: 14px;
-	align-items: center;
+	/* align-items: center; */
 	background: var(--hud-bg);
 	padding: 10px 14px;
 	border-radius: 10px;
@@ -21,10 +21,14 @@
 	color: var(--hud-text);
 	font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 	z-index: 9999;
-	height: 62px;
+	/* height: 62px; */
 }
 
 #hud-wrapper-first-line{
+	display: flex;
+	flex-direction: row;
+}
+#hud-wrapper-second-line{
 	display: flex;
 	flex-direction: row;
 }
