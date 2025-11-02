@@ -44,3 +44,7 @@ def client_com_partida(client):
     
     # Limpa a partida após o teste
     state.partida_global = None
+
+@pytest.fixture
+def partida(client_com_partida):
+    return state.partida_global

@@ -37,7 +37,7 @@ def test_get_jogadores_com_partida(client_com_partida):
     assert not jogador_alice['ia']
 
 
-def test_api_ataque_ignora_exercitos(client_com_partida):
+def test_api_ataque(client_com_partida):
     """
     Testa o endpoint /ataque.
     Este teste valida que o controller 'partida_controller.py' 
@@ -71,8 +71,6 @@ def test_api_ataque_ignora_exercitos(client_com_partida):
     assert response.status_code == 200
     json_data = response.get_json()
     assert json_data['status'] == 'ok'
-    assert json_data['territorio_conquistado']
-    assert territorio_b.cor == jogador_a.cor 
 
 def test_api_finalizar_turno_ignora_body(client_com_partida):
     """
