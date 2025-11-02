@@ -1,8 +1,6 @@
-from .Tabuleiro import Tabuleiro
-from .Jogador import Jogador
-from .IA import IA
-from .Territorio import Territorio
-from .Partida import Partida
+from back.model.Tabuleiro import Tabuleiro
+from back.model.IA import IA
+from back.model.Partida import Partida
 import random
 
 # Cenário de teste controlado para IA_2
