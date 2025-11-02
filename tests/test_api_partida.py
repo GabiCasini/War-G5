@@ -56,21 +56,23 @@ def test_api_ataque(client_com_partida):
     jogador_a.territorios = [territorio_a]
     jogador_b.territorios = [territorio_b]
     
-    territorio_a.exercitos = 10
-    territorio_b.exercitos = 1
-    
     payload = {
         "jogador_id": jogador_a.cor,
         "territorio_origem": territorio_a.nome,
         "territorio_ataque": territorio_b.nome,
-        "exercitos": 5  
     }
 
+    response = client_com_partida.post('/partida/ataque', json=payload)
+
+    assert response.status_code == 400  # Exércitos insuficientes
+
+    territorio_a.exercitos = 10
     response = client_com_partida.post('/partida/ataque', json=payload)
     
     assert response.status_code == 200
     json_data = response.get_json()
     assert json_data['status'] == 'ok'
+
 
 def test_api_finalizar_turno_ignora_body(client_com_partida):
     """
