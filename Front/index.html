@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Jogo War</title>
   <link href="{{ url_for('static', filename='index-styles.css') }}" rel="stylesheet" />
+  <link rel="icon" href="{{ url_for('static', filename='cristo-ico.png') }}">
 </head>
 <body>
   <h1 id="title">Jogo War</h1>
@@ -11,7 +12,7 @@
   <button id="openInitDialog">Jogar</button>
 
   <audio id="audio" loop>
-    <!-- <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg"> -->
+    <source src="{{ url_for('static', filename='metro_rio.mp3') }}" type="audio/mpeg">
   </audio>
 
   <button id="openMenuDialog">Menu</button>
