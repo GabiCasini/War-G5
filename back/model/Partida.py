@@ -15,12 +15,12 @@ class Partida:
         self.jogadores = self.criar_jogadores(tupla_jogadores)
         self.jogadores_eliminados = []
         self.tabuleiro = Tabuleiro(self.jogadores) # cria o tabuleiro do jogo, que vai gerar todos os territórios, distribuindo eles para os jogadores
-        self.tabuleiro.inicializar_exercitos_a_receber(self.jogadores)
         self.jogador_atual_idx = 0
         self.fase_do_turno = "posicionamento"  # 'posicionamento', 'ataque', 'reposicionamento'
         if shuffle_jogadores:
             random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
         self.manager_de_cartas = Manager_de_Cartas()
+        self.tabuleiro.inicializar_exercitos_a_receber(self.jogadores)
         self.manager_de_objetivos = Manager_de_Objetivos(self.jogadores)
         self.valor_da_troca = 4
 
