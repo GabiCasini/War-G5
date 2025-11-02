@@ -387,6 +387,7 @@ function reposicionarTerritorio(territorioDe, territorioPara) {
   };
 
   btnIncrement.onclick = () => {
+    if (parseInt(input.value, 10) >= maxQtd) return;
     input.value = parseInt(input.value, 10) + 1;
   };
 
