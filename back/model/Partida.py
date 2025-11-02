@@ -160,21 +160,11 @@ class Partida:
             print("Atacante não possui exércitos suficientes para atacar.")
             return False
         
-        
         #Dados de ataque
-        if atacante.exercitos_no_territorio(territorio_origem) >= 4:
-            dados_ataque = 3
-        
-        else:
-            dados_ataque = atacante.exercitos_no_territorio(territorio_origem) - 1
+        dados_ataque = 3 if atacante.exercitos_no_territorio(territorio_origem) >= 4 else atacante.exercitos_no_territorio(territorio_origem) - 1
 
-        
         #Dados de defesa
-        if defensor.exercitos_no_territorio(territorio_alvo) >= 3:
-            dados_defesa = 3
-
-        else:
-            dados_defesa = defensor.exercitos_no_territorio(territorio_alvo)
+        dados_defesa = 3 if defensor.exercitos_no_territorio(territorio_alvo) >= 3 else defensor.exercitos_no_territorio(territorio_alvo)
 
         perdas_ataque, perdas_defesa, num_dados_ataque, num_dados_defesa = atacante.combate(dados_ataque, dados_defesa)
         atacante.remover_exercitos_territorio(territorio_origem, perdas_ataque)
@@ -229,7 +219,7 @@ class Partida:
              "exercitos_restantes_no_inicio": territorio_origem.exercitos,
              "exercitos_restantes_no_defensor": territorio_alvo.exercitos,
              "exercitos_disponiveis_a_mover": (territorio_origem.exercitos - 1) if territorio_foi_conquistado else 0
-         }
+        }
 
     def transferir_territorio(self, vencedor: Jogador, perdedor: Jogador, territorio: Territorio, origem: Territorio):
         """
@@ -244,6 +234,7 @@ class Partida:
         vencedor.mover_exercitos(origem, territorio, exercitos_para_mover)
 
     # verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero) e trata a eliminação caso necessário
+    # TODO: Caso seja eliminado, deve-se verificar o cumprimento dos objetivos
     def verificar_eliminacao(self, atacante: Jogador, defensor: Jogador):
         if len(defensor.territorios) == 0:
             self.jogadores.remove(defensor)
@@ -260,27 +251,6 @@ class Partida:
             defensor.cartas = []
                 
             print(f"\nJogador {defensor.cor} eliminado\n")
-            return True
-        return False
-    
-    def transferir_territorio(self, vencedor: Jogador, perdedor: Jogador, territorio: Territorio, origem: Territorio):
-        """
-        Transfere a posse do território para o vencedor e move exércitos obrigatórios.
-        """
-        perdedor.remover_territorio(territorio)
-        vencedor.adicionar_territorio(territorio) #adiciona o território na lista do jogador e atualiza a cor 
-        
-        # move 1 exercito automaticamente para o territorio conquistado
-        # eventualmente o jogador deve poder escolher a quantidade (de 1 a 3, sendo que o territorio de origem deve continuar com pelo menos 1 exercito)
-        exercitos_para_mover = 1
-        vencedor.mover_exercitos(origem, territorio, exercitos_para_mover)
-
-    # verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero)
-    # falta implementar a passagem das cartas do jogador eliminado para quem o eliminou, além da verificação de cumprimento dos objetivos
-    def verificar_eliminacao(self, jogador: Jogador):
-        if jogador.numero_de_territorios() == 0:
-            self.jogadores.remove(jogador)
-            print(f"\nJogador {jogador.cor} eliminado\n")
             return True
         return False
     
