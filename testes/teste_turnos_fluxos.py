@@ -1,4 +1,4 @@
-from .Partida import Partida
+from back.model.Partida import Partida
 
 if __name__ == "__main__":
     print("Inicio de simulação de turnos")

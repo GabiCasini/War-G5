@@ -1,4 +1,4 @@
-from .Partida import Partida
+from back.model.Partida import Partida
 
 partida = Partida(3, 0, 120, [["Alice", "vermelho", "humano"], ["Bob", "azul", "humano"], ["Charlie", "verde", "humano"]])
 
