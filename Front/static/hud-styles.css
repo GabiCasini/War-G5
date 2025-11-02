@@ -34,7 +34,8 @@
 }
 
 #turno-wrapper > span:first-child,
-.timer-wrapper > span:first-child,
+#timer-wrapper > span:first-child,
+#info-exercitos-wrapper > span:first-child,
 #fase-wrapper > span:first-child{
 	font-size: 11px;
 	color: var(--hud-muted);
@@ -51,7 +52,15 @@
 	margin-right: 15px;
 }
 
-.timer-wrapper{
+#timer-wrapper{
+	display:flex;
+	align-items:flex-start;
+	flex-direction: column;
+	gap:6px;
+	margin-right: 15px;
+}
+
+#info-exercitos-wrapper{
 	display:flex;
 	align-items:flex-start;
 	flex-direction: column;
@@ -83,6 +92,12 @@
 }
 
 #timer{
+	font-size:17px;
+	font-weight:700;
+	color:var(--hud-text);
+}
+
+#info-exercitos-qtd{
 	font-size:17px;
 	font-weight:700;
 	color:var(--hud-text);
