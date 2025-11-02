@@ -82,8 +82,8 @@ class Tabuleiro:
         return lista
     
     def inicializar_exercitos_a_receber(self, jogadores: list[Jogador]):
-        for jogador in jogadores:
-            self.calcula_exercitos_a_receber(jogador=jogador)
+        # Só inicializa para o primeiro jogador, pois os outros receberão seus exércitos ao final do turno de cada jogador anterior
+        self.calcula_exercitos_a_receber(jogador=jogadores[0])
     
     # calcula a quantidade de exercitos recebidos na fase de posicionamento
     def calcula_exercitos_a_receber(self, jogador: Jogador):

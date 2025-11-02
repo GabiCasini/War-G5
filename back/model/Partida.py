@@ -16,7 +16,6 @@ class Partida:
         self.jogadores_eliminados = []
         self.tabuleiro = Tabuleiro(self.jogadores) # cria o tabuleiro do jogo, que vai gerar todos os territórios, distribuindo eles para os jogadores
         self.tabuleiro.inicializar_exercitos_a_receber(self.jogadores)
-        self.tabuleiro.inicializar_exercitos_a_receber(self.jogadores)
         self.jogador_atual_idx = 0
         self.fase_do_turno = "posicionamento"  # 'posicionamento', 'ataque', 'reposicionamento'
         if shuffle_jogadores:
@@ -38,7 +37,6 @@ class Partida:
 
         elif self.fase_do_turno == "reposicionamento":
             self.fase_do_turno = "posicionamento"
-            self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
             self.proximo_jogador()
             self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
         # garante que jogador_atual esteja sempre definido antes de retornar
