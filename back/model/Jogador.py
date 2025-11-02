@@ -26,7 +26,7 @@ class Jogador:
 
     # adiciona os exércitos que o jogador poderá adicionar aos seus territórios na fase de posicionamento
     def adicionar_exercitos_para_posicionamento(self, quantidade: int):
-        self.exercitos_reserva = quantidade
+        self.exercitos_reserva += quantidade
 
     def remover_exercitos_para_posicionamento(self, quantidade: int):
         self.exercitos_reserva -= quantidade
