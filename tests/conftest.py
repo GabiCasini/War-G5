@@ -1,6 +1,6 @@
 import pytest
 from flask import Flask
-from back import state  # Importa o 'state' global
+from back import state
 from back.model.Partida import Partida 
 
 from back.controller.partida_controller import partida_bp
@@ -11,7 +11,7 @@ def app():
     app = Flask(__name__)
     app.config['TESTING'] = True
     
-    # Registra o blueprint da sua API
+    # Registra o blueprint da API
     app.register_blueprint(partida_bp)
     
     yield app
@@ -27,7 +27,7 @@ def client_com_partida(client):
     Um cliente de teste onde uma partida global já foi iniciada.
     Isso limpa o estado após cada teste.
     """
-    # Setup: Cria e inicia a partida
+
     jogadores = [["Alice", "vermelho", "humano"], 
                  ["Bob", "azul", "humano"], 
                  ["Charlie", "verde", "humano"]]
@@ -36,10 +36,11 @@ def client_com_partida(client):
         qtd_humanos=3, 
         qtd_ai=0, 
         duracao_turno=60, 
-        tupla_jogadores=jogadores
+        tupla_jogadores=jogadores,
+        shuffle_jogadores=False
     )
     
     yield client  # O teste executa aqui
     
-    # Teardown: Limpa a partida após o teste
+    # Limpa a partida após o teste
     state.partida_global = None

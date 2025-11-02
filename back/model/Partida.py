@@ -6,7 +6,7 @@ from .Manager_de_Cartas import Manager_de_Cartas
 from .Manager_de_Objetivos import Manager_de_Objetivos
 
 class Partida:
-    def __init__(self, qtd_humanos: int, qtd_ai: int, duracao_turno: int, tupla_jogadores: list[tuple[str, str, str]]): # tupla representa o jogador (nome, cor, tipo)
+    def __init__(self, qtd_humanos: int, qtd_ai: int, duracao_turno: int, tupla_jogadores: list[tuple[str, str, str]], shuffle_jogadores: bool = True): # tupla representa o jogador (nome, cor, tipo)
         assert 6 >= qtd_humanos + qtd_ai >= 3
         self.qtd_humanos = qtd_humanos
         self.qtd_ai = qtd_ai
@@ -19,7 +19,8 @@ class Partida:
         self.tabuleiro.inicializar_exercitos_a_receber(self.jogadores)
         self.jogador_atual_idx = 0
         self.fase_do_turno = "posicionamento"  # 'posicionamento', 'ataque', 'reposicionamento'
-        random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
+        if shuffle_jogadores:
+            random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
         self.manager_de_cartas = Manager_de_Cartas()
         self.manager_de_objetivos = Manager_de_Objetivos(self.jogadores)
         self.valor_da_troca = 4

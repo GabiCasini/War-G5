@@ -57,12 +57,11 @@ def test_api_ataque_ignora_exercitos(client_com_partida):
     jogador_b.territorios = [territorio_b]
     
     territorio_a.exercitos = 10
-    territorio_b.exercitos = 1  
-    partida.jogador_atual_idx = 0 
+    territorio_b.exercitos = 1
     
     payload = {
         "jogador_id": jogador_a.cor,
-        "territorio_inicio": territorio_a.nome,
+        "territorio_origem": territorio_a.nome,
         "territorio_ataque": territorio_b.nome,
         "exercitos": 5  
     }
@@ -82,9 +81,6 @@ def test_api_finalizar_turno_ignora_body(client_com_partida):
     IGNORA o body da requisição, como está escrito no código.
     """
     partida = state.partida_global
-    
-    partida.jogador_atual_idx = 0
-    partida.jogadores = 0 # evitar suffle aqui
 
     jogador_atual_antes = partida.jogadores[0]
     proximo_jogador_esperado = partida.jogadores[1]
