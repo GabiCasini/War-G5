@@ -15,6 +15,8 @@ class Partida:
         self.jogadores = self.criar_jogadores(tupla_jogadores)
         self.jogadores_eliminados = []
         self.tabuleiro = Tabuleiro(self.jogadores) # cria o tabuleiro do jogo, que vai gerar todos os territórios, distribuindo eles para os jogadores
+        self.tabuleiro.inicializar_exercitos_a_receber(self.jogadores)
+        self.tabuleiro.inicializar_exercitos_a_receber(self.jogadores)
         self.jogador_atual_idx = 0
         self.fase_do_turno = "posicionamento"  # 'posicionamento', 'ataque', 'reposicionamento'
         random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
@@ -35,16 +37,27 @@ class Partida:
 
         elif self.fase_do_turno == "reposicionamento":
             self.fase_do_turno = "posicionamento"
+            self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
             self.proximo_jogador()
+            self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
         # garante que jogador_atual esteja sempre definido antes de retornar
         jogador_atual = self.jogadores[self.jogador_atual_idx]
 
         return jogador_atual, self.fase_do_turno
     
+    def finalizar_turno_atual(self):
+        self.fase_do_turno = "posicionamento"
+        self.proximo_jogador()
+        self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
+
+        # garante que jogador_atual esteja sempre definido antes de retornar
+        jogador_atual = self.jogadores[self.jogador_atual_idx]
+        return jogador_atual, self.fase_do_turno
+    
     def fase_de_ataque(self, jogador: Jogador):
         """Lógica para o jogador realizar ataques."""
        
-
+       
         # Se for IA, usar a rotina de ataque da IA
         if jogador.tipo == 'ai' and hasattr(jogador, 'executar_ataques'):
             try:
@@ -64,24 +77,34 @@ class Partida:
         print("O jogador decide se e como irá reposicionar seus exércitos.")
         pass
     
-    def fase_de_reposicionamento_api(self, jogador_id, nome_origem, nome_destino, qtd_exercitos):
-        jogador = next((j for j in self.jogadores if j.cor == jogador_id), None)
-        if not jogador: raise Exception("Jogador não encontrado")
+    def fase_de_reposicionamento_api(self, jogador_id: str, nome_origem: str, nome_destino: str, qtd_exercitos: int):
+        jogador: Jogador = next((j for j in self.jogadores if j.cor == jogador_id), None)
+        if not jogador:
+            raise Exception("Jogador não encontrado")
     
         origem = next((t for t in jogador.territorios if t.nome == nome_origem), None)
-        if not origem: raise Exception("Território de origem não é seu")
+        if not origem:
+            raise Exception("Território de origem não é seu")
     
         destino = next((t for t in jogador.territorios if t.nome == nome_destino), None)
-        if not destino: raise Exception("Território de destino não é seu")
+        if not destino:
+            raise Exception("Território de destino não é seu")
+        
+        if origem.exercitos <= 1:
+            raise Exception("Não é possível reposicionar de um território com apenas 1 exército.")
+        
+        max_reposicionar = origem.exercitos - 1
+        if qtd_exercitos > max_reposicionar:
+            raise Exception(f"Você só pode reposicionar até {max_reposicionar} exércitos.")
     
-        jogador.mover_exercitos(origem, destino, qtd_exercitos)
+        jogador.reposicionar_exercitos(origem, destino, qtd_exercitos)
     
         return {
             "territorio_origem": { "nome": origem.nome, "exercitos": origem.exercitos },
             "territorio_destino": { "nome": destino.nome, "exercitos": destino.exercitos }
         }
 
-    def fase_de_posicionamento(self, jogador: Jogador,):
+    def fase_de_posicionamento(self, jogador: Jogador):
         """Lógica para o jogador posicionar seus novos exércitos."""
         self.tabuleiro.calcula_exercitos_a_receber(jogador=jogador)
         total_exercitos = jogador.exercitos_reserva
@@ -94,8 +117,8 @@ class Partida:
             jogador.adicionar_exercitos_territorio(territorio_escolhido, total_exercitos)
             print(f"{jogador.nome} posicionou {total_exercitos} em {territorio_escolhido.nome}.")
 
-    def fase_de_posicionamento_api(self, jogador_id, territorio_nome, qtd_exercitos):
-        jogador = next((j for j in self.jogadores if j.cor == jogador_id), None)
+    def fase_de_posicionamento_api(self, jogador_id: str, territorio_nome: str, qtd_exercitos: int):
+        jogador: Jogador = next((j for j in self.jogadores if j.cor == jogador_id), None)
         if not jogador:
             raise Exception("Jogador não encontrado")
     
@@ -103,16 +126,14 @@ class Partida:
         if not territorio:
             raise Exception("Território não pertence ao jogador")
     
-        total_reserva = sum(jogador.exercitos_reserva)
+        total_reserva = jogador.exercitos_reserva
 
         if qtd_exercitos > total_reserva:
             raise Exception("Exércitos insuficientes na reserva")
         
         jogador.adicionar_exercitos_territorio(territorio, qtd_exercitos)
-        
-        jogador.remover_exercitos_para_posicionamento([0,0,0,0,0,0,qtd_exercitos]) # isso precisa ser consertado
-        
-        return sum(jogador.exercitos_reserva)
+        jogador.remover_exercitos_para_posicionamento(qtd_exercitos)
+        return jogador.exercitos_reserva
     
 
     # cria os objetos jogador a partir da tupla contendo o nome do jogador e sua respectiva cor
@@ -179,21 +200,11 @@ class Partida:
             print("Atacante não possui exércitos suficientes para atacar.")
             return False
         
-        
         #Dados de ataque
-        if atacante.exercitos_no_territorio(territorio_origem) >= 4:
-            dados_ataque = 3
-        
-        else:
-            dados_ataque = atacante.exercitos_no_territorio(territorio_origem) - 1
+        dados_ataque = 3 if atacante.exercitos_no_territorio(territorio_origem) >= 4 else atacante.exercitos_no_territorio(territorio_origem) - 1
 
-        
         #Dados de defesa
-        if defensor.exercitos_no_territorio(territorio_alvo) >= 3:
-            dados_defesa = 3
-
-        else:
-            dados_defesa = defensor.exercitos_no_territorio(territorio_alvo)
+        dados_defesa = 3 if defensor.exercitos_no_territorio(territorio_alvo) >= 3 else defensor.exercitos_no_territorio(territorio_alvo)
         
         perdas_ataque, perdas_defesa, num_dados_ataque, num_dados_defesa = atacante.combate(dados_ataque, dados_defesa)
 
@@ -209,6 +220,10 @@ class Partida:
         return {
              "dados_ataque": dados_ataque,
              "dados_defesa": dados_defesa,
+             "rolagens_ataque": num_dados_ataque,
+             "rolagens_defesa": num_dados_defesa,
+             "perdas_ataque": perdas_ataque,
+             "perdas_defesa": perdas_defesa,
              "territorio_conquistado": territorio_foi_conquistado,
              "exercitos_restantes_no_inicio": territorio_origem.exercitos,
              "exercitos_restantes_no_defensor": territorio_alvo.exercitos,
@@ -269,14 +284,12 @@ class Partida:
         return False
     
     def get_territorio_por_nome(self, nome_territorio: str):
-
         for territorio in self.tabuleiro.territorios:
             if territorio.nome == nome_territorio:
                 return territorio
         return None
     
     def get_jogador_por_cor(self, cor_jogador: str):
-        
         for jogador in self.jogadores:
             if jogador.cor == cor_jogador:
                 return jogador
@@ -297,9 +310,7 @@ class Partida:
     def incrementar_troca(self):
         if self.valor_da_troca < 12:
             self.valor_da_troca += 2
-
         elif self.valor_da_troca < 15:
             self.valor_da_troca += 3
-
         else:
             self.valor_da_troca += 5

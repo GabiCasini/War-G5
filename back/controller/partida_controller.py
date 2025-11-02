@@ -1,8 +1,6 @@
 from flask import Blueprint, jsonify, request
 
 from .. import state
-from ..model.Jogador import Jogador
-from ..model.Territorio import Territorio
 
 partida_bp = Blueprint('partida', __name__, url_prefix='/partida')
 
@@ -106,6 +104,7 @@ def post_posicionamento():
         exercitos_restantes = state.partida_global.fase_de_posicionamento_api(
             jogador_id, territorio_nome, exercitos
         )
+        print("Exércitos restantes após posicionamento:", exercitos_restantes)
         return jsonify({"status": "ok", "exercitos_restantes": exercitos_restantes})
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
@@ -119,7 +118,7 @@ def post_ataque():
     dados = request.get_json()
 
     jogador_id = dados.get("jogador_id")
-    nome_territorio_origem = dados.get("territorio_inicio")
+    nome_territorio_origem = dados.get("territorio_origem")
     nome_territorio_ataque = dados.get("territorio_ataque")
 
     atacante = state.partida_global.get_jogador_por_cor(jogador_id)
@@ -147,7 +146,7 @@ def post_reposicionamento():
     exercitos = int(dados.get("exercitos"))
     
     try:
-        resultado = state.partida_global.fase_de_remanejamento_api(
+        resultado = state.partida_global.fase_de_reposicionamento_api(
             jogador_id, nome_origem, nome_destino, exercitos
         )
         return jsonify({"status": "ok", **resultado})
@@ -157,6 +156,27 @@ def post_reposicionamento():
 
 @partida_bp.route("/finalizar_turno", methods=["POST"])
 def post_finalizar_turno():
+    if not state.partida_global:
+        return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
+
+    try:
+        proximo_jogador, nova_fase = state.partida_global.finalizar_turno_atual()
+        
+        resposta = {
+            "status": "ok",
+            "proximo_jogador": {
+                "jogador_id": proximo_jogador.cor,
+                "nome": proximo_jogador.nome,
+                "cor": proximo_jogador.cor,
+                "fase": nova_fase 
+            }
+        }
+        return jsonify(resposta)
+    except Exception as e:
+        return jsonify({"status": "erro", "mensagem": str(e)}), 400
+
+@partida_bp.route("/avancar_turno", methods=["POST"])
+def post_avancar_turno():
     if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
 
