@@ -91,10 +91,10 @@ class Partida:
             raise Exception("Território de destino não é seu")
         
         if origem.limite_de_repasse < 1:
-            raise Exception("Não é possível reposicionar de um território com apenas 1 exército.")
+            raise Exception("Não é possível reposicionar mais nenhum exército a partir deste território.")
         
         if qtd_exercitos > origem.limite_de_repasse:
-            raise Exception(f"Você só pode reposicionar até {origem.limite_de_repasse} exércitos.")
+            raise Exception(f"Você só pode reposicionar até {origem.limite_de_repasse} exércitos a partir deste território.")
     
         jogador.reposicionar_exercitos(origem, destino, qtd_exercitos)
     
