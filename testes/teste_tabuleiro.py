@@ -26,9 +26,19 @@ for i in partida.jogadores:
     partida.tabuleiro.calcula_exercitos_a_receber(i)
     print(f"O Jogador {i.cor} tem {i.exercitos_reserva} exercitos a receber nesse turno")
 
-for i in partida.tabuleiro.regioes_com_bonus[0][2]:
-    i.cor = partida.jogadores[0].cor
+for i in partida.jogadores[0].territorios:
+    i.exercitos = 22
 
-print("\nDando territórios da Região 1 para o primeiro Jogador:")
-partida.tabuleiro.calcula_exercitos_a_receber(partida.jogadores[0])
-print(f"O Jogador {partida.jogadores[0].cor} tem {partida.jogadores[0].exercitos_reserva} exercitos a receber nesse turno")
+partida.calcular_limite_de_reposicionamento(partida.jogadores[0])
+
+for i in partida.jogadores[0].territorios:
+    print(f"\nTerritorio: {i}, Limite de Repasse: {i.limite_de_repasse}")
+
+for i in partida.jogadores[0].territorios:
+    for j in i.fronteiras:
+        if j.cor == partida.jogadores[0].cor:
+            print(f"\nRealizando Reposicionamento:\n")
+            partida.jogadores[0].reposicionar_exercitos(i, j, 10)
+            print(f"Territorio: {i}, Limite de Repasse: {i.limite_de_repasse}\n")
+            print(f"Territorio: {j}, Limite de Repasse: {j.limite_de_repasse}\n")
+            break

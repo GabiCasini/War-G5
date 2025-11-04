@@ -34,6 +34,7 @@ class Partida:
 
         elif self.fase_do_turno == "ataque":
             self.fase_do_turno = "reposicionamento"
+            self.calcular_limite_de_reposicionamento(self.jogadores[self.jogador_atual_idx])
 
         elif self.fase_do_turno == "reposicionamento":
             self.fase_do_turno = "posicionamento"
@@ -89,12 +90,11 @@ class Partida:
         if not destino:
             raise Exception("Território de destino não é seu")
         
-        if origem.exercitos <= 1:
+        if origem.limite_de_repasse < 1:
             raise Exception("Não é possível reposicionar de um território com apenas 1 exército.")
         
-        max_reposicionar = origem.exercitos - 1
-        if qtd_exercitos > max_reposicionar:
-            raise Exception(f"Você só pode reposicionar até {max_reposicionar} exércitos.")
+        if qtd_exercitos > origem.limite_de_repasse:
+            raise Exception(f"Você só pode reposicionar até {origem.limite_de_repasse} exércitos.")
     
         jogador.reposicionar_exercitos(origem, destino, qtd_exercitos)
     
@@ -283,3 +283,8 @@ class Partida:
             self.valor_da_troca += 3
         else:
             self.valor_da_troca += 5
+
+    # Calcula o limite máximo de exercitos que podem ser repassados por cada territorio
+    def calcular_limite_de_reposicionamento(self, jogador: Jogador):
+        for i in jogador.territorios:
+            i.limite_de_repasse = i.exercitos - 1

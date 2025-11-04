@@ -26,7 +26,7 @@ class Manager_de_Cartas:
             
             return [resultado, territorio]
         
-        return [resultado, "Nenhum"]
+        return [resultado, ""]
     
     def cartas_trocadas(self, lista_de_cartas_trocadas):
         for i in lista_de_cartas_trocadas:
