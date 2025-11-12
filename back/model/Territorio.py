@@ -5,6 +5,7 @@ class Territorio:
         self.cor = cor
         self.regiao = regiao # nome da regiao
         self.fronteiras = []
+        self.limite_de_repasse = 0
 
 
     def __repr__(self):

@@ -72,6 +72,7 @@ class Jogador:
         # Executa o reposicionamento
         origem.exercitos -= quantidade
         destino.exercitos += quantidade
+        origem.limite_de_repasse -= quantidade
         return "Reposicionamento realizado com sucesso."
 
     def combate(self, exercitos_ataque, exercitos_defesa):
@@ -119,6 +120,7 @@ class Jogador:
                 for j in self.territorios:
                     if j.nome == i[1]:
                         self.adicionar_exercitos_territorio(j, 2)
+                        break
             self.remover_carta(i)
 
     
