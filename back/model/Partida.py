@@ -8,19 +8,24 @@ from .Manager_de_Objetivos import Manager_de_Objetivos
 class Partida:
     def __init__(self, qtd_humanos: int, qtd_ai: int, duracao_turno: int, tupla_jogadores: list[tuple[str, str, str]], shuffle_jogadores: bool = True): # tupla representa o jogador (nome, cor, tipo)
         assert 6 >= qtd_humanos + qtd_ai >= 3
+
         self.qtd_humanos = qtd_humanos
         self.qtd_ai = qtd_ai
         self.qtd_jogadores = qtd_humanos + qtd_ai
         self.duracao_turno = duracao_turno
+
         self.jogadores = self.criar_jogadores(tupla_jogadores)
         self.jogadores_eliminados = []
-        self.tabuleiro = Tabuleiro(self.jogadores) # cria o tabuleiro do jogo, que vai gerar todos os territórios, distribuindo eles para os jogadores
         self.jogador_atual_idx = 0
+
+        self.tabuleiro = Tabuleiro(self.jogadores) # Cria o tabuleiro do jogo, que vai gerar todos os territórios, distribuindo eles para os jogadores
         self.fase_do_turno = "posicionamento"  # 'posicionamento', 'ataque', 'reposicionamento'
+        
         if shuffle_jogadores:
-            random.shuffle(self.jogadores) # define a ordem dos turnos embaralhando a lista de jogadores
-        self.manager_de_cartas = Manager_de_Cartas()
+            random.shuffle(self.jogadores) # Define a ordem dos turnos embaralhando a lista de jogadores
         self.tabuleiro.inicializar_exercitos_a_receber(self.jogadores)
+        
+        self.manager_de_cartas = Manager_de_Cartas()
         self.manager_de_objetivos = Manager_de_Objetivos(self.jogadores)
         self.valor_da_troca = 4
 
@@ -40,7 +45,8 @@ class Partida:
             self.fase_do_turno = "posicionamento"
             self.proximo_jogador()
             self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
-        # garante que jogador_atual esteja sempre definido antes de retornar
+        
+        # Garante que jogador_atual esteja sempre definido antes de retornar
         jogador_atual = self.jogadores[self.jogador_atual_idx]
 
         return jogador_atual, self.fase_do_turno
@@ -50,34 +56,11 @@ class Partida:
         self.proximo_jogador()
         self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
 
-        # garante que jogador_atual esteja sempre definido antes de retornar
+        # Garante que jogador_atual esteja sempre definido antes de retornar
         jogador_atual = self.jogadores[self.jogador_atual_idx]
         return jogador_atual, self.fase_do_turno
     
-    def fase_de_ataque(self, jogador: Jogador):
-        """Lógica para o jogador realizar ataques."""
-       
-       
-        # Se for IA, usar a rotina de ataque da IA
-        if jogador.tipo == 'ai' and hasattr(jogador, 'executar_ataques'):
-            try:
-                import random
-                rng = random.Random()
-                # parâmetros básicos: agressividade baixa por padrão
-                ataques = jogador.executar_ataques(self, rng=rng, agressividade=0.0, max_ataques=10)
-                print(f'IA {jogador.nome} efetuou {ataques} ataques.')
-            except Exception as e:
-                print(f'Erro ao executar ataques da IA: {e}')
-        else:
-            print("O jogador decide se e como irá atacar.")
-            pass
-
-    def fase_de_reposicionamento(self, jogador: Jogador):
-        """Lógica para o jogador mover exércitos."""
-        print("O jogador decide se e como irá reposicionar seus exércitos.")
-        pass
-    
-    def fase_de_reposicionamento_api(self, jogador_id: str, nome_origem: str, nome_destino: str, qtd_exercitos: int):
+    def fase_de_reposicionamento(self, jogador_id: str, nome_origem: str, nome_destino: str, qtd_exercitos: int):
         jogador: Jogador = next((j for j in self.jogadores if j.cor == jogador_id), None)
         if not jogador:
             raise Exception("Jogador não encontrado")
@@ -103,20 +86,7 @@ class Partida:
             "territorio_destino": { "nome": destino.nome, "exercitos": destino.exercitos }
         }
 
-    def fase_de_posicionamento(self, jogador: Jogador):
-        """Lógica para o jogador posicionar seus novos exércitos."""
-        self.tabuleiro.calcula_exercitos_a_receber(jogador=jogador)
-        total_exercitos = jogador.exercitos_reserva
-        print(f"Exércitos para posicionar: {total_exercitos}")
-        # TODO: Substituir lógica aleatória por input do usuário ou lógica da IA
-        if jogador.tipo == 'humano':
-            print(f"Você tem {total_exercitos} exércitos para posicionar.")
-            # Coloca tudo no primeiro território
-            territorio_escolhido = jogador.territorios[0] # Necessita da api para saber qual territorio o jogador escolheu
-            jogador.adicionar_exercitos_territorio(territorio_escolhido, total_exercitos)
-            print(f"{jogador.nome} posicionou {total_exercitos} em {territorio_escolhido.nome}.")
-
-    def fase_de_posicionamento_api(self, jogador_id: str, territorio_nome: str, qtd_exercitos: int):
+    def fase_de_posicionamento(self, jogador_id: str, territorio_nome: str, qtd_exercitos: int):
         jogador: Jogador = next((j for j in self.jogadores if j.cor == jogador_id), None)
         if not jogador:
             raise Exception("Jogador não encontrado")
@@ -163,37 +133,6 @@ class Partida:
 
         #Dados de defesa
         dados_defesa = 3 if defensor.exercitos_no_territorio(territorio_alvo) >= 3 else defensor.exercitos_no_territorio(territorio_alvo)
-
-        perdas_ataque, perdas_defesa, num_dados_ataque, num_dados_defesa = atacante.combate(dados_ataque, dados_defesa)
-        atacante.remover_exercitos_territorio(territorio_origem, perdas_ataque)
-        defensor.remover_exercitos_territorio(territorio_alvo, perdas_defesa)
-        
-        # Sugestao para ver o resultado do combate
-        # print(f"Combate em {territorio_alvo.nome}: Atacante perdeu {perdas_ataque}, Defensor perdeu {perdas_defesa}.")
-
-        if territorio_alvo.exercitos == 0:
-            self.transferir_territorio(atacante, defensor, territorio_alvo, territorio_origem)
-            return True  # território conquistado
-        return False  # território não conquistado
-    
-    def resolver_combate_api(self, atacante: Jogador, defensor: Jogador, territorio_origem: Territorio, territorio_alvo: Territorio):
-        """
-        Resolve um combate entre atacante e defensor, atualizando exércitos e posse se necessário.
-        """
-        
-        if atacante == defensor:
-            print("Atacante e defensor são o mesmo jogador.")
-            return False
-        
-        if atacante.exercitos_no_territorio(territorio_origem) <=1:
-            print("Atacante não possui exércitos suficientes para atacar.")
-            return False
-        
-        #Dados de ataque
-        dados_ataque = 3 if atacante.exercitos_no_territorio(territorio_origem) >= 4 else atacante.exercitos_no_territorio(territorio_origem) - 1
-
-        #Dados de defesa
-        dados_defesa = 3 if defensor.exercitos_no_territorio(territorio_alvo) >= 3 else defensor.exercitos_no_territorio(territorio_alvo)
         
         perdas_ataque, perdas_defesa, num_dados_ataque, num_dados_defesa = atacante.combate(dados_ataque, dados_defesa)
 
@@ -203,7 +142,7 @@ class Partida:
         if territorio_alvo.exercitos == 0:
             self.transferir_territorio(atacante, defensor, territorio_alvo, territorio_origem)
             territorio_foi_conquistado = True
-        else:  # território não conquistado
+        else:
             territorio_foi_conquistado = False 
         
         return {
@@ -226,12 +165,12 @@ class Partida:
         perdedor.remover_territorio(territorio)
         vencedor.adicionar_territorio(territorio) #adiciona o território na lista do jogador e atualiza a cor 
         
-        # move 1 exercito automaticamente para o territorio conquistado
-        # eventualmente o jogador deve poder escolher a quantidade (de 1 a 3, sendo que o territorio de origem deve continuar com pelo menos 1 exercito)
+        # Move 1 exercito automaticamente para o territorio conquistado
+        # Eventualmente o jogador deve poder escolher a quantidade (de 1 a 3, sendo que o territorio de origem deve continuar com pelo menos 1 exercito)
         exercitos_para_mover = 1
         vencedor.mover_exercitos(origem, territorio, exercitos_para_mover)
 
-    # verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero) e trata a eliminação caso necessário
+    # Verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero) e trata a eliminação caso necessário
     # TODO: Caso seja eliminado, deve-se verificar o cumprimento dos objetivos
     def verificar_eliminacao(self, atacante: Jogador, defensor: Jogador):
         if len(defensor.territorios) == 0:
@@ -239,7 +178,7 @@ class Partida:
             defensor.eliminado_por = atacante.cor
             self.jogadores_eliminados.append(defensor)
 
-            # transfere as cartas do jogador eliminado para o atacante até que o limite de 5 cartas seja atingido
+            # Transfere as cartas do jogador eliminado para o atacante até que o limite de 5 cartas seja atingido
             for i in defensor.cartas:
                 if len(atacante.cartas) < 5:
                     atacante.adicionar_carta(i)
@@ -247,7 +186,7 @@ class Partida:
                     self.manager_de_cartas.cartas_trocadas(i)
 
             defensor.cartas = []
-                
+               
             print(f"\nJogador {defensor.cor} eliminado\n")
             return True
         return False
@@ -273,7 +212,7 @@ class Partida:
     def realizar_troca(self, jogador: Jogador, cartas):
         if self.manager_de_cartas.validar_possivel_troca(cartas):
             jogador.trocar_cartas(cartas, self.valor_da_troca)
-            self.manager_de_cartas.cartas_trocadas(cartas) # os territorios das cartas que foram trocados serão colocados na lista de disponíveis
+            self.manager_de_cartas.cartas_trocadas(cartas)
             self.incrementar_troca()
     
     def incrementar_troca(self):

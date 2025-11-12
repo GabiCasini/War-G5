@@ -4,10 +4,11 @@ from .Territorio import Territorio
 class Jogador:
     def __init__(self, nome: str, cor: str, tipo: str = "humano"):
         self.nome = nome
-        self.cor = cor  # red, blue, green, orange, purple, yellow
+        self.cor = cor 
         self.tipo = tipo  # 'humano' ou 'ai'
-        self.territorios = []  # lista de objetos Territorio
-        self.exercitos_reserva = 0  # exércitos disponíveis para alocação
+
+        self.territorios = []
+        self.exercitos_reserva = 0
         self.cartas = []
         self.objetivo = None
         self.eliminado_por = "nenhum"
@@ -24,7 +25,7 @@ class Jogador:
         if territorio in self.territorios:
             self.territorios.remove(territorio)
 
-    # adiciona os exércitos que o jogador poderá adicionar aos seus territórios na fase de posicionamento
+    # Adiciona os exércitos que o jogador poderá adicionar aos seus territórios na fase de posicionamento
     def adicionar_exercitos_para_posicionamento(self, quantidade: int):
         self.exercitos_reserva += quantidade
 
@@ -69,6 +70,7 @@ class Jogador:
             return f"Você só pode mover até {origem.exercitos - 1} exércitos."
         if destino not in origem.fronteiras:
             return "Os territórios não são vizinhos."
+        
         # Executa o reposicionamento
         origem.exercitos -= quantidade
         destino.exercitos += quantidade
