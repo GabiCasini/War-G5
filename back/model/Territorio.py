@@ -1,10 +1,11 @@
 class Territorio:
     def __init__(self, nome, cor, regiao):
         self.nome = nome
-        self.exercitos = 1  # quantidade de exércitos no território
+        self.exercitos = 1
         self.cor = cor
-        self.regiao = regiao # nome da regiao
+        self.regiao = regiao 
         self.fronteiras = []
+        self.limite_de_repasse = 0
 
 
     def __repr__(self):

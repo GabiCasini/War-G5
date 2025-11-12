@@ -16,7 +16,7 @@ class Manager_de_Cartas:
 
     def atribuir_carta(self):
         tipos = ["Círculo", "Quadrado", "Triângulo", "Coringa"]
-        probabilidades = [27, 27, 27, 19]
+        probabilidades = [28, 28, 28, 16]
         resultado = random.choices(tipos, weights=probabilidades, k=1)[0]
 
         if (resultado != "Coringa"):
@@ -26,7 +26,7 @@ class Manager_de_Cartas:
             
             return [resultado, territorio]
         
-        return [resultado, "Nenhum"]
+        return [resultado, ""]
     
     def cartas_trocadas(self, lista_de_cartas_trocadas):
         for i in lista_de_cartas_trocadas:

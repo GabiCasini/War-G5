@@ -117,7 +117,7 @@ def post_posicionamento():
     exercitos = int(dados.get("exercitos"))
 
     try:
-        exercitos_restantes = state.partida_global.fase_de_posicionamento_api(
+        exercitos_restantes = state.partida_global.fase_de_posicionamento(
             jogador_id, territorio_nome, exercitos
         )
         print("Exércitos restantes após posicionamento:", exercitos_restantes)
@@ -143,7 +143,7 @@ def post_ataque():
     defensor = state.partida_global.get_jogador_por_cor(territorio_alvo.cor)
     
     try:
-        resultado = state.partida_global.resolver_combate_api(atacante, defensor, territorio_origem, territorio_alvo)
+        resultado = state.partida_global.resolver_combate(atacante, defensor, territorio_origem, territorio_alvo)
         return jsonify({"status": "ok", **resultado})
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
@@ -162,7 +162,7 @@ def post_reposicionamento():
     exercitos = int(dados.get("exercitos"))
     
     try:
-        resultado = state.partida_global.fase_de_reposicionamento_api(
+        resultado = state.partida_global.fase_de_reposicionamento(
             jogador_id, nome_origem, nome_destino, exercitos
         )
         return jsonify({"status": "ok", **resultado})
@@ -174,6 +174,27 @@ def post_reposicionamento():
 def post_finalizar_turno():
     if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
+    try:
+        proximo_jogador, nova_fase = state.partida_global.finalizar_turno_atual()
+        
+        resposta = {
+            "status": "ok",
+            "proximo_jogador": {
+                "jogador_id": proximo_jogador.cor,
+                "nome": proximo_jogador.nome,
+                "cor": proximo_jogador.cor,
+                "fase": nova_fase 
+            }
+        }
+        return jsonify(resposta)
+    except Exception as e:
+        return jsonify({"status": "erro", "mensagem": str(e)}), 400
+
+@partida_bp.route("/avancar_turno", methods=["POST"])
+def post_avancar_turno():
+    if not state.partida_global:
+        return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
+
     try:
         proximo_jogador, nova_fase = state.partida_global.avancar_fase_ou_turno()
 

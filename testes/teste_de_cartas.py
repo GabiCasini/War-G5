@@ -1,4 +1,4 @@
-from .Partida import Partida
+from back.model.Partida import Partida
 
 partida = Partida(3, 0, 120, [["Alice", "vermelho", "humano"], ["Bob", "azul", "humano"], ["Charlie", "verde", "humano"]])
 
@@ -6,17 +6,18 @@ jogador = partida.jogadores[0]
 
 print(f"Cartas do Jogador {jogador.cor}: {jogador.cartas}")
 
-partida.verifica_ganho_de_carta(jogador, True)
-partida.verifica_ganho_de_carta(jogador, True)
-partida.verifica_ganho_de_carta(jogador, True)
-partida.verifica_ganho_de_carta(jogador, True)
+partida.conquistou_algum_territorio = True
+partida.verifica_ganho_de_carta(jogador)
+partida.verifica_ganho_de_carta(jogador)
+partida.verifica_ganho_de_carta(jogador)
+partida.verifica_ganho_de_carta(jogador)
 
 print(f"\nCartas do Jogador {jogador.cor}: {jogador.cartas}")
 print(f"\nExercitos que não tem carta associada: {len(partida.manager_de_cartas.territorios_disponiveis)}")
 
-partida.verifica_ganho_de_carta(jogador, True)
-partida.verifica_ganho_de_carta(jogador, True)
-partida.verifica_ganho_de_carta(jogador, True)
+partida.verifica_ganho_de_carta(jogador)
+partida.verifica_ganho_de_carta(jogador)
+partida.verifica_ganho_de_carta(jogador)
 
 print(f"\nCartas do Jogador {jogador.cor}: {jogador.cartas}\n")
 print(f"\nExercitos que não tem carta associada: {len(partida.manager_de_cartas.territorios_disponiveis)}\n")
@@ -40,7 +41,7 @@ print(f"\nExercitos para posicionamento do Jogador {jogador.cor} após a troca: 
 
 print(f"\nCartas do Jogador {jogador.cor}: {jogador.cartas}")
 
-print(f"\nExercitos que não tem carta associada: {len(partida.manager_de_cartas.territorios_disponiveis)}\n")
+print(f"\nTerritórios que não tem carta associada: {len(partida.manager_de_cartas.territorios_disponiveis)}\n")
 
 print(partida.manager_de_cartas.territorios_disponiveis)
 

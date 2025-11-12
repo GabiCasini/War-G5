@@ -15,6 +15,11 @@ pip install -r requirements.txt
 flask --app back.app run 
 ou
 python -m flask --app back.app run
+
+```
+### Fazer testes local
+```bash
+python -m pytest 
 ```
 
 Autores: Gabriel Crisostomo, Gabriela Casini, Jeremias Ciriaco, Lucas Resende, Lucas Tosto, Pedro Lucas, Rafael Machado e Raian Pierre

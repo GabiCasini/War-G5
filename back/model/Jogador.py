@@ -4,10 +4,11 @@ from .Territorio import Territorio
 class Jogador:
     def __init__(self, nome: str, cor: str, tipo: str = "humano"):
         self.nome = nome
-        self.cor = cor  # red, blue, green, orange, purple, yellow
+        self.cor = cor 
         self.tipo = tipo  # 'humano' ou 'ai'
-        self.territorios = []  # lista de objetos Territorio
-        self.exercitos_reserva = 0  # exércitos disponíveis para alocação
+
+        self.territorios = []
+        self.exercitos_reserva = 0
         self.cartas = []
         self.objetivo = None
         self.eliminado_por = "nenhum"
@@ -24,9 +25,9 @@ class Jogador:
         if territorio in self.territorios:
             self.territorios.remove(territorio)
 
-    # adiciona os exércitos que o jogador poderá adicionar aos seus territórios na fase de posicionamento
+    # Adiciona os exércitos que o jogador poderá adicionar aos seus territórios na fase de posicionamento
     def adicionar_exercitos_para_posicionamento(self, quantidade: int):
-        self.exercitos_reserva = quantidade
+        self.exercitos_reserva += quantidade
 
     def remover_exercitos_para_posicionamento(self, quantidade: int):
         self.exercitos_reserva -= quantidade
@@ -41,11 +42,8 @@ class Jogador:
     
     def adicionar_exercitos_territorio(self, territorio, quantidade):
         """Adiciona exércitos a um território do jogador."""
-        if territorio in self.territorios:
-            territorio.exercitos += quantidade
-            print(f'Quantidade de exercito add: {quantidade}, Quantidade total de exercitos: {territorio.exercitos}')
-        else:   
-            print("Território não pertence ao jogador.")
+        territorio.exercitos += quantidade
+        print(f'Quantidade de exercito add: {quantidade}, Quantidade total de exercitos: {territorio.exercitos}')
 
     def remover_exercitos_territorio(self, territorio, quantidade):
         """Remove exércitos de um território do jogador."""
@@ -78,16 +76,11 @@ class Jogador:
         return quantidade_real
     
     def reposicionar_exercitos(self, origem, destino, quantidade):
-        if origem.exercitos <= 1:
-            return "Não é possível reposicionar de um território com apenas 1 exército."
-        if quantidade > origem.exercitos - 1:
-            return f"Você só pode mover até {origem.exercitos - 1} exércitos."
-        if destino not in origem.fronteiras:
-            return "Os territórios não são vizinhos."
         # Executa o reposicionamento
         origem.exercitos -= quantidade
         destino.exercitos += quantidade
-        return "Reposicionamento realizado com sucesso."
+        origem.limite_de_repasse -= quantidade
+        print("Reposicionamento realizado com sucesso.")
 
     def combate(self, exercitos_ataque, exercitos_defesa):
         """
@@ -134,6 +127,7 @@ class Jogador:
                 for j in self.territorios:
                     if j.nome == i[1]:
                         self.adicionar_exercitos_territorio(j, 2)
+                        break
             self.remover_carta(i)
 
     

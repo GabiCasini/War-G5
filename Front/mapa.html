@@ -6,6 +6,8 @@
     <title>War</title>
     <link href="{{ url_for('static', filename='mapa-styles.css') }}" rel="stylesheet" />
     <link href="{{ url_for('static', filename='hud-styles.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='fase-dialog-styles.css') }}" rel="stylesheet" />
+    <link rel="icon" href="{{ url_for('static', filename='cristo-ico.png') }}">
   </head>
   <body>
     
@@ -468,33 +470,106 @@
       </svg>
     </div>
     <div id="hud-container">
-
       <div id="hud-wrapper-first-line">
-        <div id="turno-wrapper">
-          <span class="turno-label">Turno de:</span>
-          <div id="turno-player-row">
-            <span id="player-cor-box"></span>
-            <span id="turno-player-name"></span>
+        <div id="main-info">
+          <div id="turno-wrapper">
+            <span class="turno-label">Turno de:</span>
+            <div id="turno-player-row">
+              <span id="player-cor-box"></span>
+              <span id="turno-player-name"></span>
+            </div>
           </div>
-        </div>
 
-        <div id="fase-wrapper">
-          <span>Fase atual:</span>
-          <span id="fase-nome"></span>
+          <div id="timer-wrapper">
+            <span>Tempo:</span>
+            <span id="timer"></span>
+          </div>
+
+          <div id="info-exercitos-wrapper">
+            <span>Exércitos disponíveis:</span>
+            <span id="info-exercitos-qtd">0</span>
+          </div>
+
+          <div id="fase-wrapper">
+            <span>Fase atual:</span>
+            <span id="fase-nome"></span>
+          </div>
         </div>
 
         <div id="passar-turno-wrapper">
           <button id="btn-passar-turno">Passar turno</button>
+          <button id="btn-minhas-cartas">Minhas cartas</button>
         </div>
 
       </div>
 
-      <div id="hud-wrapper-first-line">
-        <div id="info-exercitos-wrapper">
-        </div>
-      </div>
+      <!-- <div id="hud-wrapper-second-line">
+      </div> -->
     
     </div>
+
+    <dialog id="posicionamentoDialog" class="fase-dialog">
+    <form id="posicionamentoForm" method="dialog">
+      <h2 id="posicionamentoTitulo">Posicionar Exércitos</h2>
+      <label for="posicionamentoQtd" id="posicionamentoLabel">Quantos exércitos deseja posicionar?</label>
+      <div class="number-input-wrapper">
+        <button type="button" class="btn-decrement">-</button>
+        <input type="number" id="posicionamentoQtd" name="quantidade" min="1" value="1" required>
+        <button type="button" class="btn-increment">+</button>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn-cancelar">Cancelar</button>
+        <button type="submit" class="btn-confirmar">Confirmar</button>
+      </div>
+    </form>
+    </dialog>
+
+    <dialog id="ataqueDialog" class="fase-dialog">
+    <form id="ataqueForm" method="dialog">
+      <h2 id="ataqueTitulo">Confirmar Ataque</h2>
+      <p id="ataqueLabel"></p>
+      <div class="dialog-actions">
+        <button type="button" class="btn-cancelar">Cancelar</button>
+        <button type="submit" class="btn-confirmar">Atacar</button>
+      </div>
+    </form>
+  </dialog>
+
+    <dialog id="reposicionamentoDialog" class="fase-dialog">
+    <form id="reposicionamentoForm" method="dialog">
+      <h2 id="reposicionamentoTitulo">Reposicionar Exércitos</h2>
+      <label for="reposicionamentoQtd" id="reposicionamentoLabel">Reposicionar quantos exércitos?</label>
+      <div class="number-input-wrapper">
+        <button type="button" class="btn-decrement">-</button>
+        <input type="number" id="reposicionamentoQtd" name="quantidade" min="1" value="1" required>
+        <button type="button" class="btn-increment">+</button>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn-cancelar">Cancelar</button>
+        <button type="submit" class="btn-confirmar">Reposicionar</button>
+      </div>
+    </form>
+    </dialog>
+
+    <dialog id="ataqueResultadoDialog" class="fase-dialog">
+      <h2 id="ataqueResultadoTitulo">Resultado do Combate</h2>
+      <div id="ataqueResultadoConteudo">
+        <div class="dados-container">
+          <h3>Ataque</h3>
+          <div id="dados-ataque-imgs" class="dados-imgs">
+          </div>
+        </div>
+        <div class="dados-container">
+          <h3>Defesa</h3>
+          <div id="dados-defesa-imgs" class="dados-imgs">
+          </div>
+        </div>
+      </div>
+      <p id="ataqueResultadoTexto"></p>
+      <div class="dialog-actions">
+        <button type="button" id="ataqueResultadoFechar" class="btn-confirmar">Fechar</button>
+      </div>
+    </dialog>
 
     <script src="{{ url_for('static', filename='configuracoes_mapa.js') }}"></script>
     <script src="{{ url_for('static', filename='configuracoes_players.js') }}"></script>
