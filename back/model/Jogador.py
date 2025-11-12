@@ -42,11 +42,8 @@ class Jogador:
     
     def adicionar_exercitos_territorio(self, territorio, quantidade):
         """Adiciona exércitos a um território do jogador."""
-        if territorio in self.territorios:
-            territorio.exercitos += quantidade
-            print(f'Quantidade de exercito add: {quantidade}, Quantidade total de exercitos: {territorio.exercitos}')
-        else:   
-            print("Território não pertence ao jogador.")
+        territorio.exercitos += quantidade
+        print(f'Quantidade de exercito add: {quantidade}, Quantidade total de exercitos: {territorio.exercitos}')
 
     def remover_exercitos_territorio(self, territorio, quantidade):
         """Remove exércitos de um território do jogador."""
@@ -64,18 +61,11 @@ class Jogador:
             destino.exercitos += quantidade
     
     def reposicionar_exercitos(self, origem, destino, quantidade):
-        if origem.exercitos <= 1:
-            return "Não é possível reposicionar de um território com apenas 1 exército."
-        if quantidade > origem.exercitos - 1:
-            return f"Você só pode mover até {origem.exercitos - 1} exércitos."
-        if destino not in origem.fronteiras:
-            return "Os territórios não são vizinhos."
-        
         # Executa o reposicionamento
         origem.exercitos -= quantidade
         destino.exercitos += quantidade
         origem.limite_de_repasse -= quantidade
-        return "Reposicionamento realizado com sucesso."
+        print("Reposicionamento realizado com sucesso.")
 
     def combate(self, exercitos_ataque, exercitos_defesa):
         """

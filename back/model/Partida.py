@@ -28,18 +28,31 @@ class Partida:
         self.manager_de_cartas = Manager_de_Cartas()
         self.manager_de_objetivos = Manager_de_Objetivos(self.jogadores)
         self.valor_da_troca = 4
+        self.conquistou_algum_territorio = False
+        self.libera_ataque = False
 
     def proximo_jogador(self):
         """Passa a vez para o próximo jogador."""
         self.jogador_atual_idx = (self.jogador_atual_idx + 1) % self.qtd_jogadores
+        if self.jogador_atual_idx == 0:
+            self.libera_ataque = True
 
     def avancar_fase_ou_turno(self):
         if self.fase_do_turno == "posicionamento":
-            self.fase_do_turno = "ataque"
+            if self.libera_ataque:
+                self.fase_do_turno = "ataque"
+            else:
+                self.proximo_jogador()
+                self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
 
         elif self.fase_do_turno == "ataque":
             self.fase_do_turno = "reposicionamento"
+            
+            if self.conquistou_algum_territorio :
+                self.verifica_ganho_de_carta(self.jogadores[self.jogador_atual_idx])
+            
             self.calcular_limite_de_reposicionamento(self.jogadores[self.jogador_atual_idx])
+            self.conquistou_algum_territorio = False
 
         elif self.fase_do_turno == "reposicionamento":
             self.fase_do_turno = "posicionamento"
@@ -142,6 +155,7 @@ class Partida:
         if territorio_alvo.exercitos == 0:
             self.transferir_territorio(atacante, defensor, territorio_alvo, territorio_origem)
             territorio_foi_conquistado = True
+            self.conquistou_algum_territorio = True
         else:
             territorio_foi_conquistado = False 
         
@@ -171,9 +185,18 @@ class Partida:
         vencedor.mover_exercitos(origem, territorio, exercitos_para_mover)
 
     # Verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero) e trata a eliminação caso necessário
-    # TODO: Caso seja eliminado, deve-se verificar o cumprimento dos objetivos
     def verificar_eliminacao(self, atacante: Jogador, defensor: Jogador):
         if len(defensor.territorios) == 0:
+            for i in range(self.qtd_jogadores):
+                if self.jogadores[i] == defensor:
+                    defensor_index = i
+                elif self.jogadores[i] == atacante:
+                    atacante_index = i
+            
+            if defensor_index < atacante_index:
+                self.jogador_atual_idx -= 1
+            
+            self.qtd_jogadores -= 1
             self.jogadores.remove(defensor)
             defensor.eliminado_por = atacante.cor
             self.jogadores_eliminados.append(defensor)
@@ -203,10 +226,9 @@ class Partida:
                 return jogador
         return None
 
-    # Essa função deve ser utilizada ao final da fase ataque de cada jogador, passando um valor booleano que indica
-    # se ele conquistou ou não algum território durante o ataque
-    def verifica_ganho_de_carta(self, jogador: Jogador, conquistado: bool):
-        if conquistado and len(jogador.cartas) < 5:
+    # Função para verificar ao final da fase de ataque se aquele jogador deve receber uma carta (em caso positivo, atribui a carta)
+    def verifica_ganho_de_carta(self, jogador: Jogador):
+        if self.conquistou_algum_territorio and len(jogador.cartas) < 5:
             jogador.adicionar_carta(self.manager_de_cartas.atribuir_carta())
 
     def realizar_troca(self, jogador: Jogador, cartas):
