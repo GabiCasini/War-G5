@@ -2,7 +2,7 @@ from back.model.Jogador import Jogador
 from back.model.Partida import Partida
 from back.model.Territorio import Territorio
 
-def test_resolver_combate_api(partida: Partida):
+def test_resolver_combate(partida: Partida):
     jogador_a: Jogador = partida.jogadores[0]
     jogador_b: Jogador = partida.jogadores[1]
 
@@ -15,7 +15,7 @@ def test_resolver_combate_api(partida: Partida):
     assert territorio_a.exercitos == 6
     assert territorio_b.exercitos == 4
 
-    resp = partida.resolver_combate_api(jogador_a, jogador_b, territorio_a, territorio_b)
+    resp = partida.resolver_combate(jogador_a, jogador_b, territorio_a, territorio_b)
     assert isinstance(resp["territorio_conquistado"], bool)
 
     perdas_a = resp["perdas_ataque"]
