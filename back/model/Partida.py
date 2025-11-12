@@ -165,12 +165,12 @@ class Partida:
         perdedor.remover_territorio(territorio)
         vencedor.adicionar_territorio(territorio) #adiciona o território na lista do jogador e atualiza a cor 
         
-        # move 1 exercito automaticamente para o territorio conquistado
-        # eventualmente o jogador deve poder escolher a quantidade (de 1 a 3, sendo que o territorio de origem deve continuar com pelo menos 1 exercito)
+        # Move 1 exercito automaticamente para o territorio conquistado
+        # Eventualmente o jogador deve poder escolher a quantidade (de 1 a 3, sendo que o territorio de origem deve continuar com pelo menos 1 exercito)
         exercitos_para_mover = 1
         vencedor.mover_exercitos(origem, territorio, exercitos_para_mover)
 
-    # verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero) e trata a eliminação caso necessário
+    # Verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero) e trata a eliminação caso necessário
     # TODO: Caso seja eliminado, deve-se verificar o cumprimento dos objetivos
     def verificar_eliminacao(self, atacante: Jogador, defensor: Jogador):
         if len(defensor.territorios) == 0:
@@ -178,7 +178,7 @@ class Partida:
             defensor.eliminado_por = atacante.cor
             self.jogadores_eliminados.append(defensor)
 
-            # transfere as cartas do jogador eliminado para o atacante até que o limite de 5 cartas seja atingido
+            # Transfere as cartas do jogador eliminado para o atacante até que o limite de 5 cartas seja atingido
             for i in defensor.cartas:
                 if len(atacante.cartas) < 5:
                     atacante.adicionar_carta(i)
@@ -186,7 +186,7 @@ class Partida:
                     self.manager_de_cartas.cartas_trocadas(i)
 
             defensor.cartas = []
-                
+               
             print(f"\nJogador {defensor.cor} eliminado\n")
             return True
         return False
@@ -212,7 +212,7 @@ class Partida:
     def realizar_troca(self, jogador: Jogador, cartas):
         if self.manager_de_cartas.validar_possivel_troca(cartas):
             jogador.trocar_cartas(cartas, self.valor_da_troca)
-            self.manager_de_cartas.cartas_trocadas(cartas) # os territorios das cartas que foram trocados serão colocados na lista de disponíveis
+            self.manager_de_cartas.cartas_trocadas(cartas)
             self.incrementar_troca()
     
     def incrementar_troca(self):

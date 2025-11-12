@@ -1,0 +1,214 @@
+{
+  "territorios": [
+    {
+      "nome": "Rio de Janeiro",
+      "regiao": "Regiao_1",
+      "fronteiras": ["Nova Iguaçu", "Mesquita", "São João de Meriti", "Niterói"]
+    },
+    {
+      "nome": "Nova Iguaçu",
+      "regiao": "Regiao_1",
+      "fronteiras": ["Rio de Janeiro", "Mesquita", "Seropédica"]
+    },
+    {
+      "nome": "Mesquita",
+      "regiao": "Regiao_1",
+      "fronteiras": ["Rio de Janeiro", "Nova Iguaçu", "São João de Meriti"]
+    },
+    {
+      "nome": "São João de Meriti",
+      "regiao": "Regiao_1",
+      "fronteiras": ["Rio de Janeiro", "Mesquita"]
+    },
+    {
+      "nome": "Seropédica",
+      "regiao": "Regiao_2",
+      "fronteiras": ["Nova Iguaçu", "Queimados", "Japeri", "Paracambi"]
+    },
+    {
+      "nome": "Queimados",
+      "regiao": "Regiao_2",
+      "fronteiras": ["Japeri", "Seropédica"]
+    },
+    {
+      "nome": "Japeri",
+      "regiao": "Regiao_2",
+      "fronteiras": ["Miguel Pereira", "Queimados", "Seropédica", "Paracambi"]
+    },
+    {
+      "nome": "Paracambi",
+      "regiao": "Regiao_2",
+      "fronteiras": ["Miguel Pereira", "Eng Paulo de Frontin", "Seropédica", "Japeri"]
+    },
+    {
+      "nome": "Miguel Pereira",
+      "regiao": "Regiao_2",
+      "fronteiras": ["Paty do Alferes", "Vassouras", "Eng Paulo de Frontin", "Japeri", "Paracambi"]
+    },
+    {
+      "nome": "Eng Paulo de Frontin",
+      "regiao": "Regiao_2",
+      "fronteiras": ["Vassouras", "Miguel Pereira", "Paracambi"]
+    },
+    {
+      "nome": "Vassouras",
+      "regiao": "Regiao_2",
+      "fronteiras": ["Paty do Alferes", "Miguel Pereira", "Eng Paulo de Frontin", "Paraíba do Sul"]
+    },
+    {
+      "nome": "Paty do Alferes",
+      "regiao": "Regiao_2",
+      "fronteiras": ["Vassouras", "Miguel Pereira", "Paraíba do Sul"]
+    },
+    {
+      "nome": "Paraíba do Sul",
+      "regiao": "Regiao_2",
+      "fronteiras": ["Paty do Alferes", "Vassouras", "Comendador Levy Gasparian"]
+    },
+    {
+      "nome": "Comendador Levy Gasparian",
+      "regiao": "Regiao_3",
+      "fronteiras": ["Três Rios", "Paraíba do Sul"]
+    },
+    {
+      "nome": "Três Rios",
+      "regiao": "Regiao_3",
+      "fronteiras": ["Comendador Levy Gasparian", "Sapucaia", "Areal"]
+    },
+    {
+      "nome": "Areal",
+      "regiao": "Regiao_3",
+      "fronteiras": ["Petrópolis", "Três Rios"]
+    },
+    {
+      "nome": "Sapucaia",
+      "regiao": "Regiao_3",
+      "fronteiras": ["Três Rios", "Teresópolis", "São José do Vale do Rio Preto"]
+    },
+    {
+      "nome": "Petrópolis",
+      "regiao": "Regiao_3",
+      "fronteiras": ["Areal", "Teresópolis", "Magé", "Guapimirim"]
+    },
+    {
+      "nome": "Teresópolis",
+      "regiao": "Regiao_3",
+      "fronteiras": ["Sapucaia", "Petrópolis", "Cachoeiras de Macacu", "Guapimirim", "Nova Friburgo"]
+    },
+    {
+      "nome": "Cachoeiras de Macacu",
+      "regiao": "Regiao_3",
+      "fronteiras": ["Teresópolis", "Guapimirim", "Itaboraí"]
+    },
+    {
+      "nome": "São José do Vale do Rio Preto",
+      "regiao": "Regiao_4",
+      "fronteiras": ["Sapucaia", "Sumidouro"]
+    },
+    {
+      "nome": "Sumidouro",
+      "regiao": "Regiao_4",
+      "fronteiras": ["São José do Vale do Rio Preto", "Carmo", "Duas Barras", "Nova Friburgo"]
+    },
+    {
+      "nome": "Nova Friburgo",
+      "regiao": "Regiao_4",
+      "fronteiras": ["Teresópolis", "Sumidouro", "Duas Barras", "Bom Jardim", "Cordeiro", "Trajano de Moraes"]
+    },
+    {
+      "nome": "Bom Jardim",
+      "regiao": "Regiao_4",
+      "fronteiras": ["Duas Barras", "Nova Friburgo", "Macuco"]
+    },
+    {
+      "nome": "Duas Barras",
+      "regiao": "Regiao_4",
+      "fronteiras": ["Cantagalo", "Carmo", "Sumidouro", "Nova Friburgo", "Bom Jardim"]
+    },
+    {
+      "nome": "Carmo",
+      "regiao": "Regiao_4",
+      "fronteiras": ["Cantagalo", "Duas Barras", "Sumidouro"]
+    },
+    {
+      "nome": "Cantagalo",
+      "regiao": "Regiao_4",
+      "fronteiras": ["Duas Barras", "Carmo", "Macuco", "São Sebastião do Alto", "Itaocara", "Santo Antônio de Pádua"]
+    },
+    {
+      "nome": "Macuco",
+      "regiao": "Regiao_4",
+      "fronteiras": ["Cantagalo", "São Sebastião do Alto", "Bom Jardim"]
+    },
+    {
+      "nome": "São Sebastião do Alto",
+      "regiao": "Regiao_4",
+      "fronteiras": ["Cantagalo", "Macuco", "Itaocara"]
+    },
+    {
+      "nome": "Itaocara",
+      "regiao": "Regiao_4",
+      "fronteiras": ["Cantagalo", "São Sebastião do Alto", "Santo Antônio de Pádua", "Cambuci"]
+    },
+    {
+      "nome": "Santo Antônio de Pádua",
+      "regiao": "Regiao_4",
+      "fronteiras": ["Cantagalo", "Itaocara", "Cambuci"]
+    },
+    {
+      "nome": "Cambuci",
+      "regiao": "Regiao_4",
+      "fronteiras": ["Santo Antônio de Pádua", "Itaocara"]
+    },
+    {
+      "nome": "Magé",
+      "regiao": "Regiao_5",
+      "fronteiras": ["Petrópolis", "Guapimirim"]
+    },
+    {
+      "nome": "Guapimirim",
+      "regiao": "Regiao_5",
+      "fronteiras": ["Petrópolis", "Magé", "Teresópolis", "Cachoeiras de Macacu", "Itaboraí"]
+    },
+    {
+      "nome": "Itaboraí",
+      "regiao": "Regiao_5",
+      "fronteiras": ["Guapimirim", "Cachoeiras de Macacu", "São Gonçalo", "Maricá"]
+    },
+    {
+      "nome": "São Gonçalo",
+      "regiao": "Regiao_5",
+      "fronteiras": ["Itaboraí", "Maricá", "Niterói"]
+    },
+    {
+      "nome": "Maricá",
+      "regiao": "Regiao_5",
+      "fronteiras": ["Itaboraí", "São Gonçalo", "Niterói"]
+    },
+    {
+      "nome": "Niterói",
+      "regiao": "Regiao_5",
+      "fronteiras": ["São Gonçalo", "Maricá", "Rio de Janeiro"]
+    },
+    {
+      "nome": "Cordeiro",
+      "regiao": "Regiao_6",
+      "fronteiras": ["Nova Friburgo", "Trajano de Moraes"]
+    },
+    {
+      "nome": "Trajano de Moraes",
+      "regiao": "Regiao_6",
+      "fronteiras": ["Nova Friburgo", "Cordeiro", "Macaé"]
+    },
+    {
+      "nome": "Macaé",
+      "regiao": "Regiao_6",
+      "fronteiras": ["Trajano de Moraes", "Casimiro de Abreu"]
+    },
+    {
+      "nome": "Casimiro de Abreu",
+      "regiao": "Regiao_6",
+      "fronteiras": ["Macaé"]
+    }
+  ]
+}

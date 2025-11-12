@@ -30,8 +30,8 @@ class Manager_de_Objetivos:
             self.objetivos_disponiveis.remove(objetivo)
             i.objetivo = objetivo
     
-    # verifica se qualquer jogador cumpriu seu objetivo, priorizando: 1 - o jogador do turno; 2 - a ordem dos turnos 
-    # retorna a cor do vencedor (se houver), e False se ninguém ganhou
+    # Verifica se qualquer jogador cumpriu seu objetivo, priorizando: 1 - o jogador do turno; 2 - a ordem dos turnos 
+    # Retorna a cor do vencedor (se houver), e False se ninguém ganhou
     def verifica_objetivo_de_todos_os_jogadores(self, jogador_do_turno: Jogador, jogadores_vivos, jogadores_eliminados, tabuleiro: Tabuleiro):
         vencedor = False
 
@@ -42,7 +42,7 @@ class Manager_de_Objetivos:
             
         return vencedor
         
-    # função para verificar se um único jogador específico cumpriu seu objetivo
+    # Função para verificar se um único jogador específico cumpriu seu objetivo
     def verifica_objetivo_do_jogador(self, jogador: Jogador, jogadores_eliminados, tabuleiro: Tabuleiro):
         objetivo = jogador.objetivo
         
