@@ -46,17 +46,10 @@ function fetchTerritorios() {
   return fetch(LOCALHOST + "/partida/territorios", { method: "GET" })
     .then((resp) => {
       if (!resp.ok) {
-        return resp
-          .json()
+        return resp.json()
           .then((errBody) => {
-            throw new Error(
-              (errBody && (errBody.mensagem || errBody.message)) ||
-                `HTTP ${resp.status}`
-            );
-          })
-          .catch(() => {
-            throw new Error(`HTTP ${resp.status}`);
-          });
+            throw new Error((errBody && (errBody.mensagem || errBody.message)) || `HTTP ${resp.status}`);})
+          .catch(() => {throw new Error(`HTTP ${resp.status}`);});
       }
       return resp.json();
     })
@@ -94,15 +87,12 @@ function fetchEstadoAtual() {
       jogadorAtual = data.turno.jogador_cor;
       faseAtual = data.turno.fase;
       let exercitosParaPosicionar = data.exercitos_disponiveis.total;
+      tempoTurno = data.turno.tempo_turno;
       let faseAtualStringPrimeiraMaiuscula =
         faseAtual.charAt(0).toUpperCase() + faseAtual.slice(1);
       let corHexJogador = players.find((p) => p.cor === jogadorAtual).corHex;
       atualizarExercitosParaPosicionar(jogadorAtual, exercitosParaPosicionar);
-      atualizarHUD(
-        data.turno.jogador_nome,
-        corHexJogador,
-        faseAtualStringPrimeiraMaiuscula
-      );
+      atualizarHUD(data.turno.jogador_nome, corHexJogador, faseAtualStringPrimeiraMaiuscula, tempoTurno, exercitosParaPosicionar);
       console.log(data);
 
       // Se o jogador atual for IA e estivermos na fase de posicionamento, solicitar execução do turno da IA
@@ -116,7 +106,7 @@ function fetchEstadoAtual() {
           // evita chamadas repetidas enquanto a IA está sendo executada
           if (!iaExecutando[jogadorAtual]) {
             iaExecutando[jogadorAtual] = true;
-            invokeIaTurnoCompleto(jogadorAtual).finally(() => {
+            invokeIaTurnoCompleto(jogadorAtual, tempoTurno, exercitosParaPosicionar).finally(() => {
               iaExecutando[jogadorAtual] = false;
             });
           }
@@ -132,7 +122,7 @@ function fetchEstadoAtual() {
     });
 }
 
-function invokeIaTurnoCompleto(jogador_cor) {
+function invokeIaTurnoCompleto(jogador_cor, tempoTurno, exercitosParaPosicionar) {
   // Abre uma conexão SSE para receber eventos da IA em tempo real.
   return new Promise((resolve, reject) => {
     const url = `${LOCALHOST}/ia/stream?jogador_id=${jogador_cor}&acao=turno_completo`;
@@ -182,7 +172,8 @@ function invokeIaTurnoCompleto(jogador_cor) {
               else if (ev.fase === "reposicionamento")
                 faseLabel = "Reposicionamento";
               if (faseLabel)
-                atualizarHUD(playerObj.nome, playerObj.corHex, faseLabel);
+                // to do : deixar tempo e exercitos dinamicos, pois so é chamado uma vez e fica estatico.
+              atualizarHUD(playerObj.nome, playerObj.corHex, faseLabel, tempoTurno, exercitosParaPosicionar);
             }
           } catch (err) {
             // não bloquear o processamento do evento se atualizarHUD falhar
