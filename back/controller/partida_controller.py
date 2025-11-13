@@ -4,7 +4,7 @@ from .. import state
 
 partida_bp = Blueprint('partida', __name__, url_prefix='/partida')
 
-
+# Retorna lista de jogadores da partida e suas informacoes
 @partida_bp.route("/jogadores", methods=["GET"])
 def get_jogadores():
     
@@ -24,7 +24,7 @@ def get_jogadores():
 
     return jsonify({"jogadores": jogadores_json})
 
-
+# Retorna lista de territorios do tabuleiro
 @partida_bp.route("/territorios", methods=["GET"])
 def get_territorios():
     if not state.partida_global:
@@ -47,7 +47,7 @@ def get_territorios():
 
     return jsonify({"territorios": territorios_json})
 
-
+# Retorna o estado atual da partida - fase atual, jogador atual e seus dados 
 @partida_bp.route("/estado_atual", methods=["GET"])
 def get_estado_atual():
 
@@ -88,7 +88,7 @@ def get_estado_atual():
     }
     return jsonify(estado_json)
 
-
+# Faz os cálculos da regra de negócio e retorna a quantidade de tropas restantes após um reposicionamento  
 @partida_bp.route("/posicionamento", methods=["POST"])
 def post_posicionamento():
     if not state.partida_global:
@@ -96,20 +96,22 @@ def post_posicionamento():
 
     dados = request.get_json() 
     
-    jogador_id = dados.get("jogador_id")
+    jogador_cor = dados.get("jogador_id")
     territorio_nome = dados.get("territorio")
     exercitos = int(dados.get("exercitos"))
 
+    jogador_obj = state.partida_global.get_jogador_por_cor(jogador_cor)
+
     try:
-        exercitos_restantes = state.partida_global.fase_de_posicionamento(
-            jogador_id, territorio_nome, exercitos
-        )
+        exercitos_restantes = state.partida_global.fase_de_posicionamento(jogador_cor, territorio_nome, exercitos)
+        objetivo_finalizado = state.partida_global.verifica_objetivo_do_jogador(jogador_obj, state.partida_global.get_jogadores_eliminados(), state.partida_global.get_tabuleiro())
         print("Exércitos restantes após posicionamento:", exercitos_restantes)
-        return jsonify({"status": "ok", "exercitos_restantes": exercitos_restantes})
+        return jsonify({"status": "ok", "exercitos_restantes": exercitos_restantes, "objetivo_finalizado": objetivo_finalizado })
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
 
 
+# Faz os cálculos da regra de ataque do jogo e retorna o resultado dos dados e a atualização da batalha
 @partida_bp.route("/ataque", methods=["POST"])
 def post_ataque():
     if not state.partida_global:
