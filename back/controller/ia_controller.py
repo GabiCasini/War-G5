@@ -91,7 +91,8 @@ def ia_stream():
                     pass
 
             # envia evento final indicando conclusão
-            yield f"data: {json.dumps({"tipo": "turno_finalizado", "status": "ok"})}\n\n"
+            dados = {"tipo": "turno_finalizado", "status": "ok"}
+            yield f"data: {json.dumps(dados)}\n\n"
 
         except Exception as e:
             tb = traceback.format_exc()
