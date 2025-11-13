@@ -88,7 +88,7 @@ def get_estado_atual():
     }
     return jsonify(estado_json)
 
-# Faz os cálculos da regra de negócio e retorna a quantidade de tropas restantes após um reposicionamento  
+# Faz os cálculos da regra de negócio e retorna a quantidade de tropas restantes após um posicionamento  
 @partida_bp.route("/posicionamento", methods=["POST"])
 def post_posicionamento():
     if not state.partida_global:
@@ -142,16 +142,17 @@ def post_reposicionamento():
 
     dados = request.get_json()
 
-    jogador_id = dados.get("jogador_id")
+    jogador_cor = dados.get("jogador_id")
     nome_origem = dados.get("territorio_origem")
     nome_destino = dados.get("territorio_destino")
     exercitos = int(dados.get("exercitos"))
+
+    jogador_obj = state.partida_global.get_jogador_por_cor(jogador_cor)
     
     try:
-        resultado = state.partida_global.fase_de_reposicionamento(
-            jogador_id, nome_origem, nome_destino, exercitos
-        )
-        return jsonify({"status": "ok", **resultado})
+        resultado = state.partida_global.fase_de_reposicionamento(jogador_cor, nome_origem, nome_destino, exercitos)
+        objetivo_finalizado = state.partida_global.verifica_objetivo_do_jogador(jogador_obj, state.partida_global.get_jogadores_eliminados(), state.partida_global.get_tabuleiro())
+        return jsonify({"status": "ok", "objetivo_finalizado": objetivo_finalizado, **resultado})
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
 
