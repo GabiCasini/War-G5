@@ -106,7 +106,7 @@ def post_posicionamento():
         exercitos_restantes = state.partida_global.fase_de_posicionamento(jogador_cor, territorio_nome, exercitos)
         objetivo_finalizado = state.partida_global.verifica_objetivo_do_jogador(jogador_obj, state.partida_global.get_jogadores_eliminados(), state.partida_global.get_tabuleiro())
         print("Exércitos restantes após posicionamento:", exercitos_restantes)
-        return jsonify({"status": "ok", "exercitos_restantes": exercitos_restantes, "objetivo_finalizado": objetivo_finalizado })
+        return jsonify({"status": "ok", "objetivo_finalizado": objetivo_finalizado, "exercitos_restantes": exercitos_restantes })
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
 
@@ -130,7 +130,8 @@ def post_ataque():
     
     try:
         resultado = state.partida_global.resolver_combate(atacante, defensor, territorio_origem, territorio_alvo)
-        return jsonify({"status": "ok", **resultado})
+        objetivo_finalizado = state.partida_global.verifica_objetivo_de_todos_os_jogadores(atacante, state.partida_global.get_jogadores_vivos(), state.partida_global.get_jogadores_eliminados(), state.partida_global.get_tabuleiro())
+        return jsonify({"status": "ok", "objetivo_finalizado": objetivo_finalizado, **resultado})
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
 
