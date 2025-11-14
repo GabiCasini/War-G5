@@ -19,6 +19,7 @@ def get_jogadores():
             "nome": jogador.nome,
             "cor": jogador.cor,
             "ia": jogador.tipo == 'ai',
+            "objetivo": jogador.objetivo,
             "ordem": i + 1
         })
 
@@ -110,7 +111,6 @@ def post_posicionamento():
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
 
-
 # Faz os cálculos da regra de ataque do jogo e retorna o resultado dos dados e a atualização da batalha
 @partida_bp.route("/ataque", methods=["POST"])
 def post_ataque():
@@ -135,7 +135,6 @@ def post_ataque():
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
 
-
 @partida_bp.route("/reposicionamento", methods=["POST"])
 def post_reposicionamento():
     if not state.partida_global:
@@ -156,7 +155,6 @@ def post_reposicionamento():
         return jsonify({"status": "ok", "objetivo_finalizado": objetivo_finalizado, **resultado})
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
-
 
 @partida_bp.route("/finalizar_turno", methods=["POST"])
 def post_finalizar_turno():
