@@ -40,7 +40,6 @@ class Partida:
             self.libera_ataque = True
 
     def avancar_fase_ou_turno(self):
-        fase_anterior = self.fase_do_turno
         if self.fase_do_turno == "posicionamento":
             if self.libera_ataque:
                 self.fase_do_turno = "ataque"
@@ -53,15 +52,14 @@ class Partida:
             
             if self.conquistou_algum_territorio :
                 self.verifica_ganho_de_carta(self.jogadores[self.jogador_atual_idx])
+                self.conquistou_algum_territorio = False
             
             self.calcular_limite_de_reposicionamento(self.jogadores[self.jogador_atual_idx])
-            self.conquistou_algum_territorio = False
 
         elif self.fase_do_turno == "reposicionamento":
             self.fase_do_turno = "posicionamento"
             self.proximo_jogador()
             self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
-        # print(f"{fase_anterior} ---> {self.fase_do_turno}")
         
         # Garante que jogador_atual esteja sempre definido antes de retornar
         jogador_atual = self.jogadores[self.jogador_atual_idx]
@@ -190,12 +188,10 @@ class Partida:
         """
         print(f"Território {territorio.nome} conquistado por {vencedor.cor} de {perdedor.cor}")
         perdedor.remover_territorio(territorio)
-        vencedor.adicionar_territorio(territorio) #adiciona o território na lista do jogador e atualiza a cor 
-        
         # Move 1 exercito automaticamente para o territorio conquistado
         # Eventualmente o jogador deve poder escolher a quantidade (de 1 a 3, sendo que o territorio de origem deve continuar com pelo menos 1 exercito)
         exercitos_para_mover = 1
-        vencedor.mover_exercitos(origem, territorio, exercitos_para_mover)
+        vencedor.receber_territorio_conquistado(origem, territorio, exercitos_para_mover) #adiciona o território na lista do jogador e atualiza a cor 
 
     # Verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero) e trata a eliminação caso necessário
     def verificar_eliminacao(self, atacante: Jogador, defensor: Jogador):

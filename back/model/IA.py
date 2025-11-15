@@ -325,6 +325,7 @@ class IA(Jogador):
             for f in destino.fronteiras:
                 if f.cor == destino.cor:
                     nova.append(destino)
+                    # o continue é inútil aqui, deveria ser um break ??
                     continue
                     
         destinos = nova
@@ -351,7 +352,7 @@ class IA(Jogador):
             if movimentos_feitos >= max_movimentos:
                 break
             # seleciona apenas fontes que fazem fronteira com o destino (e são nossas)
-            candidate_fontes = [f for f in fontes if f is not destino and f in destino.fronteiras and f.cor == self.cor and f.exercitos > 1]
+            candidate_fontes = [f for f in fontes if f is not destino and f in destino.fronteiras and f.cor == self.cor and f.limite_de_repasse > 0]
            
             if not candidate_fontes:
                 # nenhuma fonte adjacente disponível para esse destino
@@ -362,19 +363,25 @@ class IA(Jogador):
             fonte_escolhida = None
             for fonte in candidate_fontes:
                 # preferir fontes com mais de 3 exércitos ou fontes que não tenham inimigos na fronteira
-                if fonte.exercitos > 3 or not any(ff.cor != self.cor for ff in fonte.fronteiras):
+                if not any(ff.cor != self.cor for ff in fonte.fronteiras):
                     fonte_escolhida = fonte
-                    
                     break
+
+            if not fonte_escolhida:
+                for fonte in candidate_fontes:
+                # preferir fontes com mais de 3 exércitos ou fontes que não tenham inimigos na fronteira
+                    if fonte.exercitos > 3:
+                        fonte_escolhida = fonte
+                        break
 
             if not fonte_escolhida:
                 # escolher a fonte adjacente com mais exércitos
                 fonte_escolhida = max(candidate_fontes, key=lambda x: x.exercitos)
                 
             # decide quantidade a mover: deixa pelo menos 1 no origem e não mais que 3 por movimento
-            qtd_possivel = max(0, fonte_escolhida.exercitos - 1)
-            # mover apenas o necessário para trazer o destino até um nível mínimo (ex.: 2 exércitos)
-            nivel_desejado = 2
+            qtd_possivel = max(0, fonte_escolhida.limite_de_repasse)
+            # mover apenas o necessário para trazer o destino até um nível mínimo (ex.: 3 exércitos)
+            nivel_desejado = 3
             necessario = max(0, nivel_desejado - destino.exercitos)
             if necessario <= 0:
                 continue

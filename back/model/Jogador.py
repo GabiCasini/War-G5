@@ -66,15 +66,27 @@ class Jogador:
             return 0
 
         # garante que não movemos mais do que a origem pode ceder e não produzimos valores negativos
-        max_transferivel = max(0, origem.exercitos - 1)
-        quantidade_real = max(0, min(quantidade, max_transferivel))
+        quantidade_real = max(0, min(quantidade, origem.limite_de_repasse))
         if quantidade_real <= 0:
             return 0
 
         origem.exercitos -= quantidade_real
         destino.exercitos += quantidade_real
+        origem.limite_de_repasse -= quantidade_real
+        print("Reposicionamento realizado com sucesso.")
         return quantidade_real
     
+    # Atribui o territorio ao jogador e transfere a quantidade de exércitos escolhida
+    def receber_territorio_conquistado(self, territorio_atacante: Territorio, territorio_conquistado: Territorio, quantidade: int):
+        self.adicionar_territorio(territorio_conquistado)
+        if quantidade > 3:
+            quantidade = 3
+        
+        qtd_real = min(territorio_atacante.exercitos - 1, quantidade)
+        territorio_conquistado.exercitos += qtd_real
+        territorio_atacante.exercitos -= qtd_real
+    
+    # FUNÇÃO ANTIGA !!! FAZER A REMOÇÃO APÓS GARANTIR QUE ELA NÃO ESTÁ MAIS EM USO EM LUGAR ALGUM DO CÓDIGO
     def reposicionar_exercitos(self, origem, destino, quantidade):
         # Executa o reposicionamento
         origem.exercitos -= quantidade
