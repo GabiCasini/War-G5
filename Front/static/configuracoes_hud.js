@@ -5,6 +5,7 @@ const btnPassarTurno = document.getElementById('btn-passar-turno');
 const timerDisplay = document.getElementById('timer');
 const infoExercitosQtdElement = document.getElementById('info-exercitos-qtd');
 let timerInterval = null;
+let tempoRestante = 0;
 
 function atualizarHUD(jogadorAtual, jogadorCor, faseAtual, tempoTurno, exercitosParaPosicionar) {
     playerNomeElement.textContent = jogadorAtual;
@@ -13,9 +14,23 @@ function atualizarHUD(jogadorAtual, jogadorCor, faseAtual, tempoTurno, exercitos
     infoExercitosQtdElement.textContent = exercitosParaPosicionar;
 
     if (faseAtual.toLowerCase() === 'posicionamento') {
-        iniciarTimerTurno(tempoTurno);
+        //Não reiniciar o timer se ele já estiver rodando — evita reset quando o jogador posiciona exércitos
+        // Aceita string numérica ou número
+        const t = Number(tempoTurno);
+        if (isNaN(t)) {
+            // não alterar o timer
+        } else {
+            // se não houver timer em andamento, iniciar; se houver, só reiniciar quando o servidor indicar tempo menor
+            if (timerInterval == null) {
+                iniciarTimerTurno(t);
+            } else if (typeof tempoRestante === 'number' && t < tempoRestante) {
+                // servidor reduziu o tempo restante — sincroniza
+                iniciarTimerTurno(t);
+            }
+        }
     }
 }
+
 
 function formatarTempo(segundos) {
     const minutos = Math.floor(segundos / 60);

@@ -312,8 +312,36 @@ class IA(Jogador):
         """
         movimentos = []
 
-        # destinos: territórios com <=2 exércitos e que têm inimigos na fronteira
-        destinos = [t for t in self.territorios if t.exercitos <= 2 and any(f.cor != self.cor for f in t.fronteiras)]
+        # destinos: territórios próprios com <=2 exércitos, que têm inimigos na fronteira
+        # e que também possuem pelo menos um território próprio adjacente (para poder receber movimentos)
+        destinos = [
+            t for t in self.territorios
+            if t.exercitos <= 2
+            and any if(t.cor == self.cor)
+        ]
+       
+        nova= []
+        for destino in destinos:
+            for f in destino.fronteiras:
+                if f.cor == destino.cor:
+                    nova.append(destino)
+                    continue
+                    
+        destinos = nova
+
+        for destino in destinos:
+            for f in destino.fronteiras:
+                cont = 0
+                if f.cor == self.cor:
+                    cont += 1
+            if cont == len(destino.fronteiras):
+                # se todas as fronteiras são nossas, não é um destino válido
+                destinos.remove(destino)
+
+        destinos = list(set(destinos))
+        for d in destinos:
+            print(d.nome)
+
 
         # fontes: territórios com mais de 1 exército (podem ceder)
         fontes = sorted([t for t in self.territorios if t.exercitos > 1], key=lambda x: x.exercitos, reverse=True)
@@ -322,29 +350,27 @@ class IA(Jogador):
         for destino in destinos:
             if movimentos_feitos >= max_movimentos:
                 break
+            # seleciona apenas fontes que fazem fronteira com o destino (e são nossas)
+            candidate_fontes = [f for f in fontes if f is not destino and f in destino.fronteiras and f.cor == self.cor and f.exercitos > 1]
+           
+            if not candidate_fontes:
+                # nenhuma fonte adjacente disponível para esse destino
+               
+                continue
 
-            # procura uma fonte adequada: que não seja fronteira fortemente exposta (ou que tenha muitos exércitos)
+            # procura uma fonte adequada entre as candidate_fontes
             fonte_escolhida = None
-            for fonte in fontes:
-                if fonte is destino:
-                    continue
-                if fonte.exercitos <= 1:
-                    continue
+            for fonte in candidate_fontes:
                 # preferir fontes com mais de 3 exércitos ou fontes que não tenham inimigos na fronteira
-                if fonte.exercitos > 3 or not any(f.cor != self.cor for f in fonte.fronteiras):
+                if fonte.exercitos > 3 or not any(ff.cor != self.cor for ff in fonte.fronteiras):
                     fonte_escolhida = fonte
+                    
                     break
 
             if not fonte_escolhida:
-                # pega qualquer fonte disponível
-                for fonte in fontes:
-                    if fonte is not destino and fonte.exercitos > 1:
-                        fonte_escolhida = fonte
-                        break
-
-            if not fonte_escolhida:
-                continue
-
+                # escolher a fonte adjacente com mais exércitos
+                fonte_escolhida = max(candidate_fontes, key=lambda x: x.exercitos)
+                
             # decide quantidade a mover: deixa pelo menos 1 no origem e não mais que 3 por movimento
             qtd_possivel = max(0, fonte_escolhida.exercitos - 1)
             # mover apenas o necessário para trazer o destino até um nível mínimo (ex.: 2 exércitos)
@@ -359,6 +385,7 @@ class IA(Jogador):
             # executar movimento
             try:
                 # mover_exercitos definido em Jogador; agora retorna a quantidade efetivamente movida
+                print(f"fonte_escolhida: {fonte_escolhida.nome} -> destino: {destino.nome} qtd: {qtd_mover}")
                 moved = self.mover_exercitos(fonte_escolhida, destino, qtd_mover)
                 if moved and moved > 0:
                     movimentos.append({"origem": fonte_escolhida.nome, "destino": destino.nome, "qtd": moved})
@@ -368,7 +395,6 @@ class IA(Jogador):
             except Exception:
                 # se falhar (por qualquer razão), pular
                 continue
-
         return movimentos
 
 

@@ -53,7 +53,7 @@ def ia_stream():
                         time.sleep(1.0)
 
             # ATAQUE: usar o gerador de ataques da IA para emitir eventos em tempo real
-            if acao in ('ataque', 'turno_completo'):
+            if (partida.libera_ataque is True) and acao in ('ataque', 'turno_completo'):
                 try:
                     for ev in jogador.executar_ataques_generator(partida, rng=None, agressividade=agressividade, max_ataques=50):
                         # garantir que eventos de ataque venham com 'fase' definido pelo gerador
@@ -65,7 +65,7 @@ def ia_stream():
                     pass
 
             # REPOSICIONAMENTO
-            if acao in ('reposicionamento', 'turno_completo'):
+            if acao in ('reposicionamento', 'turno_completo') and (partida.libera_ataque is True):
                 repos = []
                 if hasattr(jogador, 'executar_reposicionamento'):
                     repos = jogador.executar_reposicionamento(partida, max_movimentos=10)
@@ -79,7 +79,7 @@ def ia_stream():
             try:
                 jogador_cor_atual = jogador.cor
                 tentativas = 0
-                while tentativas < 4 and partida.jogadores[partida.jogador_atual_idx].cor == jogador_cor_atual:
+                while tentativas < 3 and partida.jogadores[partida.jogador_atual_idx].cor == jogador_cor_atual:
                     partida.avancar_fase_ou_turno()
                     tentativas += 1
                 if partida.jogadores[partida.jogador_atual_idx].cor == jogador_cor_atual:

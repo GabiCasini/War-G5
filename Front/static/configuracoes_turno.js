@@ -4,6 +4,28 @@ let jogadorCorAtual = null;
 const LOCALHOST = "http://127.0.0.1:5000";
 let iaExecutando = {};
 
+
+
+// Atualiza visibilidade dos controles que devem aparecer apenas para jogadores humanos
+function atualizarVisibilidadeBotoes(playerObj) {
+  try {
+    const wrapper = document.getElementById('passar-turno-wrapper');
+    const btnPassar = document.getElementById('btn-passar-turno');
+    const btnCartas = document.getElementById('btn-minhas-cartas');
+
+    const isHumano = playerObj && (playerObj.tipo === 'humano') ;
+
+    if (wrapper) {
+      wrapper.style.display = isHumano ? 'flex' : 'none';
+    } else {
+      if (btnPassar) btnPassar.style.display = isHumano ? 'inline-block' : 'none';
+      if (btnCartas) btnCartas.style.display = isHumano ? 'inline-block' : 'none';
+    }
+  } catch (e) {
+    console.warn('Falha ao atualizar visibilidade dos botões:', e);
+  }
+}
+
 function fetchJogadores() {
   return fetch(LOCALHOST + "/partida/jogadores", { method: "GET" })
     .then((resp) => {
@@ -33,6 +55,15 @@ function fetchJogadores() {
           tipo = jogador.tipo;
         }
         adicionarPlayer(jogador.nome, jogador.cor, tipo);
+        
+      }
+      try {
+        if (jogadorAtual) {
+          const playerObj = players.find((p) => p.cor === jogadorAtual);
+          atualizarVisibilidadeBotoes(playerObj);
+        }
+      } catch (e) {
+        // não bloquear a função principal
       }
       return data.jogadores;
     })
@@ -98,6 +129,9 @@ function fetchEstadoAtual() {
       // Se o jogador atual for IA e estivermos na fase de posicionamento, solicitar execução do turno da IA
       try {
         const playerObj = players.find((p) => p.cor === jogadorAtual);
+        // Atualiza visibilidade dos botões conforme o tipo do jogador atual
+        atualizarVisibilidadeBotoes(playerObj);
+        
         if (
           playerObj &&
           playerObj.tipo === "ai" &&
@@ -131,6 +165,10 @@ function invokeIaTurnoCompleto(jogador_cor, tempoTurno, exercitosParaPosicionar)
 
     // marca execução para evitar reentradas
     iaExecutando[jogador_cor] = true;
+
+    // estado local mutável para atualizar HUD dinamicamente durante os eventos SSE
+    let restanteExercitos = typeof exercitosParaPosicionar === 'number' ? exercitosParaPosicionar : (Number(exercitosParaPosicionar) || 0);
+    let restanteTempo = typeof tempoTurno === 'number' ? tempoTurno : (Number(tempoTurno) || 0);
 
     es.onmessage = function (evt) {
       try {
@@ -169,11 +207,15 @@ function invokeIaTurnoCompleto(jogador_cor, tempoTurno, exercitosParaPosicionar)
               let faseLabel = "";
               if (ev.fase === "posicionamento") faseLabel = "Posicionamento";
               else if (ev.fase === "ataque") faseLabel = "Ataque";
-              else if (ev.fase === "reposicionamento")
-                faseLabel = "Reposicionamento";
-              if (faseLabel)
-                // to do : deixar tempo e exercitos dinamicos, pois so é chamado uma vez e fica estatico.
-              atualizarHUD(playerObj.nome, playerObj.corHex, faseLabel, tempoTurno, exercitosParaPosicionar);
+              else if (ev.fase === "reposicionamento") faseLabel = "Reposicionamento";
+              if (faseLabel) {
+                // atualizar HUD usando os valores locais (restanteTempo/restanteExercitos)
+                try {
+                  atualizarHUD(playerObj.nome, playerObj.corHex, faseLabel, restanteTempo, restanteExercitos);
+                } catch (err) {
+                  console.warn('Falha ao atualizar HUD a partir do evento IA:', err);
+                }
+              }
             }
           } catch (err) {
             // não bloquear o processamento do evento se atualizarHUD falhar
@@ -181,7 +223,15 @@ function invokeIaTurnoCompleto(jogador_cor, tempoTurno, exercitosParaPosicionar)
           }
 
           if (ev.tipo === "posicionar") {
-            adicionarExercitos(ev.territorio, ev.qtd || 1);
+            const qtd = Number(ev.qtd) || 1;
+            adicionarExercitos(ev.territorio, qtd);
+            // atualiza contador local e HUD para refletir exércitos restantes
+            restanteExercitos = Math.max(0, restanteExercitos - qtd);
+            try {
+              atualizarHUD(playerObj.nome, playerObj.corHex, 'Posicionamento', restanteTempo, restanteExercitos);
+            } catch (err) {
+              console.warn('Falha ao atualizar HUD após posicionamento IA:', err);
+            }
             destacarTerritorio(ev.territorio);
             setTimeout(() => removerDestaqueTerritorio(ev.territorio), 600);
           } else if (ev.tipo === "ataque_inicio") {
@@ -422,7 +472,7 @@ function postPosicionarExercitos(jogador_cor, territorio, quantidade) {
       console.log("Exércitos posicionados com sucesso:", data);
       fetchTerritorios();
       fetchEstadoAtual();
-      fetchEstadoAtual();
+      refreshTerritorios();
       return data;
     })
     .catch((err) => {

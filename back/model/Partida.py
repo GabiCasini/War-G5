@@ -6,6 +6,7 @@ from .Territorio import Territorio
 from .Manager_de_Cartas import Manager_de_Cartas
 from .Manager_de_Objetivos import Manager_de_Objetivos
 
+
 class Partida:
     def __init__(self, qtd_humanos: int, qtd_ai: int, duracao_turno: int, tupla_jogadores: list[tuple[str, str, str]], shuffle_jogadores: bool = True): # tupla representa o jogador (nome, cor, tipo)
         assert 6 >= qtd_humanos + qtd_ai >= 3
@@ -39,6 +40,7 @@ class Partida:
             self.libera_ataque = True
 
     def avancar_fase_ou_turno(self):
+        fase_anterior = self.fase_do_turno
         if self.fase_do_turno == "posicionamento":
             if self.libera_ataque:
                 self.fase_do_turno = "ataque"
@@ -59,6 +61,7 @@ class Partida:
             self.fase_do_turno = "posicionamento"
             self.proximo_jogador()
             self.tabuleiro.calcula_exercitos_a_receber(self.jogadores[self.jogador_atual_idx])
+        # print(f"{fase_anterior} ---> {self.fase_do_turno}")
         
         # Garante que jogador_atual esteja sempre definido antes de retornar
         jogador_atual = self.jogadores[self.jogador_atual_idx]
@@ -185,6 +188,7 @@ class Partida:
         """
         Transfere a posse do território para o vencedor e move exércitos obrigatórios.
         """
+        print(f"Território {territorio.nome} conquistado por {vencedor.cor} de {perdedor.cor}")
         perdedor.remover_territorio(territorio)
         vencedor.adicionar_territorio(territorio) #adiciona o território na lista do jogador e atualiza a cor 
         

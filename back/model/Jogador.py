@@ -43,7 +43,7 @@ class Jogador:
     def adicionar_exercitos_territorio(self, territorio, quantidade):
         """Adiciona exércitos a um território do jogador."""
         territorio.exercitos += quantidade
-        print(f'Quantidade de exercito add: {quantidade}, Quantidade total de exercitos: {territorio.exercitos}')
+        # print(f'Quantidade de exercito add: {quantidade}, Quantidade total de exercitos: {territorio.exercitos}')
 
     def remover_exercitos_territorio(self, territorio, quantidade):
         """Remove exércitos de um território do jogador."""
@@ -51,7 +51,7 @@ class Jogador:
             # evita que o número de exércitos do território fique negativo
             quantidade_real = min(quantidade, territorio.exercitos)
             territorio.exercitos -= quantidade_real
-            print(f'Quantidade de exercito removido do {self.nome}: {quantidade_real}')
+            # print(f'Quantidade de exercito removido do {self.nome}: {quantidade_real}')
         else:
             print("Território não pertence ao jogador.")
 
