@@ -1,3 +1,13 @@
+const MAPEAMENTO_REGIOES = {
+	"Regiao_1": "Metropolitana",
+	"Regiao_2": "Serrana",
+	"Regiao_3": "Norte Fluminense",
+	"Regiao_4": "Costa Verde",
+	"Regiao_5": "Médio Paraíba",
+	"Regiao_6": "Baixada Litorânea"
+}
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
 	// Configuração para aparecer o tooltip com o nome do município ao passar o mouse sobre ele
@@ -145,8 +155,142 @@ function desenharFronteiraMunicipios(nome1, nome2) {
 }
 
 
+
+
 desenharFronteiraMunicipios("Rio de Janeiro", "Niterói");
 desenharFronteiraMunicipios("Paraíba do Sul", "Comendador Levy Gasparian");
 desenharFronteiraMunicipios("Nova Friburgo", "Cordeiro");
 desenharFronteiraMunicipios("Bom Jardim", "Trajano de Moraes");
 desenharFronteiraMunicipios("Teresópolis", "Nova Friburgo");
+
+
+function desenharNomeRegioes() {
+	const svg = document.getElementById('mapa');
+	if (!svg) return;
+
+	let rotulosGroup = svg.querySelector('#rotulos_regioes');
+	if (rotulosGroup) rotulosGroup.remove();
+	rotulosGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+	rotulosGroup.setAttribute('id', 'rotulos_regioes');
+
+	const regioes = svg.querySelectorAll('g[id^="Regiao_"]');
+	regioes.forEach(group => {
+		const box = group.getBBox();
+		const cx = box.x + box.width / 2;
+		const cy = box.y + box.height / 2;
+
+		const offset = Math.max(70, box.width * 0.45);
+		const xStart = cx;
+		const xEnd = cx - offset;
+
+		const id = group.id || '';
+		let label = id; // vou mudar depois para o nome certinho de cada regiao
+		if (MAPEAMENTO_REGIOES[id]) {
+			label = MAPEAMENTO_REGIOES[id];
+		}
+
+		const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+		line.setAttribute('x1', xStart);
+		line.setAttribute('y1', cy);
+		line.setAttribute('x2', xEnd);
+		line.setAttribute('y2', cy);
+		line.setAttribute('stroke', 'black');
+		line.setAttribute('stroke-width', '1');
+		line.setAttribute('opacity', '0.8');
+		// line.setAttribute('pointer-events', 'none');
+
+		const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+		text.textContent = label;
+		text.setAttribute('x', xEnd - 6);
+		text.setAttribute('y', cy);
+		text.setAttribute('fill', '#000');
+		text.setAttribute('font-size', '10');
+		text.setAttribute('font-family', 'sans-serif');
+		text.setAttribute('text-anchor', 'end');
+		text.setAttribute('alignment-baseline', 'middle');
+		text.setAttribute('z-index', '10');
+
+		text.style.paintOrder = 'stroke';
+		text.style.stroke = 'white';
+		text.style.strokeWidth = '0.9';
+
+		text.classList.add('rotulo-regiao');
+
+		text.id = id;
+
+		text.addEventListener("mouseenter", function() {
+			console.log('Hover em:', text.id);
+			destacarRegiao(text.id);
+		});
+
+		console.log('Adicionando rótulo para:', text);
+
+
+		rotulosGroup.appendChild(line);
+		rotulosGroup.appendChild(text);
+	});
+
+	svg.insertBefore(rotulosGroup, svg.firstChild);
+}
+
+
+
+const _destaqueAnimState = new WeakMap();
+
+function destacarRegiao(idRotulo) {
+	const svg = document.getElementById('mapa');
+	const regiao = svg.querySelector(`g[id="${idRotulo.replace('rotulo-regiao-', 'Regiao_')}"]`);
+	if (!regiao) return;
+
+	const paths = regiao.querySelectorAll('path');
+	paths.forEach(path => {
+		// Se já houver animação ativa, limpa antes de reiniciar (evita empilhar)
+		const existing = _destaqueAnimState.get(path);
+		if (existing) {
+			if (existing.interval) clearInterval(existing.interval);
+			if (existing.timeout) clearTimeout(existing.timeout);
+			// restaura estilos originais antes de reiniciar
+			if (existing.prevStroke !== undefined) {
+				if (existing.prevStroke !== '') path.setAttribute('stroke', existing.prevStroke);
+				else path.removeAttribute('stroke');
+			}
+			if (existing.prevStrokeWidth !== undefined) {
+				if (existing.prevStrokeWidth !== '') path.setAttribute('stroke-width', existing.prevStrokeWidth);
+				else path.removeAttribute('stroke-width');
+			}
+		}
+
+		// armazena os valores originais (captura atual)
+		const prevStroke = path.getAttribute('stroke') || '';
+		const prevStrokeWidth = path.getAttribute('stroke-width') || '';
+
+		const state = { prevStroke, prevStrokeWidth, interval: null, timeout: null };
+		_destaqueAnimState.set(path, state);
+
+		// inicia animação (toggle) e garante que não será duplicada
+		let toggle = false;
+		path.setAttribute('stroke', 'black');
+		state.interval = setInterval(() => {
+			path.setAttribute('stroke-width', toggle ? '0.287244' : '1.5');
+			toggle = !toggle;
+		}, 300);
+
+		// após 2s para a animação e restaura estilos originais
+		state.timeout = setTimeout(() => {
+			if (state.interval) clearInterval(state.interval);
+
+			if (state.prevStroke !== '') path.setAttribute('stroke', state.prevStroke);
+			else path.removeAttribute('stroke');
+
+			if (state.prevStrokeWidth !== '') path.setAttribute('stroke-width', state.prevStrokeWidth);
+			else path.removeAttribute('stroke-width');
+
+			_destaqueAnimState.delete(path);
+		}, 2000);
+	});
+}
+
+
+desenharNomeRegioes();
+
+
