@@ -1,20 +1,20 @@
 
 class Player {
-    constructor(id, nome, cor, tipo) {
+    constructor(id, nome, cor, tipo, objetivo) {
         this.playerId = id;
         this.nome = nome;
         this.cor = cor;
         this.corHex = atribuiCorHexJogador(cor);
         this.tipo = tipo;
         this.exercitosDisponiveisPosicionamento = 0;
-        this.objetivo = null;
+        this.objetivo = objetivo;
     }
 }
 
 let players = [];
 
-function adicionarPlayer(nome, cor, tipo) {
-    const player = new Player(players.length + 1, nome, cor, tipo);
+function adicionarPlayer(nome, cor, tipo, objetivo) {
+    const player = new Player(players.length + 1, nome, cor, tipo, objetivo);
     players.push(player);
 }
 

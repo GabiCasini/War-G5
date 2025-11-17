@@ -17,7 +17,7 @@ function fetchJogadores() {
     .then(data => {
     //   console.log('jogadores', data.jogadores);
       for (let jogador of data.jogadores) {
-        adicionarPlayer(jogador.nome, jogador.cor, jogador.tipo);
+        adicionarPlayer(jogador.nome, jogador.cor, jogador.tipo, jogador.objetivo);
       }
       return data.jogadores;
     })
