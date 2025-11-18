@@ -571,6 +571,18 @@
       </div>
     </dialog>
 
+    <div id="objective-card-container">
+      <div id="objective-card-inner">
+        <div class="card-face card-cover">
+          <img src="{{ url_for('static', filename='carta_verso.svg') }}" alt="Verso da Carta">
+        </div>
+        <div class="card-face card-content">
+          <img src="{{ url_for('static', filename='carta_frente.svg') }}" alt="Frente da Carta">
+          <div id="objetivo-player" class="objective-text">Domine todos os territórios</div>
+        </div>
+      </div>
+    </div>
+
     <script src="{{ url_for('static', filename='configuracoes_mapa.js') }}"></script>
     <script src="{{ url_for('static', filename='configuracoes_players.js') }}"></script>
     <script src="{{ url_for('static', filename='configuracoes_territorios.js') }}"></script>

@@ -4,7 +4,7 @@ from .. import state
 
 partida_bp = Blueprint('partida', __name__, url_prefix='/partida')
 
-
+# Retorna lista de jogadores da partida e suas informacoes
 @partida_bp.route("/jogadores", methods=["GET"])
 def get_jogadores():
     
@@ -19,12 +19,13 @@ def get_jogadores():
             "nome": jogador.nome,
             "cor": jogador.cor,
             "ia": jogador.tipo == 'ai',
+            "objetivo": jogador.objetivo,
             "ordem": i + 1
         })
 
     return jsonify({"jogadores": jogadores_json})
 
-
+# Retorna lista de territorios do tabuleiro
 @partida_bp.route("/territorios", methods=["GET"])
 def get_territorios():
     if not state.partida_global:
@@ -47,7 +48,7 @@ def get_territorios():
 
     return jsonify({"territorios": territorios_json})
 
-
+# Retorna o estado atual da partida - fase atual, jogador atual e seus dados 
 @partida_bp.route("/estado_atual", methods=["GET"])
 def get_estado_atual():
 
@@ -88,7 +89,7 @@ def get_estado_atual():
     }
     return jsonify(estado_json)
 
-
+# Faz os cálculos da regra de negócio e retorna a quantidade de tropas restantes após um posicionamento  
 @partida_bp.route("/posicionamento", methods=["POST"])
 def post_posicionamento():
     if not state.partida_global:
@@ -96,20 +97,21 @@ def post_posicionamento():
 
     dados = request.get_json() 
     
-    jogador_id = dados.get("jogador_id")
+    jogador_cor = dados.get("jogador_id")
     territorio_nome = dados.get("territorio")
     exercitos = int(dados.get("exercitos"))
 
+    jogador_obj = state.partida_global.get_jogador_por_cor(jogador_cor)
+
     try:
-        exercitos_restantes = state.partida_global.fase_de_posicionamento(
-            jogador_id, territorio_nome, exercitos
-        )
+        exercitos_restantes = state.partida_global.fase_de_posicionamento(jogador_cor, territorio_nome, exercitos)
+        objetivo_finalizado = state.partida_global.manager_de_objetivos.verifica_objetivo_do_jogador(jogador_obj, state.partida_global.get_jogadores_eliminados(), state.partida_global.get_tabuleiro())
         print("Exércitos restantes após posicionamento:", exercitos_restantes)
-        return jsonify({"status": "ok", "exercitos_restantes": exercitos_restantes})
+        return jsonify({"status": "ok", "objetivo_finalizado": objetivo_finalizado, "exercitos_restantes": exercitos_restantes })
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
 
-
+# Faz os cálculos da regra de ataque do jogo e retorna o resultado dos dados e a atualização da batalha
 @partida_bp.route("/ataque", methods=["POST"])
 def post_ataque():
     if not state.partida_global:
@@ -128,10 +130,10 @@ def post_ataque():
     
     try:
         resultado = state.partida_global.resolver_combate(atacante, defensor, territorio_origem, territorio_alvo)
-        return jsonify({"status": "ok", **resultado})
+        objetivo_finalizado = state.partida_global.manager_de_objetivos.verifica_objetivo_de_todos_os_jogadores(atacante, state.partida_global.get_jogadores_vivos(), state.partida_global.get_jogadores_eliminados(), state.partida_global.get_tabuleiro())
+        return jsonify({"status": "ok", "objetivo_finalizado": objetivo_finalizado, **resultado})
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
-
 
 @partida_bp.route("/reposicionamento", methods=["POST"])
 def post_reposicionamento():
@@ -140,19 +142,19 @@ def post_reposicionamento():
 
     dados = request.get_json()
 
-    jogador_id = dados.get("jogador_id")
+    jogador_cor = dados.get("jogador_id")
     nome_origem = dados.get("territorio_origem")
     nome_destino = dados.get("territorio_destino")
     exercitos = int(dados.get("exercitos"))
+
+    jogador_obj = state.partida_global.get_jogador_por_cor(jogador_cor)
     
     try:
-        resultado = state.partida_global.fase_de_reposicionamento(
-            jogador_id, nome_origem, nome_destino, exercitos
-        )
-        return jsonify({"status": "ok", **resultado})
+        resultado = state.partida_global.fase_de_reposicionamento(jogador_cor, nome_origem, nome_destino, exercitos)
+        objetivo_finalizado = state.partida_global.manager_de_objetivos.verifica_objetivo_do_jogador(jogador_obj, state.partida_global.get_jogadores_eliminados(), state.partida_global.get_tabuleiro())
+        return jsonify({"status": "ok", "objetivo_finalizado": objetivo_finalizado, **resultado})
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
-
 
 @partida_bp.route("/finalizar_turno", methods=["POST"])
 def post_finalizar_turno():
