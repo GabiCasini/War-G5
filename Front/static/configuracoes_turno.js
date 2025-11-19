@@ -4,25 +4,25 @@ let jogadorCorAtual = null;
 const LOCALHOST = "http://127.0.0.1:5000";
 let iaExecutando = {};
 
-
-
 // Atualiza visibilidade dos controles que devem aparecer apenas para jogadores humanos
 function atualizarVisibilidadeBotoes(playerObj) {
   try {
-    const wrapper = document.getElementById('passar-turno-wrapper');
-    const btnPassar = document.getElementById('btn-passar-turno');
-    const btnCartas = document.getElementById('btn-minhas-cartas');
+    const wrapper = document.getElementById("passar-turno-wrapper");
+    const btnPassar = document.getElementById("btn-passar-turno");
+    const btnCartas = document.getElementById("btn-minhas-cartas");
 
-    const isHumano = playerObj && (playerObj.tipo === 'humano') ;
+    const isHumano = playerObj && playerObj.tipo === "humano";
 
     if (wrapper) {
-      wrapper.style.display = isHumano ? 'flex' : 'none';
+      wrapper.style.display = isHumano ? "flex" : "none";
     } else {
-      if (btnPassar) btnPassar.style.display = isHumano ? 'inline-block' : 'none';
-      if (btnCartas) btnCartas.style.display = isHumano ? 'inline-block' : 'none';
+      if (btnPassar)
+        btnPassar.style.display = isHumano ? "inline-block" : "none";
+      if (btnCartas)
+        btnCartas.style.display = isHumano ? "inline-block" : "none";
     }
   } catch (e) {
-    console.warn('Falha ao atualizar visibilidade dos botões:', e);
+    console.warn("Falha ao atualizar visibilidade dos botões:", e);
   }
 }
 
@@ -55,7 +55,6 @@ function fetchJogadores() {
           tipo = jogador.tipo;
         }
         adicionarPlayer(jogador.nome, jogador.cor, tipo);
-        
       }
       try {
         if (jogadorAtual) {
@@ -77,10 +76,17 @@ function fetchTerritorios() {
   return fetch(LOCALHOST + "/partida/territorios", { method: "GET" })
     .then((resp) => {
       if (!resp.ok) {
-        return resp.json()
+        return resp
+          .json()
           .then((errBody) => {
-            throw new Error((errBody && (errBody.mensagem || errBody.message)) || `HTTP ${resp.status}`);})
-          .catch(() => {throw new Error(`HTTP ${resp.status}`);});
+            throw new Error(
+              (errBody && (errBody.mensagem || errBody.message)) ||
+                `HTTP ${resp.status}`
+            );
+          })
+          .catch(() => {
+            throw new Error(`HTTP ${resp.status}`);
+          });
       }
       return resp.json();
     })
@@ -115,15 +121,40 @@ function fetchEstadoAtual() {
       return resp.json();
     })
     .then((data) => {
-      jogadorAtual = data.turno.jogador_cor;
+      // detecta troca de jogador para reiniciar o timer apenas quando necessário
+      const jogadorAnterior = jogadorAtual;
+      const novoJogador = data.turno.jogador_cor;
+      jogadorAtual = novoJogador;
       faseAtual = data.turno.fase;
       let exercitosParaPosicionar = data.exercitos_disponiveis.total;
       tempoTurno = data.turno.tempo_turno;
       let faseAtualStringPrimeiraMaiuscula =
         faseAtual.charAt(0).toUpperCase() + faseAtual.slice(1);
       let corHexJogador = players.find((p) => p.cor === jogadorAtual).corHex;
+
+      // Se o jogador mudou (início do turno de outro jogador), reinicia o timer
+      try {
+        if (jogadorAnterior !== novoJogador) {
+          if (typeof redefinirTimer === "function") {
+            redefinirTimer(tempoTurno);
+          } else {
+            // fallback: iniciar diretamente (pode ser que redefinirTimer não esteja disponível)
+            if (typeof iniciarTimerTurno === "function")
+              iniciarTimerTurno(tempoTurno);
+          }
+        }
+      } catch (e) {
+        console.warn("Erro ao reiniciar timer na troca de jogador:", e);
+      }
+
       atualizarExercitosParaPosicionar(jogadorAtual, exercitosParaPosicionar);
-      atualizarHUD(data.turno.jogador_nome, corHexJogador, faseAtualStringPrimeiraMaiuscula, tempoTurno, exercitosParaPosicionar);
+      atualizarHUD(
+        data.turno.jogador_nome,
+        corHexJogador,
+        faseAtualStringPrimeiraMaiuscula,
+        tempoTurno,
+        exercitosParaPosicionar
+      );
       console.log(data);
 
       // Se o jogador atual for IA e estivermos na fase de posicionamento, solicitar execução do turno da IA
@@ -131,7 +162,7 @@ function fetchEstadoAtual() {
         const playerObj = players.find((p) => p.cor === jogadorAtual);
         // Atualiza visibilidade dos botões conforme o tipo do jogador atual
         atualizarVisibilidadeBotoes(playerObj);
-        
+
         if (
           playerObj &&
           playerObj.tipo === "ai" &&
@@ -140,7 +171,11 @@ function fetchEstadoAtual() {
           // evita chamadas repetidas enquanto a IA está sendo executada
           if (!iaExecutando[jogadorAtual]) {
             iaExecutando[jogadorAtual] = true;
-            invokeIaTurnoCompleto(jogadorAtual, tempoTurno, exercitosParaPosicionar).finally(() => {
+            invokeIaTurnoCompleto(
+              jogadorAtual,
+              tempoTurno,
+              exercitosParaPosicionar
+            ).finally(() => {
               iaExecutando[jogadorAtual] = false;
             });
           }
@@ -156,7 +191,11 @@ function fetchEstadoAtual() {
     });
 }
 
-function invokeIaTurnoCompleto(jogador_cor, tempoTurno, exercitosParaPosicionar) {
+function invokeIaTurnoCompleto(
+  jogador_cor,
+  tempoTurno,
+  exercitosParaPosicionar
+) {
   // Abre uma conexão SSE para receber eventos da IA em tempo real.
   return new Promise((resolve, reject) => {
     const url = `${LOCALHOST}/ia/stream?jogador_id=${jogador_cor}&acao=turno_completo`;
@@ -167,8 +206,12 @@ function invokeIaTurnoCompleto(jogador_cor, tempoTurno, exercitosParaPosicionar)
     iaExecutando[jogador_cor] = true;
 
     // estado local mutável para atualizar HUD dinamicamente durante os eventos SSE
-    let restanteExercitos = typeof exercitosParaPosicionar === 'number' ? exercitosParaPosicionar : (Number(exercitosParaPosicionar) || 0);
-    let restanteTempo = typeof tempoTurno === 'number' ? tempoTurno : (Number(tempoTurno) || 0);
+    let restanteExercitos =
+      typeof exercitosParaPosicionar === "number"
+        ? exercitosParaPosicionar
+        : Number(exercitosParaPosicionar) || 0;
+    let restanteTempo =
+      typeof tempoTurno === "number" ? tempoTurno : Number(tempoTurno) || 0;
 
     es.onmessage = function (evt) {
       try {
@@ -207,13 +250,23 @@ function invokeIaTurnoCompleto(jogador_cor, tempoTurno, exercitosParaPosicionar)
               let faseLabel = "";
               if (ev.fase === "posicionamento") faseLabel = "Posicionamento";
               else if (ev.fase === "ataque") faseLabel = "Ataque";
-              else if (ev.fase === "reposicionamento") faseLabel = "Reposicionamento";
+              else if (ev.fase === "reposicionamento")
+                faseLabel = "Reposicionamento";
               if (faseLabel) {
                 // atualizar HUD usando os valores locais (restanteTempo/restanteExercitos)
                 try {
-                  atualizarHUD(playerObj.nome, playerObj.corHex, faseLabel, restanteTempo, restanteExercitos);
+                  atualizarHUD(
+                    playerObj.nome,
+                    playerObj.corHex,
+                    faseLabel,
+                    restanteTempo,
+                    restanteExercitos
+                  );
                 } catch (err) {
-                  console.warn('Falha ao atualizar HUD a partir do evento IA:', err);
+                  console.warn(
+                    "Falha ao atualizar HUD a partir do evento IA:",
+                    err
+                  );
                 }
               }
             }
@@ -228,9 +281,18 @@ function invokeIaTurnoCompleto(jogador_cor, tempoTurno, exercitosParaPosicionar)
             // atualiza contador local e HUD para refletir exércitos restantes
             restanteExercitos = Math.max(0, restanteExercitos - qtd);
             try {
-              atualizarHUD(playerObj.nome, playerObj.corHex, 'Posicionamento', restanteTempo, restanteExercitos);
+              atualizarHUD(
+                playerObj.nome,
+                playerObj.corHex,
+                "Posicionamento",
+                restanteTempo,
+                restanteExercitos
+              );
             } catch (err) {
-              console.warn('Falha ao atualizar HUD após posicionamento IA:', err);
+              console.warn(
+                "Falha ao atualizar HUD após posicionamento IA:",
+                err
+              );
             }
             destacarTerritorio(ev.territorio);
             setTimeout(() => removerDestaqueTerritorio(ev.territorio), 600);
@@ -387,32 +449,40 @@ async function replayIaEvents(events, intervaloMs = 1000, jogadorCor) {
 }
 
 function postPassarTurno() {
-  return fetch(LOCALHOST + '/partida/avancar_turno', { method: 'POST' })
-    .then(resp => {
+  return fetch(LOCALHOST + "/partida/avancar_turno", { method: "POST" })
+    .then((resp) => {
       if (!resp.ok) {
-        return resp.json()
-          .then(errBody => { throw new Error((errBody && (errBody.mensagem || errBody.message)) || `HTTP ${resp.status}`); })
-          .catch(() => { throw new Error(`HTTP ${resp.status}`); });
+        return resp
+          .json()
+          .then((errBody) => {
+            throw new Error(
+              (errBody && (errBody.mensagem || errBody.message)) ||
+                `HTTP ${resp.status}`
+            );
+          })
+          .catch(() => {
+            throw new Error(`HTTP ${resp.status}`);
+          });
       }
       return resp.json();
     })
-    .then(data => {
-      console.log('Turno passado com sucesso:', data);
+    .then((data) => {
+      console.log("Turno passado com sucesso:", data);
       fetchJogadores();
       fetchTerritorios();
       fetchEstadoAtual();
       refreshTerritorios();
       return data;
     })
-    .catch(err => {
-      console.error('Erro ao passar turno:', err.message);
+    .catch((err) => {
+      console.error("Erro ao passar turno:", err.message);
       throw err;
     });
 }
 
 function postFinalizarTurno() {
-  return fetch(LOCALHOST + '/partida/finalizar_turno', { method: 'POST' })
-    .then(resp => {
+  return fetch(LOCALHOST + "/partida/finalizar_turno", { method: "POST" })
+    .then((resp) => {
       if (!resp.ok) {
         return resp
           .json()
@@ -506,71 +576,90 @@ function postAtaque(jogador_cor, territorio_origem, territorio_ataque) {
           });
       }
       return resp.json();
-    }
-    )
-    .then(data => {
-      console.log('Ataque realizado com sucesso:', data);
-      
+    })
+    .then((data) => {
+      console.log("Ataque realizado com sucesso:", data);
+
       if (data.rolagens_ataque && data.rolagens_defesa) {
         mostrarResultadoAtaque(data);
       } else {
-        alert(data.territorio_conquistado ? 'Território conquistado!' : 'Ataque finalizado.');
+        alert(
+          data.territorio_conquistado
+            ? "Território conquistado!"
+            : "Ataque finalizado."
+        );
         fetchTerritorios();
         fetchEstadoAtual();
       }
-      
+
       return data;
     })
-    .catch(err => {
-      console.error('Erro ao realizar ataque:', err.message);
+    .catch((err) => {
+      console.error("Erro ao realizar ataque:", err.message);
       alert(`Erro no ataque: ${err.message}`);
       throw err;
     });
 }
 
-
-function postReposicionamento(jogador_cor, territorio_origem, territorio_destino, quantidade) {
-  return fetch(LOCALHOST + '/partida/reposicionamento', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ jogador_id: jogador_cor, territorio_origem: territorio_origem, territorio_destino: territorio_destino, exercitos: quantidade })
+function postReposicionamento(
+  jogador_cor,
+  territorio_origem,
+  territorio_destino,
+  quantidade
+) {
+  return fetch(LOCALHOST + "/partida/reposicionamento", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      jogador_id: jogador_cor,
+      territorio_origem: territorio_origem,
+      territorio_destino: territorio_destino,
+      exercitos: quantidade,
+    }),
   })
-    .then(resp => {
+    .then((resp) => {
       if (!resp.ok) {
-        return resp.json()
-          .then(errBody => { throw new Error((errBody && (errBody.mensagem || errBody.message)) || `HTTP ${resp.status}`); })
-          .catch(() => { throw new Error(`HTTP ${resp.status}`); });
+        return resp
+          .json()
+          .then((errBody) => {
+            throw new Error(
+              (errBody && (errBody.mensagem || errBody.message)) ||
+                `HTTP ${resp.status}`
+            );
+          })
+          .catch(() => {
+            throw new Error(`HTTP ${resp.status}`);
+          });
       }
       return resp.json();
     })
-    .then(data => {
-      console.log('Reposicionamento realizado com sucesso:', data);
+    .then((data) => {
+      console.log("Reposicionamento realizado com sucesso:", data);
       fetchTerritorios();
       fetchEstadoAtual();
       return data;
     })
-    .catch(err => {
-      console.error('Erro ao realizar reposicionamento:', err.message);
+    .catch((err) => {
+      console.error("Erro ao realizar reposicionamento:", err.message);
       alert(`Erro no reposicionamento: ${err.message}`);
       throw err;
     });
 }
 
-
 function mostrarResultadoAtaque(data) {
-  const dialog = document.getElementById('ataqueResultadoDialog');
-  const titulo = document.getElementById('ataqueResultadoTitulo');
-  const imgsAtaque = document.getElementById('dados-ataque-imgs');
-  const imgsDefesa = document.getElementById('dados-defesa-imgs');
-  const resultadoTexto = document.getElementById('ataqueResultadoTexto');
-  const btnFechar = document.getElementById('ataqueResultadoFechar');
+  const dialog = document.getElementById("ataqueResultadoDialog");
+  const titulo = document.getElementById("ataqueResultadoTitulo");
+  const imgsAtaque = document.getElementById("dados-ataque-imgs");
+  const imgsDefesa = document.getElementById("dados-defesa-imgs");
+  const resultadoTexto = document.getElementById("ataqueResultadoTexto");
+  const btnFechar = document.getElementById("ataqueResultadoFechar");
 
-  imgsAtaque.innerHTML = '';
-  imgsDefesa.innerHTML = '';
+  imgsAtaque.innerHTML = "";
+  imgsDefesa.innerHTML = "";
 
   if (data.rolagens_ataque && Array.isArray(data.rolagens_ataque)) {
-    data.rolagens_ataque.forEach(num => {
-      const img = document.createElement('img');
+    data.rolagens_ataque.forEach((num) => {
+      const img = document.createElement("img");
       img.src = `static/d${num}.png`;
       img.alt = `Dado ${num}`;
       imgsAtaque.appendChild(img);
@@ -578,8 +667,8 @@ function mostrarResultadoAtaque(data) {
   }
 
   if (data.rolagens_defesa && Array.isArray(data.rolagens_defesa)) {
-    data.rolagens_defesa.forEach(num => {
-      const img = document.createElement('img');
+    data.rolagens_defesa.forEach((num) => {
+      const img = document.createElement("img");
       img.src = `static/d${num}.png`;
       img.alt = `Dado ${num}`;
       imgsDefesa.appendChild(img);
@@ -588,16 +677,16 @@ function mostrarResultadoAtaque(data) {
 
   let mensagem = `Ataque perdeu: ${data.perdas_ataque}. Defesa perdeu: ${data.perdas_defesa}.<br>`;
   if (data.territorio_conquistado) {
-    titulo.textContent = 'Território Conquistado!';
-    mensagem += '<strong>O ataque foi bem-sucedido!</strong>';
+    titulo.textContent = "Território Conquistado!";
+    mensagem += "<strong>O ataque foi bem-sucedido!</strong>";
   } else {
-    titulo.textContent = 'Combate Realizado';
+    titulo.textContent = "Combate Realizado";
     if (data.perdas_ataque > data.perdas_defesa) {
-        mensagem += '<strong>A defesa venceu a troca.';
+      mensagem += "<strong>A defesa venceu a troca.";
     } else if (data.perdas_defesa > data.perdas_ataque) {
-        mensagem += '<strong>O ataque venceu a troca.';
+      mensagem += "<strong>O ataque venceu a troca.";
     } else {
-        mensagem += '<strong>Houve um empate na troca (defesa vence).';
+      mensagem += "<strong>Houve um empate na troca (defesa vence).";
     }
   }
   resultadoTexto.innerHTML = mensagem;
@@ -610,7 +699,6 @@ function mostrarResultadoAtaque(data) {
 
   dialog.showModal();
 }
-
 
 fetchJogadores();
 fetchTerritorios();
