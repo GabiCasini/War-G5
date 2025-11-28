@@ -34,7 +34,8 @@ class Manager_de_Objetivos:
             # Para IAs, mapear para uma estrutura (dict) quando possível para evitar tratamentos condicionais
             # no código da IA (que espera dicts) — caso não seja possível mapear, atribuímos None.
             if getattr(i, 'tipo', 'humano') == 'ai':
-                i.objetivo = self._map_objetivo_para_dict(objetivo)
+                #i.objetivo = self._map_objetivo_para_dict(objetivo)
+                i.objetivo = objetivo
             else:
                 i.objetivo = objetivo
 

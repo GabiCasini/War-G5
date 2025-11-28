@@ -54,7 +54,7 @@ function fetchJogadores() {
         } else if (typeof jogador.tipo !== "undefined") {
           tipo = jogador.tipo;
         }
-        adicionarPlayer(jogador.nome, jogador.cor, jogador.tipo, tratarObjetivo(jogador.objetivo));
+        adicionarPlayer(jogador.nome, jogador.cor, tipo, tratarObjetivo(jogador.objetivo));
       }
       try {
         if (jogadorAtual) {
