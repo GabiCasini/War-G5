@@ -53,3 +53,9 @@ btnPassarTurno.addEventListener('click', function() {
     postPassarTurno();
 });
 
+const objectiveCardContainer = document.getElementById('objective-card-container');
+if (objectiveCardContainer) {
+    objectiveCardContainer.addEventListener('click', function() {
+        this.classList.toggle('flipped');
+    });
+}

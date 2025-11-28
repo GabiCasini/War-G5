@@ -225,6 +225,21 @@ class Partida:
             if jogador.cor == cor_jogador:
                 return jogador
         return None
+    
+    def get_jogadores_eliminados(self):
+        return self.jogadores_eliminados
+    
+    def get_jogadores_vivos(self):
+        jogadores_vivos = []
+        
+        for i in self.jogadores:
+            if i not in self.jogadores_eliminados:
+                jogadores_vivos.append(i)
+
+        return jogadores_vivos
+    
+    def get_tabuleiro(self):
+        return self.tabuleiro
 
     # Função para verificar ao final da fase de ataque se aquele jogador deve receber uma carta (em caso positivo, atribui a carta)
     def verifica_ganho_de_carta(self, jogador: Jogador):
