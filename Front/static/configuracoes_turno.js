@@ -54,7 +54,7 @@ function fetchJogadores() {
         } else if (typeof jogador.tipo !== "undefined") {
           tipo = jogador.tipo;
         }
-        adicionarPlayer(jogador.nome, jogador.cor, tipo);
+        adicionarPlayer(jogador.nome, jogador.cor, jogador.tipo, tratarObjetivo(jogador.objetivo));
       }
       try {
         if (jogadorAtual) {
@@ -698,6 +698,35 @@ function mostrarResultadoAtaque(data) {
   };
 
   dialog.showModal();
+}
+
+function atualizaObjetivoPlayer() {
+  if (faseAtual === 'posicionamento') {
+    document.getElementById('objetivo-player').textContent = players.find(p => p.cor === jogadorAtual).objetivo;
+  }
+}
+
+
+function tratarObjetivo(objetivo) {
+  if (objetivo.includes('Região 1')) {
+    objetivo = objetivo.replace('Região 1','Região ' + MAPEAMENTO_REGIOES['Regiao_1']);
+  }
+  if (objetivo.includes('Região 2')) {
+    objetivo = objetivo.replace('Região 2', 'Região ' + MAPEAMENTO_REGIOES['Regiao_2']);
+  }
+  if (objetivo.includes('Região 3')) {
+    objetivo = objetivo.replace('Região 3', 'Região ' + MAPEAMENTO_REGIOES['Regiao_3']);
+  }
+  if (objetivo.includes('Região 4')) {
+    objetivo = objetivo.replace('Região 4', 'Região ' + MAPEAMENTO_REGIOES['Regiao_4']);
+  }
+  if (objetivo.includes('Região 5')) {
+    objetivo = objetivo.replace('Região 5', 'Região ' + MAPEAMENTO_REGIOES['Regiao_5']);
+  }
+  if (objetivo.includes('Região 6')) {
+    objetivo = objetivo.replace('Região 6', 'Região ' + MAPEAMENTO_REGIOES['Regiao_6']);
+  }
+  return objetivo;
 }
 
 fetchJogadores();
