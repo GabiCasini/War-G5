@@ -183,6 +183,7 @@ function fetchEstadoAtual() {
       } catch (e) {
         console.warn("Erro ao tentar disparar IA automaticamente:", e);
       }
+      atualizaObjetivoPlayer();
       return data;
     })
     .catch((err) => {
@@ -539,6 +540,12 @@ function postPosicionarExercitos(jogador_cor, territorio, quantidade) {
       return resp.json();
     })
     .then((data) => {
+      if (data.status === "finalizado") {
+        alert(`Parabéns! ${data.mensagem}`);
+        // Só redireciona após o usuário clicar em OK
+        window.location.href = "/";
+        return data;
+      }
       console.log("Exércitos posicionados com sucesso:", data);
       fetchTerritorios();
       fetchEstadoAtual();
@@ -578,6 +585,12 @@ function postAtaque(jogador_cor, territorio_origem, territorio_ataque) {
       return resp.json();
     })
     .then((data) => {
+      if (data.status === "finalizado") {
+        alert(`Parabéns! ${data.mensagem}`);
+        // Só redireciona após o usuário clicar em OK
+        window.location.href = "/";
+        return data;
+      }
       console.log("Ataque realizado com sucesso:", data);
 
       if (data.rolagens_ataque && data.rolagens_defesa) {
@@ -634,6 +647,12 @@ function postReposicionamento(
       return resp.json();
     })
     .then((data) => {
+      if (data.status === "finalizado") {
+        alert(`Parabéns! ${data.mensagem}`);
+        // Só redireciona após o usuário clicar em OK
+        window.location.href = "/";
+        return data;
+      }
       console.log("Reposicionamento realizado com sucesso:", data);
       fetchTerritorios();
       fetchEstadoAtual();

@@ -1,4 +1,5 @@
 import random
+import re
 from .Jogador import Jogador
 
 
@@ -18,32 +19,104 @@ class IA(Jogador):
         - Conquistar continentes
         """
         prioridades = []
-        # normalize objetivo: manager_de_objetivos may assign string descriptions,
-        # while some tests or advanced behaviours use dicts. Only use dict form.
-        objetivo_dict = self.objetivo if isinstance(self.objetivo, dict) else None
+
+        # normalize objetivo: the game assigns objective as a string (several formats).
+        # Convert known objective strings into a structured dict so the scoring logic
+        # can work uniformly. Examples handled below are the project's objective list.
+        def parse_objetivo(obj):
+            if isinstance(obj, dict):
+                return obj
+            if not isinstance(obj, str):
+                return None
+            s = obj.lower()
+            # Conquistar 24 territórios à sua escolha
+            if '24 territ' in s:
+                return {'tipo': 'conquistar_territorios', 'target': 24}
+            # Conquistar 18 territórios e ocupar cada um deles com pelo menos 2 exércitos
+            if '18 territ' in s and '2 ex' in s:
+                return {'tipo': 'conquistar_territorios_exercitos', 'target': 18, 'min_exercitos': 2}
+            # Regiões explícitas (ex.: "Região 2 e a Região 5")
+            regs = re.findall(r'regi[ãa]\s*\s*(\d+)', s)
+            if regs:
+                regioes = [int(r) for r in regs]
+                # detectar se a string permite escolher mais uma região
+                if 'mais uma' in s or 'à sua escolha' in s:
+                    return {'tipo': 'conquistar_continentes', 'regioes': regioes, 'allow_extra': True}
+                return {'tipo': 'conquistar_continentes', 'regioes': regioes}
+            # fallback: if contains "conquistar" treat as generic conquistar_territorios
+            if 'conquistar' in s:
+                return {'tipo': 'conquistar_territorios'}
+            return None
+
+        objetivo_dict = parse_objetivo(self.objetivo)
+
+        # Se o objetivo permite escolher mais uma região, decidir qual é a melhor
+        # candidata automaticamente: heurística simples = minimizar custo (nº de territórios
+        # inimigos na região) e favorecer regiões com bônus maior.
+        if objetivo_dict and objetivo_dict.get('tipo') == 'conquistar_continentes' and objetivo_dict.get('allow_extra'):
+            regioes_existentes = set(objetivo_dict.get('regioes', []))
+            todas_regioes = sorted({t.regiao for t in tabuleiro.territorios if isinstance(t.regiao, int)})
+            candidato = None
+            melhor_score = float('-inf')
+            # map de bonus por região (se disponível em tabuleiro.regioes_com_bonus)
+            bonus_map = {item[0]: (item[1] if len(item) > 1 else 0) for item in getattr(tabuleiro, 'regioes_com_bonus', [])}
+            for r in todas_regioes:
+                if r in regioes_existentes:
+                    continue
+                custo = sum(1 for t in tabuleiro.territorios if t.regiao == r and t.cor != self.cor)
+                bonus = bonus_map.get(r, 0)
+                # heurística: prefere regiões com menor custo e maior bônus
+                score_r = -custo + bonus * 0.3
+                if score_r > melhor_score:
+                    melhor_score = score_r
+                    candidato = r
+            if candidato is not None:
+                objetivo_dict.setdefault('regioes', []).append(candidato)
+                # desativar allow_extra para não repetir seleção
+                objetivo_dict['allow_extra'] = False
+
+        # Para objetivos numéricos, calcular quantos territórios faltam
+        target_remaining = None
+        if objetivo_dict and objetivo_dict.get('tipo') in ('conquistar_territorios', 'conquistar_territorios_exercitos') and objetivo_dict.get('target'):
+            owned = len(self.territorios)
+            target_remaining = max(0, objetivo_dict.get('target') - owned)
 
         for territorio in tabuleiro.territorios:
             score = 0
             # 1. Objetivo: conquistar X territórios
             if objetivo_dict and objetivo_dict.get('tipo') == 'conquistar_territorios':
                 if territorio.cor != self.cor:
-                    score += 2  # Prioriza territórios não conquistados
+                    # base
+                    score += 2
+                    # se faltam poucos territórios para a meta, aumentar agressividade
+                    if target_remaining is not None and target_remaining <= 3:
+                        score += (4 - target_remaining) * 1.5
             # 2. Objetivo: conquistar X territórios com pelo menos Y exércitos
             if objetivo_dict and objetivo_dict.get('tipo') == 'conquistar_territorios_exercitos':
                 if territorio in self.territorios and territorio.exercitos < objetivo_dict.get('min_exercitos', 2):
                     score += 3  # Prioriza reforço
                 elif territorio.cor != self.cor:
                     score += 1
+                    # se faltam poucos territórios para a meta, dar peso extra a alvos capturáveis
+                    if target_remaining is not None and target_remaining <= 3:
+                        score += 2
             # 3. Objetivo: destruir jogador de cor específica
             if objetivo_dict and objetivo_dict.get('tipo') == 'destruir_jogador':
                 cor_alvo = objetivo_dict.get('cor_alvo')
                 if territorio.cor == cor_alvo:
                     score += 4  # Prioriza atacar territórios do alvo
-            # 4. Objetivo: conquistar continentes
+            # 4. Objetivo: conquistar continentes / regiões específicas
             if objetivo_dict and objetivo_dict.get('tipo') == 'conquistar_continentes':
-                continentes_alvo = objetivo_dict.get('continentes', [])
-                if territorio.regiao in continentes_alvo:
+                # suportar ambas as chaves 'continentes' (legado) e 'regioes' (nova)
+                regioes_alvo = objetivo_dict.get('continentes') or objetivo_dict.get('regioes') or []
+                if territorio.regiao in regioes_alvo:
+                    # território contribui para completar uma região alvo
                     score += 3
+                else:
+                    # se o objetivo permite escolher mais uma região, damos um bônus menor
+                    if objetivo_dict.get('allow_extra'):
+                        if territorio.cor != self.cor:
+                            score += 1
             # Critérios gerais
             if territorio in self.territorios:
                 score += 1
@@ -59,7 +132,6 @@ class IA(Jogador):
                     if territorio.regiao == regiao:
                         score += bonus * 0.5
             # Aleatoriedade
-            import random
             score += random.uniform(-1, 1)
             prioridades.append((territorio, score))
         prioridades.sort(key=lambda x: x[1], reverse=True)
@@ -403,6 +475,7 @@ class IA(Jogador):
                 # se falhar (por qualquer razão), pular
                 continue
         return movimentos
+
 
 
 

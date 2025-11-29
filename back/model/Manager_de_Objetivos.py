@@ -84,9 +84,12 @@ class Manager_de_Objetivos:
     def verifica_objetivo_de_todos_os_jogadores(self, jogador_do_turno: Jogador, jogadores_vivos, jogadores_eliminados, tabuleiro: Tabuleiro):
         vencedor = False
 
+
         for i in jogadores_vivos:
             resultado = self.verifica_objetivo_do_jogador(i, jogadores_eliminados, tabuleiro)
             if resultado and (jogador_do_turno == i or not vencedor):
+                print(f"\nO jogador {i.cor} cumpriu seu objetivo: '{i.objetivo}'\n")
+                print("----- FIM DE JOGO -----\n")
                 vencedor = i.cor
             
         return vencedor
@@ -98,6 +101,7 @@ class Manager_de_Objetivos:
         match objetivo:
             case "Conquistar 24 territórios à sua escolha":
                 if len(jogador.territorios) >= 24:
+                    print(f"\nJogador {jogador.cor} possui {len(jogador.territorios)} territórios.\n")
                     return True
             
             case "Conquistar 18 territórios e ocupar cada um deles com pelo menos 2 exércitos":
@@ -106,6 +110,7 @@ class Manager_de_Objetivos:
                     if i.exercitos > 1:
                         count += 1
                 if count >= 18:
+                    print(f"\nJogador {jogador.cor} possui {count} territórios com pelo menos 2 exércitos.\n")
                     return True
             
             case obj if "Conquistar na totalidade" in obj:
@@ -113,14 +118,17 @@ class Manager_de_Objetivos:
 
                 if "Região 2 e a Região 5" in obj:
                     if regioes_dominadas[1] and regioes_dominadas[4]:
+                        print(f"\nJogador {jogador.cor} domina a Região 2 e a Região 5.\n")
                         return True
                 
                 elif "Região 4 e a Região 5" in obj:
                     if regioes_dominadas[3] and regioes_dominadas[4]:
+                        print(f"\nJogador {jogador.cor} domina a Região 4 e a Região 5.\n")
                         return True
                     
                 elif "Região 2 e a Região 6" in obj:
                     if regioes_dominadas[1] and regioes_dominadas[5]:
+                        print(f"\nJogador {jogador.cor} domina a Região 2 e a Região 6.\n")
                         return True
                     
                 elif "Região 1 e a Região 4" in obj:

@@ -32,6 +32,12 @@ class Partida:
         self.valor_da_troca = 4
         self.conquistou_algum_territorio = False
         self.libera_ataque = False
+        self.finalizado = False  # Indica se a partida foi finalizada
+        self.vencedor = None     # Guarda a cor do vencedor
+
+    def finalizar_partida(self, cor_vencedor):
+        self.finalizado = True
+        self.vencedor = cor_vencedor
 
     def proximo_jogador(self):
         """Passa a vez para o próximo jogador."""
