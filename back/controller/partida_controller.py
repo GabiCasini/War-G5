@@ -48,6 +48,22 @@ def get_territorios():
 
     return jsonify({"territorios": territorios_json})
 
+
+@partida_bp.route('/debug_jogadores', methods=['GET'])
+def debug_jogadores():
+    if not state.partida_global:
+        return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
+
+    lista = []
+    for j in state.partida_global.jogadores:
+        lista.append({
+            'nome': j.nome,
+            'cor': j.cor,
+            'tipo': j.tipo,
+            'class': j.__class__.__name__
+        })
+    return jsonify({'jogadores': lista})
+
 # Retorna o estado atual da partida - fase atual, jogador atual e seus dados 
 @partida_bp.route("/estado_atual", methods=["GET"])
 def get_estado_atual():
@@ -94,6 +110,8 @@ def get_estado_atual():
 def post_posicionamento():
     if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
+    if state.partida_global.finalizado:
+        return jsonify({"status": "finalizado", "mensagem": f"Partida finalizada. Vencedor: {state.partida_global.vencedor}"}), 400
 
     dados = request.get_json() 
     
@@ -105,10 +123,25 @@ def post_posicionamento():
 
     try:
         exercitos_restantes = state.partida_global.fase_de_posicionamento(jogador_cor, territorio_nome, exercitos)
-        objetivo_finalizado = state.partida_global.manager_de_objetivos.verifica_objetivo_do_jogador(jogador_obj, state.partida_global.get_jogadores_eliminados(), state.partida_global.get_tabuleiro())
+        objetivo_finalizado = state.partida_global.manager_de_objetivos.verifica_objetivo_de_todos_os_jogadores(
+            jogador_obj,
+            state.partida_global.get_jogadores_vivos(),
+            state.partida_global.get_jogadores_eliminados(),
+            state.partida_global.get_tabuleiro()
+        )
+        print(f"[DEBUG] Resultado da verificação de objetivo no posicionamento: {objetivo_finalizado}")
+        if objetivo_finalizado:
+            print(f"[DEBUG] Finalizando partida! Vencedor: {objetivo_finalizado}")
+            state.partida_global.finalizar_partida(objetivo_finalizado)
+            return jsonify({
+                "status": "finalizado",
+                "mensagem": f"Partida finalizada. Vencedor: {objetivo_finalizado}",
+                "objetivo_finalizado": objetivo_finalizado
+            })
         print("Exércitos restantes após posicionamento:", exercitos_restantes)
         return jsonify({"status": "ok", "objetivo_finalizado": objetivo_finalizado, "exercitos_restantes": exercitos_restantes })
     except Exception as e:
+        print(f"[ERRO] Exception no posicionamento: {e}")
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
 
 # Faz os cálculos da regra de ataque do jogo e retorna o resultado dos dados e a atualização da batalha
@@ -116,6 +149,8 @@ def post_posicionamento():
 def post_ataque():
     if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
+    if state.partida_global.finalizado:
+        return jsonify({"status": "finalizado", "mensagem": f"Partida finalizada. Vencedor: {state.partida_global.vencedor}"}), 400
 
     dados = request.get_json()
 
@@ -131,6 +166,15 @@ def post_ataque():
     try:
         resultado = state.partida_global.resolver_combate(atacante, defensor, territorio_origem, territorio_alvo)
         objetivo_finalizado = state.partida_global.manager_de_objetivos.verifica_objetivo_de_todos_os_jogadores(atacante, state.partida_global.get_jogadores_vivos(), state.partida_global.get_jogadores_eliminados(), state.partida_global.get_tabuleiro())
+        if objetivo_finalizado:
+            print(f"[DEBUG] Finalizando partida! Vencedor: {objetivo_finalizado}")
+            state.partida_global.finalizar_partida(objetivo_finalizado)
+            return jsonify({
+                "status": "finalizado",
+                "mensagem": f"Partida finalizada. Vencedor: {objetivo_finalizado}",
+                "objetivo_finalizado": objetivo_finalizado,
+                **resultado
+            })
         return jsonify({"status": "ok", "objetivo_finalizado": objetivo_finalizado, **resultado})
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
@@ -139,6 +183,8 @@ def post_ataque():
 def post_reposicionamento():
     if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
+    if state.partida_global.finalizado:
+        return jsonify({"status": "finalizado", "mensagem": f"Partida finalizada. Vencedor: {state.partida_global.vencedor}"}), 400
 
     dados = request.get_json()
 
@@ -151,16 +197,31 @@ def post_reposicionamento():
     
     try:
         resultado = state.partida_global.fase_de_reposicionamento(jogador_cor, nome_origem, nome_destino, exercitos)
-        objetivo_finalizado = state.partida_global.manager_de_objetivos.verifica_objetivo_do_jogador(jogador_obj, state.partida_global.get_jogadores_eliminados(), state.partida_global.get_tabuleiro())
+        objetivo_finalizado = state.partida_global.manager_de_objetivos.verifica_objetivo_de_todos_os_jogadores(
+            jogador_obj,
+            state.partida_global.get_jogadores_vivos(),
+            state.partida_global.get_jogadores_eliminados(),
+            state.partida_global.get_tabuleiro()
+        )
+        print(f"[DEBUG] Resultado da verificação de objetivo no reposicionamento: {objetivo_finalizado}")
+        if objetivo_finalizado:
+            print(f"[DEBUG] Finalizando partida! Vencedor: {objetivo_finalizado}")
+            state.partida_global.finalizar_partida(objetivo_finalizado)
+            return jsonify({
+                "status": "finalizado",
+                "mensagem": f"Partida finalizada. Vencedor: {objetivo_finalizado}",
+                "objetivo_finalizado": objetivo_finalizado,
+                **resultado
+            })
         return jsonify({"status": "ok", "objetivo_finalizado": objetivo_finalizado, **resultado})
     except Exception as e:
+        print(f"[ERRO] Exception no reposicionamento: {e}")
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
 
 @partida_bp.route("/finalizar_turno", methods=["POST"])
 def post_finalizar_turno():
     if not state.partida_global:
         return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
-
     try:
         proximo_jogador, nova_fase = state.partida_global.finalizar_turno_atual()
         
@@ -184,7 +245,7 @@ def post_avancar_turno():
 
     try:
         proximo_jogador, nova_fase = state.partida_global.avancar_fase_ou_turno()
-        
+
         resposta = {
             "status": "ok",
             "proximo_jogador": {
@@ -194,6 +255,16 @@ def post_avancar_turno():
                 "fase": nova_fase 
             }
         }
+
+        # Não executar turnos da IA de forma síncrona aqui — isso faz com que
+        # as ações da IA ocorram instantaneamente no cliente. Em vez disso,
+        # o cliente deve detectar que o próximo jogador é IA (via /partida/estado_atual)
+        # e abrir a stream SSE (`/ia/stream`) para receber ações em tempo real.
+        partida = state.partida_global
+        proximo = partida.jogadores[partida.jogador_atual_idx]
+        resposta['proximo_e_ia'] = (proximo.tipo == 'ai')
+        # Nota: mantemos a informação do próximo jogador em `resposta['proximo_jogador']`.
+
         return jsonify(resposta)
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400

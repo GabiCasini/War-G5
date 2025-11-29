@@ -43,23 +43,50 @@ class Jogador:
     def adicionar_exercitos_territorio(self, territorio, quantidade):
         """Adiciona exércitos a um território do jogador."""
         territorio.exercitos += quantidade
-        print(f'Quantidade de exercito add: {quantidade}, Quantidade total de exercitos: {territorio.exercitos}')
+        # print(f'Quantidade de exercito add: {quantidade}, Quantidade total de exercitos: {territorio.exercitos}')
 
     def remover_exercitos_territorio(self, territorio, quantidade):
         """Remove exércitos de um território do jogador."""
         if territorio in self.territorios:
-            territorio.exercitos -= quantidade
-            print(f'Quantidade de exercito removido do {self.nome}: {quantidade}')
+            # evita que o número de exércitos do território fique negativo
+            quantidade_real = min(quantidade, territorio.exercitos)
+            territorio.exercitos -= quantidade_real
+            # print(f'Quantidade de exercito removido do {self.nome}: {quantidade_real}')
         else:
             print("Território não pertence ao jogador.")
 
     def mover_exercitos(self, origem, destino, quantidade):
         """Move exércitos de um território do jogador para outro."""
-        if origem in self.territorios and destino in self.territorios and origem != destino and destino in origem.fronteiras:
-            quantidade = min(quantidade, origem.exercitos - 1)
-            origem.exercitos -= quantidade
-            destino.exercitos += quantidade
+        # validações básicas: origem e destino pertencem ao jogador, são distintos e são fronteiras
+        if not (origem in self.territorios and destino in self.territorios and origem != destino and destino in origem.fronteiras):
+            return 0
+
+        # não permitir mover se a origem tiver apenas 1 exército
+        if origem.exercitos <= 1:
+            return 0
+
+        # garante que não movemos mais do que a origem pode ceder e não produzimos valores negativos
+        quantidade_real = max(0, min(quantidade, origem.limite_de_repasse))
+        if quantidade_real <= 0:
+            return 0
+
+        origem.exercitos -= quantidade_real
+        destino.exercitos += quantidade_real
+        origem.limite_de_repasse -= quantidade_real
+        print("Reposicionamento realizado com sucesso.")
+        return quantidade_real
     
+    # Atribui o territorio ao jogador e transfere a quantidade de exércitos escolhida
+    def receber_territorio_conquistado(self, territorio_atacante: Territorio, territorio_conquistado: Territorio, quantidade: int):
+        self.adicionar_territorio(territorio_conquistado)
+        if quantidade > 3:
+            quantidade = 3
+        
+        qtd_real = min(territorio_atacante.exercitos - 1, quantidade)
+        territorio_conquistado.exercitos += qtd_real
+        territorio_atacante.exercitos -= qtd_real
+    
+    # FUNÇÃO ANTIGA !!! FAZER A REMOÇÃO APÓS GARANTIR QUE ELA NÃO ESTÁ MAIS EM USO EM LUGAR ALGUM DO CÓDIGO
     def reposicionar_exercitos(self, origem, destino, quantidade):
         # Executa o reposicionamento
         origem.exercitos -= quantidade

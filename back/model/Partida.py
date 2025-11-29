@@ -1,9 +1,11 @@
 import random
 from .Jogador import Jogador
+from .IA import IA
 from .Tabuleiro import Tabuleiro
 from .Territorio import Territorio
 from .Manager_de_Cartas import Manager_de_Cartas
 from .Manager_de_Objetivos import Manager_de_Objetivos
+
 
 class Partida:
     def __init__(self, qtd_humanos: int, qtd_ai: int, duracao_turno: int, tupla_jogadores: list[tuple[str, str, str]], shuffle_jogadores: bool = True): # tupla representa o jogador (nome, cor, tipo)
@@ -30,6 +32,12 @@ class Partida:
         self.valor_da_troca = 4
         self.conquistou_algum_territorio = False
         self.libera_ataque = False
+        self.finalizado = False  # Indica se a partida foi finalizada
+        self.vencedor = None     # Guarda a cor do vencedor
+
+    def finalizar_partida(self, cor_vencedor):
+        self.finalizado = True
+        self.vencedor = cor_vencedor
 
     def proximo_jogador(self):
         """Passa a vez para o próximo jogador."""
@@ -50,9 +58,9 @@ class Partida:
             
             if self.conquistou_algum_territorio :
                 self.verifica_ganho_de_carta(self.jogadores[self.jogador_atual_idx])
+                self.conquistou_algum_territorio = False
             
             self.calcular_limite_de_reposicionamento(self.jogadores[self.jogador_atual_idx])
-            self.conquistou_algum_territorio = False
 
         elif self.fase_do_turno == "reposicionamento":
             self.fase_do_turno = "posicionamento"
@@ -123,7 +131,12 @@ class Partida:
         lista = []
         for i in tupla_jogadores:
             if len(i) == 3:
-                lista.append(Jogador(i[0], i[1], i[2]))
+                tipo = i[2]
+                if tipo == 'ai':
+                    # não passar a string 'ai' como objetivo (IA espera dict ou None)
+                    lista.append(IA(i[0], i[1]))
+                else:
+                    lista.append(Jogador(i[0], i[1], tipo))
             else:
                 lista.append(Jogador(i[0], i[1]))
         return lista
@@ -145,7 +158,10 @@ class Partida:
         dados_ataque = 3 if atacante.exercitos_no_territorio(territorio_origem) >= 4 else atacante.exercitos_no_territorio(territorio_origem) - 1
 
         #Dados de defesa
-        dados_defesa = 3 if defensor.exercitos_no_territorio(territorio_alvo) >= 3 else defensor.exercitos_no_territorio(territorio_alvo)
+        if defensor.exercitos_no_territorio(territorio_alvo) >= 3:
+            dados_defesa = 3
+        else:
+            dados_defesa = defensor.exercitos_no_territorio(territorio_alvo)
         
         perdas_ataque, perdas_defesa, num_dados_ataque, num_dados_defesa = atacante.combate(dados_ataque, dados_defesa)
 
@@ -176,13 +192,12 @@ class Partida:
         """
         Transfere a posse do território para o vencedor e move exércitos obrigatórios.
         """
+        print(f"Território {territorio.nome} conquistado por {vencedor.cor} de {perdedor.cor}")
         perdedor.remover_territorio(territorio)
-        vencedor.adicionar_territorio(territorio) #adiciona o território na lista do jogador e atualiza a cor 
-        
         # Move 1 exercito automaticamente para o territorio conquistado
         # Eventualmente o jogador deve poder escolher a quantidade (de 1 a 3, sendo que o territorio de origem deve continuar com pelo menos 1 exercito)
         exercitos_para_mover = 1
-        vencedor.mover_exercitos(origem, territorio, exercitos_para_mover)
+        vencedor.receber_territorio_conquistado(origem, territorio, exercitos_para_mover) #adiciona o território na lista do jogador e atualiza a cor 
 
     # Verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero) e trata a eliminação caso necessário
     def verificar_eliminacao(self, atacante: Jogador, defensor: Jogador):
@@ -260,6 +275,77 @@ class Partida:
         else:
             self.valor_da_troca += 5
 
+    def executar_turnos_ia_consecutivos(self, max_ias: int = 10, max_ataques: int = 50):
+        """
+        Executa turnos completos para jogadores IA enquanto o jogador atual for IA.
+        Retorna uma lista com os resultados de cada IA executada.
+        """
+        partida = self
+        ia_aggregate = []
+
+        while getattr(partida.jogadores[partida.jogador_atual_idx], 'tipo', None) == 'ai':
+            jogador_ia = partida.jogadores[partida.jogador_atual_idx]
+            ia_result = {"jogador_id": jogador_ia.cor, "nome": jogador_ia.nome}
+
+            # POSICIONAMENTO
+            try:
+                partida.tabuleiro.calcula_exercitos_a_receber(jogador_ia)
+                if getattr(jogador_ia, 'exercitos_reserva', 0) > 0 and hasattr(jogador_ia, 'distribuir_exercitos'):
+                    distribuicao = jogador_ia.distribuir_exercitos(partida.tabuleiro, jogador_ia.exercitos_reserva)
+                    try:
+                        jogador_ia.remover_exercitos_para_posicionamento(jogador_ia.exercitos_reserva)
+                    except Exception:
+                        pass
+                else:
+                    distribuicao = {}
+                ia_result['posicionamento'] = distribuicao
+            except Exception as e:
+                ia_result['posicionamento_error'] = str(e)
+
+            # avançar para fase de ataque
+            try:
+                partida.avancar_fase_ou_turno()
+            except Exception:
+                pass
+
+            # ATAQUE
+            try:
+                ataques = 0
+                if hasattr(jogador_ia, 'executar_ataques'):
+                    ataques = jogador_ia.executar_ataques(partida, rng=None, agressividade=0.0, max_ataques=max_ataques)
+                ia_result['ataques_efetuados'] = ataques
+            except Exception as e:
+                ia_result['ataques_error'] = str(e)
+
+            # avançar para fase de reposicionamento
+            try:
+                partida.avancar_fase_ou_turno()
+            except Exception:
+                pass
+
+            # REPOSICIONAMENTO
+            try:
+                repos = []
+                if hasattr(jogador_ia, 'executar_reposicionamento'):
+                    repos = jogador_ia.executar_reposicionamento(partida, max_movimentos=10)
+                ia_result['reposicionamento'] = repos
+            except Exception as e:
+                ia_result['reposicionamento_error'] = str(e)
+
+            # finalizar reposicionamento e avançar para o próximo jogador (posicionamento do próximo)
+            try:
+                partida.avancar_fase_ou_turno()
+            except Exception:
+                pass
+
+            ia_aggregate.append(ia_result)
+
+            # proteção para evitar loop infinito (caso algo dê errado)
+            if len(ia_aggregate) > max_ias:
+                break
+
+        return ia_aggregate
+    
     # Calcula o limite máximo de exercitos que podem ser repassados por cada territorio
     def calcular_limite_de_reposicionamento(self, jogador: Jogador):
         for i in jogador.territorios:
