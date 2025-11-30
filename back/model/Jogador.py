@@ -137,3 +137,4 @@ class Jogador:
         total = 0
         for i in self.territorios:
             total += i.exercitos
+        return total
