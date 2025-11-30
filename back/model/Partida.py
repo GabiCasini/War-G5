@@ -100,7 +100,7 @@ class Partida:
         if qtd_exercitos > origem.limite_de_repasse:
             raise Exception(f"Você só pode reposicionar até {origem.limite_de_repasse} exércitos a partir deste território.")
     
-        jogador.reposicionar_exercitos(origem, destino, qtd_exercitos)
+        jogador.mover_exercitos(origem, destino, qtd_exercitos)
     
         return {
             "territorio_origem": { "nome": origem.nome, "exercitos": origem.exercitos },
@@ -248,13 +248,7 @@ class Partida:
         return self.jogadores_eliminados
     
     def get_jogadores_vivos(self):
-        jogadores_vivos = []
-        
-        for i in self.jogadores:
-            if i not in self.jogadores_eliminados:
-                jogadores_vivos.append(i)
-
-        return jogadores_vivos
+        return self.jogadores
     
     def get_tabuleiro(self):
         return self.tabuleiro

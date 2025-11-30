@@ -171,10 +171,10 @@ class IA(Jogador):
             for alvo in inimigos:
                 # heurística simples: prioriza alvos com alta prioridade (rank_map), diferença de exércitos e quantidade de inimigos adjacentes
                 rank_score = rank_map.get(alvo, 0)
-                advantage = origem.exercitos - alvo.exercitos
+                advantage = (origem.exercitos - alvo.exercitos) / alvo.exercitos
                 fronteira_inimiga = len([t for t in origem.fronteiras if t.cor != self.cor])
                 # combine fatores com pesos simples
-                score = rank_score * 1.5 + advantage * 1.0 + fronteira_inimiga * 0.5
+                score = rank_score * 1.5 + advantage * 1.5 + fronteira_inimiga * 0.5
 
                 # adicionar pequeno ruído para evitar empates sempre iguais
                 score += rng.uniform(-0.5, 0.5)

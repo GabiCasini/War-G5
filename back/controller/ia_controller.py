@@ -50,7 +50,7 @@ def ia_stream():
                         ev = {"tipo": "posicionar", "fase": "posicionamento", "territorio": nome, "qtd": 1}
                         yield f"data: {json.dumps(ev)}\n\n"
                         # delay unificado para 1s entre ações
-                        time.sleep(1.0)
+                        time.sleep(0.8)
 
             # ATAQUE: usar o gerador de ataques da IA para emitir eventos em tempo real
             if (partida.libera_ataque is True) and acao in ('ataque', 'turno_completo'):
@@ -59,7 +59,7 @@ def ia_stream():
                         # garantir que eventos de ataque venham com 'fase' definido pelo gerador
                         yield f"data: {json.dumps(ev)}\n\n"
                         # delay unificado para 1s entre ações
-                        time.sleep(1.0)
+                        time.sleep(0.8)
                 except Exception:
                     # se o gerador falhar por algum motivo, apenas continuar
                     pass
@@ -73,7 +73,7 @@ def ia_stream():
                         ev = {"tipo": "reposicionar", "fase": "reposicionamento", "origem": m.get('origem'), "destino": m.get('destino'), "qtd": m.get('qtd')}
                         yield f"data: {json.dumps(ev)}\n\n"
                         # delay unificado para 1s entre ações
-                        time.sleep(1.0)
+                        time.sleep(0.8)
 
             # Ao finalizar, avançar fases/turno como antes
             try:
