@@ -38,7 +38,7 @@ for i in partida.jogadores[0].territorios:
     for j in i.fronteiras:
         if j.cor == partida.jogadores[0].cor:
             print(f"\nRealizando Reposicionamento:\n")
-            partida.jogadores[0].reposicionar_exercitos(i, j, 10)
+            partida.jogadores[0].mover_exercitos(i, j, 10)
             print(f"Territorio: {i}, Limite de Repasse: {i.limite_de_repasse}\n")
             print(f"Territorio: {j}, Limite de Repasse: {j.limite_de_repasse}\n")
             break
