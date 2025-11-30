@@ -175,6 +175,9 @@ class Partida:
         else:
             territorio_foi_conquistado = False 
         
+        if territorio_foi_conquistado:
+            self.verificar_eliminacao(atacante, defensor)
+
         return {
              "dados_ataque": dados_ataque,
              "dados_defesa": dados_defesa,
