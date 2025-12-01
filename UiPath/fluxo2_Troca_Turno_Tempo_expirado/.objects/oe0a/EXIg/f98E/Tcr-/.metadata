@@ -1,0 +1,14 @@
+﻿{
+  "Name": "O número total de jogad…",
+  "Type": "Element",
+  "TaxonomyType": "Label",
+  "Id": "Tcr-_OAc7EGh9s-lYCm45w",
+  "Reference": "SwBgJQK0MUm7AevS3N0W2w/Tcr-_OAc7EGh9s-lYCm45w",
+  "ParentRef": "SwBgJQK0MUm7AevS3N0W2w/f98E9-8uX0-Fnz-OA-zpxQ",
+  "Created": "2025-11-30T13:36:43.5628814Z",
+  "Updated": "2025-11-30T13:36:43.5628814Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

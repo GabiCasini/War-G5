@@ -1,0 +1,13 @@
+﻿{
+  "Name": "127.0.0.15000 diz O nú…",
+  "Type": "Element",
+  "Id": "7VIHagNg1Uaz9CIu4jEKNQ",
+  "Reference": "SwBgJQK0MUm7AevS3N0W2w/7VIHagNg1Uaz9CIu4jEKNQ",
+  "ParentRef": "SwBgJQK0MUm7AevS3N0W2w/f98E9-8uX0-Fnz-OA-zpxQ",
+  "Created": "2025-11-30T13:30:55.9586563Z",
+  "Updated": "2025-11-30T13:30:55.9586563Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}
