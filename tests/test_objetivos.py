@@ -5,7 +5,7 @@ from back.model.Jogador import Jogador
 # FUNÇÕES AUXILIARES
 
 def limpar_territorios_dos_jogadores(partida: Partida):
-    """Remove todos os territórios do tabuleiro e dos jogadores, para criarmos territórios customizados por teste."""
+    """Remove todos os territórios dos jogadores, para distribuirmos manualmente para alguns testes."""
     for j in partida.jogadores:
         j.territorios = []
 
@@ -253,3 +253,29 @@ def test_objetivo_eliminar_jogador(partida: Partida):
     atacante.territorios = []
 
     assert not partida.manager_de_objetivos.verifica_objetivo_do_jogador(atacante, partida.jogadores_eliminados, partida.tabuleiro)
+
+
+def test_prioridade_de_vitoria(partida: Partida):
+    jogador_a: Jogador = partida.jogadores[0]
+    jogador_b: Jogador = partida.jogadores[1]
+    jogador_c: Jogador = partida.jogadores[2]
+
+    limpar_territorios_dos_jogadores(partida)
+
+    jogador_a.objetivo = "Conquistar 24 territórios à sua escolha"
+    jogador_b.objetivo = "Elimine o jogador " + jogador_c.cor + ". Caso você seja esse jogador, ou ele já tenha sido eliminado, seu objetivo passa a ser conquistar 24 territórios"
+
+    for i in range(30):
+        jogador_a.adicionar_territorio(partida.tabuleiro.territorios[i])
+    
+    jogador_b.adicionar_territorio(partida.tabuleiro.territorios[40])
+
+    partida.verificar_eliminacao(jogador_b, jogador_c)
+
+    resultado = partida.manager_de_objetivos.verifica_objetivo_de_todos_os_jogadores(jogador_a, partida.jogadores, partida.jogadores_eliminados, partida.tabuleiro)
+    
+    assert resultado == jogador_a.cor
+
+    resultado = partida.manager_de_objetivos.verifica_objetivo_de_todos_os_jogadores(jogador_b, partida.jogadores, partida.jogadores_eliminados, partida.tabuleiro)
+
+    assert resultado == jogador_b.cor
