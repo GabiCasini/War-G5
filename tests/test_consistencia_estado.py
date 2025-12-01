@@ -149,7 +149,7 @@ def test_consistencia_exercitos_para_posicionar_nao_negativo(client_com_partida)
     partida = state.partida_global
     
     for jogador in partida.jogadores:
-        assert jogador.exercitos_para_posicionar >= 0
+        assert jogador.exercitos_reserva >= 0
 
 
 # ============================================================================

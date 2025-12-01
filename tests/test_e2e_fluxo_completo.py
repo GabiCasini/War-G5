@@ -9,11 +9,13 @@ from back.model.Partida import Partida
 
 def criar_payload_inicializar(qtd_humanos=2, qtd_ai=1, duracao=60):
     """Cria payload padrão para inicializar partida."""
+    nomes_disponiveis = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank']
+    total_jogadores = qtd_humanos + qtd_ai
     return {
         'qtd_humanos': qtd_humanos,
         'qtd_ai': qtd_ai,
         'duracao_turno': duracao,
-        'nomes': ['Alice', 'Bob', 'Charlie'][:qtd_humanos + qtd_ai]
+        'nomes': nomes_disponiveis[:total_jogadores]
     }
 
 
@@ -85,8 +87,8 @@ def test_e2e_ciclo_completo_tres_turnos(client):
 def test_e2e_inicializar_multiplas_configuracoes(client):
     """Testa inicialização com diferentes configurações de jogadores."""
     configuracoes = [
-        (2, 0, 60),  # 2 humanos, 0 IA
-        (1, 2, 90),  # 1 humano, 2 IA
+        (3, 0, 60),  # 3 humanos, 0 IA (mínimo 3 jogadores)
+        (2, 2, 90),  # 2 humanos, 2 IA
         (3, 1, 120), # 3 humanos, 1 IA
     ]
     
@@ -156,7 +158,7 @@ def test_e2e_verificar_exercitos_iniciais(client):
     jogadores = obter_jogadores(client)
     
     # Primeiro jogador deve ter exércitos para posicionar
-    assert jogadores[0]['exercitos_para_posicionar'] > 0
+    assert jogadores[0]['exercitos_reserva'] > 0
 
 
 def test_e2e_finalizar_turno_atualiza_jogador_atual(client):
@@ -212,11 +214,11 @@ def test_e2e_verificar_estado_apos_multiplos_turnos(client):
 
 def test_e2e_reiniciar_partida(client):
     """Testa reiniciar uma partida."""
-    # Primeira partida
-    payload1 = criar_payload_inicializar(qtd_humanos=2, qtd_ai=0)
+    # Primeira partida (mínimo 3 jogadores)
+    payload1 = criar_payload_inicializar(qtd_humanos=3, qtd_ai=0)
     client.post('/inicializar_partida', json=payload1)
     jogadores1 = obter_jogadores(client)
-    assert len(jogadores1) == 2
+    assert len(jogadores1) == 3
     
     # Segunda partida (reinicia)
     payload2 = criar_payload_inicializar(qtd_humanos=3, qtd_ai=1)

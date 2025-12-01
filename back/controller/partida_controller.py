@@ -20,7 +20,8 @@ def get_jogadores():
             "cor": jogador.cor,
             "ia": jogador.tipo == 'ai',
             "objetivo": jogador.objetivo,
-            "ordem": i + 1
+            "ordem": i + 1,
+            "exercitos_reserva": jogador.exercitos_reserva
         })
 
     return jsonify({"jogadores": jogadores_json})
@@ -161,6 +162,11 @@ def post_ataque():
     atacante = state.partida_global.get_jogador_por_cor(jogador_id)
     territorio_origem = state.partida_global.get_territorio_por_nome(nome_territorio_origem)
     territorio_alvo = state.partida_global.get_territorio_por_nome(nome_territorio_ataque)
+    
+    # Validação de território alvo
+    if not territorio_alvo:
+        return jsonify({"status": "erro", "mensagem": "Território de ataque não encontrado"}), 400
+    
     defensor = state.partida_global.get_jogador_por_cor(territorio_alvo.cor)
     
     try:

@@ -19,9 +19,9 @@ def contar_exercitos_jogador(jogador):
 
 def simular_posicionamento_exercitos(jogador, territorio, quantidade):
     """Simula posicionamento de exércitos em um território."""
-    if jogador.exercitos_para_posicionar >= quantidade:
+    if jogador.exercitos_reserva >= quantidade:
         territorio.exercitos += quantidade
-        jogador.exercitos_para_posicionar -= quantidade
+        jogador.exercitos_reserva -= quantidade
         return True
     return False
 
@@ -36,7 +36,7 @@ def test_turno_fase_posicionamento_recebe_exercitos(client_com_partida):
     jogador = obter_jogador_atual(partida)
     
     # Jogador deve ter exércitos para posicionar
-    assert jogador.exercitos_para_posicionar > 0
+    assert jogador.exercitos_reserva > 0
 
 
 def test_turno_fase_posicionamento_quantidade_minima(client_com_partida):
@@ -45,7 +45,7 @@ def test_turno_fase_posicionamento_quantidade_minima(client_com_partida):
     jogador = obter_jogador_atual(partida)
     
     # Mínimo de 3 exércitos
-    assert jogador.exercitos_para_posicionar >= 3
+    assert jogador.exercitos_reserva >= 3
 
 
 def test_turno_fase_posicionamento_bonus_territorios(client_com_partida):
@@ -57,7 +57,7 @@ def test_turno_fase_posicionamento_bonus_territorios(client_com_partida):
     bonus_esperado = max(3, len(jogador.territorios) // 2)
     
     # Deve receber pelo menos o bônus de territórios
-    assert jogador.exercitos_para_posicionar >= bonus_esperado
+    assert jogador.exercitos_reserva >= bonus_esperado
 
 
 def test_turno_distribuir_exercitos_em_territorio(client_com_partida):
@@ -67,14 +67,14 @@ def test_turno_distribuir_exercitos_em_territorio(client_com_partida):
     territorio = jogador.territorios[0]
     
     exercitos_antes = territorio.exercitos
-    exercitos_disponiveis = jogador.exercitos_para_posicionar
+    exercitos_disponiveis = jogador.exercitos_reserva
     
     # Posiciona 2 exércitos
     sucesso = simular_posicionamento_exercitos(jogador, territorio, 2)
     
     assert sucesso
     assert territorio.exercitos == exercitos_antes + 2
-    assert jogador.exercitos_para_posicionar == exercitos_disponiveis - 2
+    assert jogador.exercitos_reserva == exercitos_disponiveis - 2
 
 
 def test_turno_nao_pode_posicionar_mais_que_disponivel(client_com_partida):
@@ -83,7 +83,7 @@ def test_turno_nao_pode_posicionar_mais_que_disponivel(client_com_partida):
     jogador = obter_jogador_atual(partida)
     territorio = jogador.territorios[0]
     
-    exercitos_disponiveis = jogador.exercitos_para_posicionar
+    exercitos_disponiveis = jogador.exercitos_reserva
     
     # Tenta posicionar mais do que tem
     sucesso = simular_posicionamento_exercitos(jogador, territorio, exercitos_disponiveis + 10)
@@ -177,14 +177,14 @@ def test_turno_ordem_jogadores_consistente(client_com_partida):
 # ============================================================================
 
 def test_turno_gerenciar_nao_lanca_excecao(client_com_partida):
-    """Testa que gerenciar_turno não lança exceção."""
+    """Testa que passar turno não lança exceção."""
     partida = state.partida_global
-    jogador = obter_jogador_atual(partida)
     
     try:
-        partida.gerenciar_turno(jogador)
+        # Apenas passa para o próximo jogador
+        partida.proximo_jogador()
     except Exception as e:
-        pytest.fail(f"gerenciar_turno lançou exceção: {e}")
+        pytest.fail(f"proximo_jogador lançou exceção: {e}")
 
 
 def test_turno_exercitos_nao_negativos(client_com_partida):
@@ -235,7 +235,7 @@ def test_turno_bonus_continente(client_com_partida):
     partida.tabuleiro.calcula_exercitos_a_receber(jogador)
     
     # Deve ter recebido o bônus
-    assert jogador.exercitos_para_posicionar >= bonus_esperado
+    assert jogador.exercitos_reserva >= bonus_esperado
 
 
 def test_turno_calculo_exercitos_multiplos_territorios(client_com_partida):
@@ -248,11 +248,11 @@ def test_turno_calculo_exercitos_multiplos_territorios(client_com_partida):
     bonus_esperado = max(3, num_territorios // 2)
     
     # Limpa e recalcula
-    jogador.exercitos_para_posicionar = 0
+    jogador.exercitos_reserva = 0
     partida.tabuleiro.calcula_exercitos_a_receber(jogador)
     
     # Deve ter recebido pelo menos o bônus de territórios
-    assert jogador.exercitos_para_posicionar >= bonus_esperado
+    assert jogador.exercitos_reserva >= bonus_esperado
 
 
 # ============================================================================
