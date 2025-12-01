@@ -224,7 +224,7 @@ class Partida:
                 if len(atacante.cartas) < 5:
                     atacante.adicionar_carta(i)
                 else:
-                    self.manager_de_cartas.cartas_trocadas(i)
+                    self.manager_de_cartas.cartas_trocadas([i])
 
             defensor.cartas = []
                
