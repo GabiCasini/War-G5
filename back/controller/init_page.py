@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint, redirect, render_template, request
 
 from ..model.Partida import Partida
@@ -23,7 +24,10 @@ class PaginaIndex:
                     tipo = 'humano' if i < qtd_humanos else 'ai'
                     tupla_jogadores.append((nome, cor, tipo))
 
-                state.partida_global = Partida(qtd_humanos, qtd_ai, duracao_turno, tupla_jogadores)
+                if not os.path.exists(state.ARQUIVO):
+                    state.partida_global = Partida(qtd_humanos, qtd_ai, duracao_turno, tupla_jogadores)
+                else: 
+                    state.partida_global = state.carregar_partida()
                 return render_template('mapa.html', partida=state.partida_global)
             
             return redirect('/')

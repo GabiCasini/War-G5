@@ -4,6 +4,16 @@ from .. import state
 
 partida_bp = Blueprint('partida', __name__, url_prefix='/partida')
 
+@partida_bp.route("/salvar_partida", methods=["POST", "GET"])
+def salvar_partida_route():
+    state.salvar_partida(state.partida_global)
+    return ("Partida Salva", 204)
+
+@partida_bp.route("/resetar_partida", methods=["POST", "GET"])
+def resetar_partida_route():
+    state.apagar_partida()
+    return ("Partida Resetada", 204)
+
 # Retorna lista de jogadores da partida e suas informacoes
 @partida_bp.route("/jogadores", methods=["GET"])
 def get_jogadores():
