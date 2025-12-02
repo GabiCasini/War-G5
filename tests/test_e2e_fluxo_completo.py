@@ -2,13 +2,8 @@ import pytest
 from back import state
 from back.model.Partida import Partida
 
-
-# ============================================================================
-# FUNÇÕES AUXILIARES
-# ============================================================================
-
 def criar_payload_inicializar(qtd_humanos=2, qtd_ai=1, duracao=60):
-    """Cria payload padrão para inicializar partida."""
+    
     nomes_disponiveis = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank']
     total_jogadores = qtd_humanos + qtd_ai
     return {
@@ -20,30 +15,20 @@ def criar_payload_inicializar(qtd_humanos=2, qtd_ai=1, duracao=60):
 
 
 def obter_jogadores(client):
-    """Obtém lista de jogadores da API."""
+    
     response = client.get('/partida/jogadores')
     assert response.status_code == 200
     return response.get_json()['jogadores']
 
 
 def finalizar_turno(client):
-    """Finaliza o turno atual."""
+    
     response = client.post('/partida/finalizar_turno', json={})
     assert response.status_code == 200
     return response.get_json()
 
-
-# ============================================================================
-# TESTES E2E - FLUXO COMPLETO
-# ============================================================================
-
 def test_e2e_inicializar_partida_ate_primeiro_turno(client):
-    """
-    Testa o fluxo completo:
-    1. POST /inicializar_partida
-    2. GET /partida/jogadores
-    3. POST /partida/finalizar_turno (primeiro turno)
-    """
+    
     # 1. Inicializa partida
     payload = criar_payload_inicializar()
     response = client.post('/inicializar_partida', json=payload)
@@ -63,7 +48,7 @@ def test_e2e_inicializar_partida_ate_primeiro_turno(client):
 
 
 def test_e2e_ciclo_completo_tres_turnos(client):
-    """Testa 3 ciclos completos de turno (todos jogadores)."""
+    
     # Inicializa partida
     payload = criar_payload_inicializar()
     client.post('/inicializar_partida', json=payload)
@@ -85,7 +70,7 @@ def test_e2e_ciclo_completo_tres_turnos(client):
 
 
 def test_e2e_inicializar_multiplas_configuracoes(client):
-    """Testa inicialização com diferentes configurações de jogadores."""
+    
     configuracoes = [
         (3, 0, 60),  # 3 humanos, 0 IA (mínimo 3 jogadores)
         (2, 2, 90),  # 2 humanos, 2 IA
@@ -105,7 +90,7 @@ def test_e2e_inicializar_multiplas_configuracoes(client):
 
 
 def test_e2e_ataque_completo(client_com_partida):
-    """Testa o fluxo completo de um ataque."""
+    
     partida = state.partida_global
     
     # Setup
@@ -135,7 +120,7 @@ def test_e2e_ataque_completo(client_com_partida):
 
 
 def test_e2e_verificar_distribuicao_inicial_territorios(client):
-    """Testa se territórios são distribuídos corretamente ao inicializar."""
+    
     payload = criar_payload_inicializar()
     client.post('/inicializar_partida', json=payload)
     
@@ -151,7 +136,7 @@ def test_e2e_verificar_distribuicao_inicial_territorios(client):
 
 
 def test_e2e_verificar_exercitos_iniciais(client):
-    """Testa se jogadores recebem exércitos iniciais corretamente."""
+    
     payload = criar_payload_inicializar()
     client.post('/inicializar_partida', json=payload)
     
@@ -162,7 +147,7 @@ def test_e2e_verificar_exercitos_iniciais(client):
 
 
 def test_e2e_finalizar_turno_atualiza_jogador_atual(client):
-    """Testa se finalizar turno atualiza corretamente o jogador atual."""
+    
     payload = criar_payload_inicializar()
     client.post('/inicializar_partida', json=payload)
     
@@ -178,7 +163,7 @@ def test_e2e_finalizar_turno_atualiza_jogador_atual(client):
 
 
 def test_e2e_sequencia_completa_dez_turnos(client):
-    """Testa uma sequência de 10 turnos consecutivos."""
+    
     payload = criar_payload_inicializar()
     client.post('/inicializar_partida', json=payload)
     
@@ -196,7 +181,7 @@ def test_e2e_sequencia_completa_dez_turnos(client):
 
 
 def test_e2e_verificar_estado_apos_multiplos_turnos(client):
-    """Testa a consistência do estado após múltiplos turnos."""
+    
     payload = criar_payload_inicializar()
     client.post('/inicializar_partida', json=payload)
     
@@ -213,7 +198,7 @@ def test_e2e_verificar_estado_apos_multiplos_turnos(client):
 
 
 def test_e2e_reiniciar_partida(client):
-    """Testa reiniciar uma partida."""
+    
     # Primeira partida (mínimo 3 jogadores)
     payload1 = criar_payload_inicializar(qtd_humanos=3, qtd_ai=0)
     client.post('/inicializar_partida', json=payload1)
@@ -228,7 +213,7 @@ def test_e2e_reiniciar_partida(client):
 
 
 def test_e2e_validar_resposta_json_em_todos_endpoints(client_com_partida):
-    """Testa se todos os endpoints retornam JSON válido."""
+    
     endpoints = [
         ('/partida/jogadores', 'GET', None),
         ('/partida/finalizar_turno', 'POST', {}),

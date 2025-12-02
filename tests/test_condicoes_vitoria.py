@@ -2,11 +2,6 @@ import pytest
 from back import state
 from back.model.Partida import Partida
 
-
-# ============================================================================
-# FUNÇÕES AUXILIARES
-# ============================================================================
-
 def eliminar_jogadores_exceto(partida, jogador_vencedor):
     """Remove todos os territórios de todos exceto o vencedor."""
     for jogador in partida.jogadores:
@@ -35,11 +30,6 @@ def simular_conquista_continente(partida, jogador, regiao_idx):
     
     return nome_regiao, bonus
 
-
-# ============================================================================
-# TESTES - VITÓRIA POR ELIMINAÇÃO
-# ============================================================================
-
 def test_vitoria_quando_um_jogador_restar(client_com_partida):
     """Testa vitória quando apenas um jogador tem territórios."""
     partida = state.partida_global
@@ -54,7 +44,7 @@ def test_vitoria_quando_um_jogador_restar(client_com_partida):
 
 
 def test_vitoria_eliminacao_gradual(client_com_partida):
-    """Testa eliminação gradual de jogadores."""
+
     partida = state.partida_global
     
     # Inicialmente todos têm territórios
@@ -82,7 +72,7 @@ def test_vitoria_eliminacao_gradual(client_com_partida):
 
 
 def test_vitoria_jogador_correto_vence(client_com_partida):
-    """Testa que o jogador correto é identificado como vencedor."""
+
     partida = state.partida_global
     jogador_vencedor = partida.jogadores[1]  # Bob
     
@@ -94,7 +84,7 @@ def test_vitoria_jogador_correto_vence(client_com_partida):
 
 
 def test_nao_vitoria_com_multiplos_jogadores_ativos(client_com_partida):
-    """Testa que não há vitória enquanto múltiplos jogadores estão ativos."""
+
     partida = state.partida_global
     
     # Todos têm territórios
@@ -109,7 +99,7 @@ def test_nao_vitoria_com_multiplos_jogadores_ativos(client_com_partida):
 # ============================================================================
 
 def test_vitoria_objetivo_conquistar_territorios(client_com_partida):
-    """Testa vitória por objetivo de conquistar N territórios."""
+    
     partida = state.partida_global
     jogador = partida.jogadores[0]
     
@@ -134,7 +124,7 @@ def test_vitoria_objetivo_conquistar_territorios(client_com_partida):
 
 
 def test_vitoria_objetivo_destruir_jogador(client_com_partida):
-    """Testa vitória por objetivo de destruir jogador específico."""
+    
     partida = state.partida_global
     
     # Procura jogador com objetivo de eliminar outro (objetivo é string)
@@ -158,7 +148,6 @@ def test_vitoria_objetivo_destruir_jogador(client_com_partida):
 
 
 def test_vitoria_objetivo_continentes(client_com_partida):
-    """Testa vitória por objetivo de conquistar continentes."""
     partida = state.partida_global
     jogador = partida.jogadores[0]
     
@@ -171,13 +160,8 @@ def test_vitoria_objetivo_continentes(client_com_partida):
                 # Verifica que conquistou
                 assert nome_regiao is not None
 
-
-# ============================================================================
-# TESTES - CONDIÇÕES DE NÃO-VITÓRIA
-# ============================================================================
-
 def test_nao_vitoria_no_inicio(client_com_partida):
-    """Testa que não há vitória no início da partida."""
+    
     partida = state.partida_global
     
     # Todos os jogadores devem estar ativos
@@ -185,7 +169,7 @@ def test_nao_vitoria_no_inicio(client_com_partida):
 
 
 def test_nao_vitoria_apos_um_turno(client_com_partida):
-    """Testa que não há vitória após apenas um turno."""
+    
     partida = state.partida_global
     
     partida.proximo_jogador()
@@ -195,7 +179,7 @@ def test_nao_vitoria_apos_um_turno(client_com_partida):
 
 
 def test_nao_vitoria_com_dois_jogadores_ativos(client_com_partida):
-    """Testa que não há vitória com 2 jogadores ativos."""
+
     partida = state.partida_global
     
     # Elimina apenas um jogador
@@ -216,7 +200,7 @@ def test_nao_vitoria_com_dois_jogadores_ativos(client_com_partida):
 # ============================================================================
 
 def test_vitoria_todos_territorios_com_vencedor(client_com_partida):
-    """Testa que vencedor possui todos os territórios."""
+    
     partida = state.partida_global
     jogador_vencedor = partida.jogadores[0]
     
@@ -227,7 +211,7 @@ def test_vitoria_todos_territorios_com_vencedor(client_com_partida):
 
 
 def test_vitoria_territorios_com_cor_vencedor(client_com_partida):
-    """Testa que todos os territórios têm a cor do vencedor."""
+    
     partida = state.partida_global
     jogador_vencedor = partida.jogadores[1]
     
@@ -239,7 +223,7 @@ def test_vitoria_territorios_com_cor_vencedor(client_com_partida):
 
 
 def test_vitoria_perdedores_sem_territorios(client_com_partida):
-    """Testa que perdedores não têm territórios."""
+
     partida = state.partida_global
     jogador_vencedor = partida.jogadores[2]
     
@@ -251,12 +235,9 @@ def test_vitoria_perdedores_sem_territorios(client_com_partida):
             assert len(jogador.territorios) == 0
 
 
-# ============================================================================
-# TESTES - MÉTODOS DE VERIFICAÇÃO DE VITÓRIA
-# ============================================================================
 
 def test_metodo_finalizada_retorna_true_com_vencedor(client_com_partida):
-    """Testa que método finalizada() retorna True quando há vencedor."""
+
     partida = state.partida_global
     
     if hasattr(partida, 'finalizada'):
@@ -270,7 +251,7 @@ def test_metodo_finalizada_retorna_true_com_vencedor(client_com_partida):
 
 
 def test_metodo_obter_vencedor(client_com_partida):
-    """Testa método obter_vencedor() se existir."""
+    
     partida = state.partida_global
     
     if hasattr(partida, 'obter_vencedor'):
@@ -283,13 +264,8 @@ def test_metodo_obter_vencedor(client_com_partida):
         if vencedor:
             assert vencedor == jogador_vencedor
 
-
-# ============================================================================
-# TESTES - CENÁRIOS ESPECIAIS
-# ============================================================================
-
 def test_vitoria_ia_vs_humano(client_com_partida):
-    """Testa vitória de IA contra humano."""
+
     partida = state.partida_global
     
     # Encontra um jogador IA
@@ -307,7 +283,7 @@ def test_vitoria_ia_vs_humano(client_com_partida):
 
 
 def test_vitoria_apos_longa_partida(client_com_partida):
-    """Testa vitória após muitos turnos."""
+  
     partida = state.partida_global
     
     # Simula 20 turnos
@@ -322,7 +298,7 @@ def test_vitoria_apos_longa_partida(client_com_partida):
 
 
 def test_empate_impossivel(client_com_partida):
-    """Testa que empate é impossível (sempre há um vencedor)."""
+    
     partida = state.partida_global
     
     # Não pode haver dois jogadores com todos os territórios

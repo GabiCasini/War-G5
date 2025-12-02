@@ -1,10 +1,7 @@
 from back import state 
 
 def test_get_jogadores_sem_partida(client):
-    """
-    Testa se o endpoint /jogadores retorna erro 400
-    quando state.partida_global é None.
-    """
+    
     state.partida_global = None
     response = client.get('/partida/jogadores')
     
@@ -14,10 +11,7 @@ def test_get_jogadores_sem_partida(client):
     assert json_data['mensagem'] == 'Partida não iniciada'
 
 def test_get_jogadores_com_partida(client_com_partida):
-    """
-    Testa se o endpoint /jogadores retorna a lista correta de jogadores
-    quando uma partida está ativa.
-    """
+
     response = client_com_partida.get('/partida/jogadores')
     
     assert response.status_code == 200
@@ -38,11 +32,7 @@ def test_get_jogadores_com_partida(client_com_partida):
 
 
 def test_api_ataque(client_com_partida):
-    """
-    Testa o endpoint /ataque.
-    Este teste valida que o controller 'partida_controller.py' 
-    ignora o campo 'exercitos' do body, como está escrito no código.
-    """
+    
     partida = state.partida_global 
     
     jogador_a = partida.jogadores[0] 
@@ -75,11 +65,7 @@ def test_api_ataque(client_com_partida):
 
 
 def test_api_finalizar_turno_ignora_body(client_com_partida):
-    """
-    Testa o endpoint /finalizar_turno.
-    Este teste VALIDA que o seu controller 'partida_controller.py'
-    IGNORA o body da requisição, como está escrito no código.
-    """
+    
     partida = state.partida_global
 
     jogador_atual_antes = partida.jogadores[0]

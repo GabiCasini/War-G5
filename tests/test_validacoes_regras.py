@@ -2,13 +2,8 @@ import pytest
 from back import state
 from back.model.Partida import Partida
 
-
-# ============================================================================
-# FUNÇÕES AUXILIARES
-# ============================================================================
-
 def setup_ataque_basico(partida):
-    """Configura cenário básico de ataque entre dois jogadores."""
+    
     jogador_a = partida.jogadores[0]
     jogador_b = partida.jogadores[1]
     
@@ -27,20 +22,15 @@ def setup_ataque_basico(partida):
 
 
 def validar_ataque(client, territorio_origem, territorio_destino, jogador_id):
-    """Executa um ataque e retorna a resposta."""
+    
     return client.post('/partida/ataque', json={
         'territorio_origem': territorio_origem,
         'territorio_ataque': territorio_destino,
         'jogador_id': jogador_id
     })
 
-
-# ============================================================================
-# TESTES - VALIDAÇÃO DE ATAQUE
-# ============================================================================
-
 def test_validar_ataque_sem_exercitos_suficientes(client_com_partida):
-    """Testa que não pode atacar com menos de 2 exércitos."""
+
     partida = state.partida_global
     territorio_a, territorio_b, jogador_a, jogador_b = setup_ataque_basico(partida)
     
@@ -54,7 +44,7 @@ def test_validar_ataque_sem_exercitos_suficientes(client_com_partida):
 
 
 def test_validar_ataque_territorio_proprio(client_com_partida):
-    """Testa que não pode atacar próprio território."""
+    
     partida = state.partida_global
     jogador_a = partida.jogadores[0]
     territorio_a = jogador_a.territorios[0]
@@ -70,7 +60,7 @@ def test_validar_ataque_territorio_proprio(client_com_partida):
 
 
 def test_validar_ataque_territorio_nao_adjacente(client_com_partida):
-    """Testa que não pode atacar território não-adjacente."""
+   
     partida = state.partida_global
     jogador_a = partida.jogadores[0]
     jogador_b = partida.jogadores[1]
@@ -98,7 +88,7 @@ def test_validar_ataque_territorio_nao_adjacente(client_com_partida):
 
 
 def test_validar_ataque_territorio_inexistente(client_com_partida):
-    """Testa ataque a território que não existe."""
+    
     partida = state.partida_global
     territorio_a, _, jogador_a, _ = setup_ataque_basico(partida)
     
@@ -108,7 +98,7 @@ def test_validar_ataque_territorio_inexistente(client_com_partida):
 
 
 def test_validar_ataque_origem_inexistente(client_com_partida):
-    """Testa ataque de origem que não existe."""
+    
     partida = state.partida_global
     _, territorio_b, jogador_a, _ = setup_ataque_basico(partida)
     
@@ -118,7 +108,7 @@ def test_validar_ataque_origem_inexistente(client_com_partida):
 
 
 def test_validar_ataque_de_territorio_nao_pertencente(client_com_partida):
-    """Testa ataque de território que não pertence ao jogador."""
+    
     partida = state.partida_global
     territorio_a, territorio_b, jogador_a, jogador_b = setup_ataque_basico(partida)
     
@@ -128,12 +118,8 @@ def test_validar_ataque_de_territorio_nao_pertencente(client_com_partida):
     assert response.status_code >= 400
 
 
-# ============================================================================
-# TESTES - VALIDAÇÃO DE POSICIONAMENTO
-# ============================================================================
-
 def test_validar_posicionamento_exercitos_negativos(client_com_partida):
-    """Testa que não pode posicionar exércitos negativos."""
+    
     partida = state.partida_global
     jogador = partida.jogadores[0]
     territorio = jogador.territorios[0]
@@ -146,7 +132,7 @@ def test_validar_posicionamento_exercitos_negativos(client_com_partida):
 
 
 def test_validar_posicionamento_mais_que_disponivel(client_com_partida):
-    """Testa que não pode posicionar mais exércitos que disponível."""
+    
     partida = state.partida_global
     jogador = partida.jogadores[0]
     territorio = jogador.territorios[0]
@@ -158,7 +144,7 @@ def test_validar_posicionamento_mais_que_disponivel(client_com_partida):
 
 
 def test_validar_posicionamento_em_territorio_nao_pertencente(client_com_partida):
-    """Testa que não pode posicionar em território que não pertence ao jogador."""
+   
     partida = state.partida_global
     jogador_a = partida.jogadores[0]
     jogador_b = partida.jogadores[1]
@@ -169,13 +155,8 @@ def test_validar_posicionamento_em_territorio_nao_pertencente(client_com_partida
     # (essa validação deveria existir na lógica do servidor)
     assert territorio_b.cor != jogador_a.cor
 
-
-# ============================================================================
-# TESTES - VALIDAÇÃO DE MOVIMENTAÇÃO/REPOSICIONAMENTO
-# ============================================================================
-
 def test_validar_reposicionamento_entre_territorios_desconectados(client_com_partida):
-    """Testa que não pode reposicionar entre territórios desconectados."""
+    
     partida = state.partida_global
     jogador = partida.jogadores[0]
     
@@ -199,7 +180,7 @@ def test_validar_reposicionamento_entre_territorios_desconectados(client_com_par
 
 
 def test_validar_reposicionamento_deixar_territorio_vazio(client_com_partida):
-    """Testa que não pode mover todos os exércitos deixando território vazio."""
+    
     partida = state.partida_global
     jogador = partida.jogadores[0]
     territorio = jogador.territorios[0]
@@ -212,13 +193,8 @@ def test_validar_reposicionamento_deixar_territorio_vazio(client_com_partida):
     # Deveria manter pelo menos 1
     assert territorio.exercitos >= 0  # Idealmente >= 1
 
-
-# ============================================================================
-# TESTES - VALIDAÇÃO DE JOGADOR
-# ============================================================================
-
 def test_validar_jogador_invalido_em_ataque(client_com_partida):
-    """Testa ataque com ID de jogador inválido."""
+    
     partida = state.partida_global
     territorio_a, territorio_b, _, _ = setup_ataque_basico(partida)
     
@@ -228,7 +204,7 @@ def test_validar_jogador_invalido_em_ataque(client_com_partida):
 
 
 def test_validar_jogador_nao_e_sua_vez(client_com_partida):
-    """Testa que jogador não pode jogar fora de sua vez."""
+    
     partida = state.partida_global
     
     jogador_atual = partida.jogadores[partida.jogador_atual_idx]
@@ -238,13 +214,8 @@ def test_validar_jogador_nao_e_sua_vez(client_com_partida):
     # (essa validação deveria existir na API)
     assert jogador_atual.cor != proximo_jogador.cor
 
-
-# ============================================================================
-# TESTES - VALIDAÇÃO DE PAYLOAD
-# ============================================================================
-
 def test_validar_payload_ataque_sem_campos_obrigatorios(client_com_partida):
-    """Testa ataque com payload incompleto."""
+    
     payloads_invalidos = [
         {},
         {'territorio_origem': 'A'},
@@ -259,7 +230,7 @@ def test_validar_payload_ataque_sem_campos_obrigatorios(client_com_partida):
 
 
 def test_validar_payload_tipos_incorretos(client_com_partida):
-    """Testa ataque com tipos de dados incorretos."""
+   
     payloads_invalidos = [
         {'territorio_origem': 123, 'territorio_ataque': 'B', 'jogador_id': 'vermelho'},
         {'territorio_origem': 'A', 'territorio_ataque': None, 'jogador_id': 'vermelho'},
@@ -271,13 +242,8 @@ def test_validar_payload_tipos_incorretos(client_com_partida):
         # Pode retornar 400 (validação) ou 500 (erro de tipo)
         assert response.status_code >= 400
 
-
-# ============================================================================
-# TESTES - VALIDAÇÃO DE ESTADO DA PARTIDA
-# ============================================================================
-
 def test_validar_partida_nao_iniciada(client):
-    """Testa que não pode executar ações sem partida iniciada."""
+    
     state.partida_global = None
     
     response = client.post('/partida/ataque', json={
@@ -290,7 +256,7 @@ def test_validar_partida_nao_iniciada(client):
 
 
 def test_validar_partida_finalizada(client_com_partida):
-    """Testa que não pode atacar em partida finalizada."""
+    
     partida = state.partida_global
     
     # Simula fim de jogo (apenas um jogador com territórios)
@@ -305,13 +271,8 @@ def test_validar_partida_finalizada(client_com_partida):
     # (depende da implementação)
     assert response.status_code in [200, 400, 500]
 
-
-# ============================================================================
-# TESTES - VALIDAÇÃO DE FRONTEIRAS
-# ============================================================================
-
 def test_validar_fronteiras_bidirecionais(client_com_partida):
-    """Testa que fronteiras são bidirecionais."""
+    
     partida = state.partida_global
     
     for territorio in partida.tabuleiro.territorios:
@@ -321,19 +282,14 @@ def test_validar_fronteiras_bidirecionais(client_com_partida):
 
 
 def test_validar_territorio_nao_fronteira_propria(client_com_partida):
-    """Testa que território não é fronteira de si mesmo."""
+
     partida = state.partida_global
     
     for territorio in partida.tabuleiro.territorios:
         assert territorio not in territorio.fronteiras
 
-
-# ============================================================================
-# TESTES - VALIDAÇÃO DE EXERCITOS
-# ============================================================================
-
 def test_validar_exercitos_minimo_em_territorio(client_com_partida):
-    """Testa que território sempre tem pelo menos 1 exército."""
+   
     partida = state.partida_global
     
     for jogador in partida.jogadores:
@@ -343,7 +299,7 @@ def test_validar_exercitos_minimo_em_territorio(client_com_partida):
 
 
 def test_validar_total_exercitos_consistente(client_com_partida):
-    """Testa que total de exércitos no mapa é consistente."""
+   
     partida = state.partida_global
     
     total_exercitos = sum(

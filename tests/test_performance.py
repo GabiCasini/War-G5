@@ -3,13 +3,8 @@ import time
 from back import state
 from back.model.Partida import Partida
 
-
-# ============================================================================
-# FUNÇÕES AUXILIARES
-# ============================================================================
-
 def medir_tempo(funcao, *args, **kwargs):
-    """Mede o tempo de execução de uma função."""
+   
     inicio = time.time()
     resultado = funcao(*args, **kwargs)
     duracao = time.time() - inicio
@@ -17,7 +12,7 @@ def medir_tempo(funcao, *args, **kwargs):
 
 
 def criar_payload_padrao():
-    """Cria payload padrão para testes."""
+    
     return {
         'qtd_humanos': 2,
         'qtd_ai': 1,
@@ -25,13 +20,8 @@ def criar_payload_padrao():
         'nomes': ['Alice', 'Bob', 'Charlie']
     }
 
-
-# ============================================================================
-# TESTES - PERFORMANCE DE INICIALIZAÇÃO
-# ============================================================================
-
 def test_performance_inicializar_partida_rapido(client):
-    """Testa que inicializar partida é rápido (< 1s)."""
+    
     payload = criar_payload_padrao()
     
     duracao, response = medir_tempo(
@@ -45,7 +35,7 @@ def test_performance_inicializar_partida_rapido(client):
 
 
 def test_performance_inicializar_partida_consistente(client):
-    """Testa que tempo de inicialização é consistente."""
+    
     payload = criar_payload_padrao()
     tempos = []
     
@@ -66,7 +56,7 @@ def test_performance_inicializar_partida_consistente(client):
 
 
 def test_performance_carregar_territorios_json(client):
-    """Testa que carregamento do JSON de territórios é rápido."""
+    
     from back.utils.territorios_loader import carregar_territorios_json
     
     duracao, territorios = medir_tempo(carregar_territorios_json)
@@ -80,7 +70,7 @@ def test_performance_carregar_territorios_json(client):
 # ============================================================================
 
 def test_performance_finalizar_turno_rapido(client_com_partida):
-    """Testa que finalizar turno é rápido (< 0.1s)."""
+   
     duracao, response = medir_tempo(
         client_com_partida.post,
         '/partida/finalizar_turno',
@@ -92,7 +82,7 @@ def test_performance_finalizar_turno_rapido(client_com_partida):
 
 
 def test_performance_multiplos_turnos(client_com_partida):
-    """Testa desempenho de 10 turnos consecutivos (< 1s)."""
+    
     inicio = time.time()
     
     for _ in range(10):
@@ -104,7 +94,7 @@ def test_performance_multiplos_turnos(client_com_partida):
 
 
 def test_performance_cinquenta_turnos(client_com_partida):
-    """Testa desempenho de 50 turnos (< 3s)."""
+    
     inicio = time.time()
     
     for _ in range(50):
@@ -112,11 +102,6 @@ def test_performance_cinquenta_turnos(client_com_partida):
     
     duracao = time.time() - inicio
     assert duracao < 3.0, f"50 turnos demoraram {duracao:.2f}s (esperado < 3s)"
-
-
-# ============================================================================
-# TESTES - PERFORMANCE DE CONSULTAS
-# ============================================================================
 
 def test_performance_obter_jogadores(client_com_partida):
     """Testa que obter jogadores é rápido (< 0.05s)."""
@@ -130,7 +115,7 @@ def test_performance_obter_jogadores(client_com_partida):
 
 
 def test_performance_multiplas_consultas_jogadores(client_com_partida):
-    """Testa múltiplas consultas a /jogadores (< 0.5s para 20 requisições)."""
+    
     inicio = time.time()
     
     for _ in range(20):
@@ -146,7 +131,7 @@ def test_performance_multiplas_consultas_jogadores(client_com_partida):
 # ============================================================================
 
 def test_performance_ataque_simples(client_com_partida):
-    """Testa que um ataque é processado rapidamente (< 0.2s)."""
+    
     partida = state.partida_global
     
     # Setup ataque
@@ -179,7 +164,7 @@ def test_performance_ataque_simples(client_com_partida):
 
 
 def test_performance_multiplos_ataques_sequenciais(client_com_partida):
-    """Testa 5 ataques sequenciais (< 1s)."""
+   
     partida = state.partida_global
     jogador_a = partida.jogadores[0]
     jogador_b = partida.jogadores[1]
@@ -207,12 +192,8 @@ def test_performance_multiplos_ataques_sequenciais(client_com_partida):
     assert duracao < 1.0, f"5 ataques demoraram {duracao:.2f}s (esperado < 1s)"
 
 
-# ============================================================================
-# TESTES - PERFORMANCE DE CÁLCULOS
-# ============================================================================
-
 def test_performance_calculo_exercitos(client_com_partida):
-    """Testa que cálculo de exércitos a receber é rápido."""
+    
     partida = state.partida_global
     jogador = partida.jogadores[0]
     
@@ -225,7 +206,7 @@ def test_performance_calculo_exercitos(client_com_partida):
 
 
 def test_performance_validar_territorios_json(client):
-    """Testa que validação do JSON de territórios é aceitável."""
+    
     from back.utils.territorios_loader import validar_territorios
     
     duracao, resultado = medir_tempo(validar_territorios)
@@ -233,13 +214,8 @@ def test_performance_validar_territorios_json(client):
     assert duracao < 0.5, f"Validação demorou {duracao:.2f}s (esperado < 0.5s)"
     assert resultado['valido']
 
-
-# ============================================================================
-# TESTES - MEMÓRIA E ESCALABILIDADE
-# ============================================================================
-
 def test_performance_partida_nao_vaza_memoria(client):
-    """Testa que criar/destruir partidas não causa vazamento de memória."""
+    
     import gc
     
     payload = criar_payload_padrao()
@@ -255,7 +231,7 @@ def test_performance_partida_nao_vaza_memoria(client):
 
 
 def test_performance_muitos_territorios_gerenciados(client_com_partida):
-    """Testa que gerenciar todos os territórios não causa lentidão."""
+   
     partida = state.partida_global
     
     inicio = time.time()
@@ -270,13 +246,8 @@ def test_performance_muitos_territorios_gerenciados(client_com_partida):
     duracao = time.time() - inicio
     assert duracao < 0.05, f"Iteração demorou {duracao:.3f}s"
 
-
-# ============================================================================
-# TESTES - CARGA
-# ============================================================================
-
 def test_carga_cem_requisicoes_get_jogadores(client_com_partida):
-    """Testa 100 requisições GET /jogadores (< 3s)."""
+    
     inicio = time.time()
     
     for _ in range(100):
@@ -291,7 +262,7 @@ def test_carga_cem_requisicoes_get_jogadores(client_com_partida):
 
 
 def test_carga_ciclo_completo_cem_turnos(client_com_partida):
-    """Testa 100 turnos completos (< 5s)."""
+    
     inicio = time.time()
     
     for _ in range(100):
@@ -299,11 +270,6 @@ def test_carga_ciclo_completo_cem_turnos(client_com_partida):
     
     duracao = time.time() - inicio
     assert duracao < 5.0, f"100 turnos demoraram {duracao:.2f}s (esperado < 5s)"
-
-
-# ============================================================================
-# TESTES - CONSISTÊNCIA SOB CARGA
-# ============================================================================
 
 def test_performance_consistencia_apos_muitos_turnos(client_com_partida):
     """Testa que estado permanece consistente após muitos turnos."""
@@ -321,7 +287,7 @@ def test_performance_consistencia_apos_muitos_turnos(client_com_partida):
 
 
 def test_performance_nao_degrada_com_tempo(client_com_partida):
-    """Testa que performance não degrada após muitos turnos."""
+    
     tempos = []
     
     for i in range(20):
@@ -339,13 +305,8 @@ def test_performance_nao_degrada_com_tempo(client_com_partida):
         assert tempo_medio_fim < tempo_medio_inicio * 1.5, \
             f"Performance degradou: {tempo_medio_inicio:.3f}s -> {tempo_medio_fim:.3f}s"
 
-
-# ============================================================================
-# TESTES - BENCHMARKS
-# ============================================================================
-
 def test_benchmark_inicializacao(client, benchmark=None):
-    """Benchmark de inicialização de partida."""
+    
     if benchmark is None:
         pytest.skip("pytest-benchmark não está instalado")
     
@@ -362,7 +323,7 @@ def test_benchmark_inicializacao(client, benchmark=None):
 
 
 def test_benchmark_finalizar_turno(client_com_partida, benchmark=None):
-    """Benchmark de finalizar turno."""
+    
     if benchmark is None:
         pytest.skip("pytest-benchmark não está instalado")
     

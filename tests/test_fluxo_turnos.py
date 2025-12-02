@@ -2,36 +2,26 @@ import pytest
 from back import state
 from back.model.Partida import Partida
 
-
-# ============================================================================
-# FUNÇÕES AUXILIARES
-# ============================================================================
-
 def obter_jogador_atual(partida):
-    """Obtém o jogador da vez."""
+   
     return partida.jogadores[partida.jogador_atual_idx]
 
 
 def contar_exercitos_jogador(jogador):
-    """Conta total de exércitos de um jogador."""
+    
     return sum(t.exercitos for t in jogador.territorios)
 
 
 def simular_posicionamento_exercitos(jogador, territorio, quantidade):
-    """Simula posicionamento de exércitos em um território."""
+    
     if jogador.exercitos_reserva >= quantidade:
         territorio.exercitos += quantidade
         jogador.exercitos_reserva -= quantidade
         return True
     return False
 
-
-# ============================================================================
-# TESTES - FASES DO TURNO
-# ============================================================================
-
 def test_turno_fase_posicionamento_recebe_exercitos(client_com_partida):
-    """Testa se jogador recebe exércitos na fase de posicionamento."""
+    
     partida = state.partida_global
     jogador = obter_jogador_atual(partida)
     
@@ -40,7 +30,7 @@ def test_turno_fase_posicionamento_recebe_exercitos(client_com_partida):
 
 
 def test_turno_fase_posicionamento_quantidade_minima(client_com_partida):
-    """Testa se jogador recebe no mínimo 3 exércitos."""
+    
     partida = state.partida_global
     jogador = obter_jogador_atual(partida)
     
@@ -49,7 +39,7 @@ def test_turno_fase_posicionamento_quantidade_minima(client_com_partida):
 
 
 def test_turno_fase_posicionamento_bonus_territorios(client_com_partida):
-    """Testa bônus por quantidade de territórios."""
+    
     partida = state.partida_global
     jogador = obter_jogador_atual(partida)
     
@@ -61,7 +51,7 @@ def test_turno_fase_posicionamento_bonus_territorios(client_com_partida):
 
 
 def test_turno_distribuir_exercitos_em_territorio(client_com_partida):
-    """Testa distribuição de exércitos durante posicionamento."""
+    
     partida = state.partida_global
     jogador = obter_jogador_atual(partida)
     territorio = jogador.territorios[0]
@@ -78,7 +68,7 @@ def test_turno_distribuir_exercitos_em_territorio(client_com_partida):
 
 
 def test_turno_nao_pode_posicionar_mais_que_disponivel(client_com_partida):
-    """Testa que não pode posicionar mais exércitos do que tem."""
+    
     partida = state.partida_global
     jogador = obter_jogador_atual(partida)
     territorio = jogador.territorios[0]
@@ -92,7 +82,7 @@ def test_turno_nao_pode_posicionar_mais_que_disponivel(client_com_partida):
 
 
 def test_turno_finalizar_passa_para_proximo(client_com_partida):
-    """Testa que finalizar turno passa para o próximo jogador."""
+    
     partida = state.partida_global
     idx_antes = partida.jogador_atual_idx
     
@@ -103,7 +93,7 @@ def test_turno_finalizar_passa_para_proximo(client_com_partida):
 
 
 def test_turno_finalizar_circular(client_com_partida):
-    """Testa que turno volta para primeiro jogador após o último."""
+    
     partida = state.partida_global
     num_jogadores = len(partida.jogadores)
     
@@ -114,13 +104,8 @@ def test_turno_finalizar_circular(client_com_partida):
     # Deve estar no primeiro novamente
     assert partida.jogador_atual_idx == 0
 
-
-# ============================================================================
-# TESTES - SEQUÊNCIA DE TURNOS
-# ============================================================================
-
 def test_turno_sequencia_cinco_turnos(client_com_partida):
-    """Testa sequência de 5 turnos consecutivos."""
+    
     partida = state.partida_global
     
     jogadores_que_jogaram = []
@@ -135,7 +120,7 @@ def test_turno_sequencia_cinco_turnos(client_com_partida):
 
 
 def test_turno_cada_jogador_joga_uma_vez_por_ciclo(client_com_partida):
-    """Testa que cada jogador joga exatamente uma vez por ciclo."""
+    
     partida = state.partida_global
     num_jogadores = len(partida.jogadores)
     
@@ -152,7 +137,7 @@ def test_turno_cada_jogador_joga_uma_vez_por_ciclo(client_com_partida):
 
 
 def test_turno_ordem_jogadores_consistente(client_com_partida):
-    """Testa se ordem dos jogadores se mantém consistente."""
+    
     partida = state.partida_global
     num_jogadores = len(partida.jogadores)
     
@@ -171,13 +156,8 @@ def test_turno_ordem_jogadores_consistente(client_com_partida):
     # Ordem deve ser a mesma
     assert ordem_primeira == ordem_segunda
 
-
-# ============================================================================
-# TESTES - GESTÃO DE TURNO
-# ============================================================================
-
 def test_turno_gerenciar_nao_lanca_excecao(client_com_partida):
-    """Testa que passar turno não lança exceção."""
+    
     partida = state.partida_global
     
     try:
@@ -188,7 +168,7 @@ def test_turno_gerenciar_nao_lanca_excecao(client_com_partida):
 
 
 def test_turno_exercitos_nao_negativos(client_com_partida):
-    """Testa que exércitos nunca ficam negativos durante turno."""
+    
     partida = state.partida_global
     
     for _ in range(5):
@@ -201,7 +181,7 @@ def test_turno_exercitos_nao_negativos(client_com_partida):
 
 
 def test_turno_territorios_nao_desaparecem(client_com_partida):
-    """Testa que territórios não desaparecem durante turnos normais."""
+    
     partida = state.partida_global
     total_inicial = len(partida.tabuleiro.territorios)
     
@@ -211,13 +191,8 @@ def test_turno_territorios_nao_desaparecem(client_com_partida):
     total_final = sum(len(j.territorios) for j in partida.jogadores)
     assert total_final == total_inicial
 
-
-# ============================================================================
-# TESTES - BÔNUS E CÁLCULOS
-# ============================================================================
-
 def test_turno_bonus_continente(client_com_partida):
-    """Testa bônus por dominar um continente."""
+    
     partida = state.partida_global
     jogador = partida.jogadores[0]
     
@@ -239,7 +214,7 @@ def test_turno_bonus_continente(client_com_partida):
 
 
 def test_turno_calculo_exercitos_multiplos_territorios(client_com_partida):
-    """Testa cálculo de exércitos baseado em territórios."""
+    
     partida = state.partida_global
     jogador = partida.jogadores[0]
     
@@ -254,13 +229,8 @@ def test_turno_calculo_exercitos_multiplos_territorios(client_com_partida):
     # Deve ter recebido pelo menos o bônus de territórios
     assert jogador.exercitos_reserva >= bonus_esperado
 
-
-# ============================================================================
-# TESTES - VALIDAÇÃO DE ESTADO
-# ============================================================================
-
 def test_turno_indice_jogador_sempre_valido(client_com_partida):
-    """Testa que índice do jogador atual é sempre válido."""
+    
     partida = state.partida_global
     
     for _ in range(20):
@@ -269,7 +239,7 @@ def test_turno_indice_jogador_sempre_valido(client_com_partida):
 
 
 def test_turno_cores_territorios_consistentes(client_com_partida):
-    """Testa que cor dos territórios é consistente com proprietário."""
+    
     partida = state.partida_global
     
     for _ in range(3):

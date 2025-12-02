@@ -6,9 +6,7 @@ from back.model.Partida import Partida
 from back import state
 
 def criar_ia_com_objetivo(nome, cor, tipo_objetivo, **kwargs):
-    """
-    Cria uma IA com um objetivo específico.
-    """
+
     objetivo = {
         'tipo': tipo_objetivo,
         **kwargs
@@ -17,9 +15,7 @@ def criar_ia_com_objetivo(nome, cor, tipo_objetivo, **kwargs):
 
 
 def criar_multiplas_ias(quantidade=4):
-    """
-    Cria múltiplas IAs com diferentes objetivos.
-    """
+   
     cores = ["verde", "amarelo", "roxo", "preto", "azul", "vermelho"]
     ias = []
     
@@ -40,10 +36,7 @@ def criar_multiplas_ias(quantidade=4):
 
 
 def distribuir_territorios_entre_ias(tabuleiro, ias, seed=42):
-    """
-    Distribui territórios do tabuleiro entre as IAs em round-robin.
-    Cada território recebe 1-3 exércitos aleatoriamente.
-    """
+    
     rng = random.Random(seed)
     
     for ia in ias:
@@ -57,23 +50,17 @@ def distribuir_territorios_entre_ias(tabuleiro, ias, seed=42):
 
 
 def obter_territorios_por_ia(ias):
-    """
-    Retorna um dicionário com os territórios de cada IA.
-    """
+    
     return {ia.nome: list(ia.territorios) for ia in ias}
 
 
 def contar_exercitos_ia(ia):
-    """
-    Conta o total de exércitos de uma IA.
-    """
+    
     return sum(t.exercitos for t in ia.territorios)
 
 
 def obter_territorios_inimigos_adjacentes(ia, tabuleiro):
-    """
-    Retorna todos os territórios inimigos adjacentes aos territórios da IA.
-    """
+    
     inimigos_adjacentes = set()
     
     for territorio in ia.territorios:
@@ -85,9 +72,7 @@ def obter_territorios_inimigos_adjacentes(ia, tabuleiro):
 
 
 def validar_integridade_territorios(ias, tabuleiro):
-    """
-    Valida que todos os territórios estão distribuídos e nenhum está duplicado.
-    """
+   
     territorios_alocados = set()
     
     for ia in ias:
@@ -100,9 +85,7 @@ def validar_integridade_territorios(ias, tabuleiro):
 
 
 def simular_rodada_ataques(ias, tabuleiro, seed=42, agressividade=0.2, max_ataques_por_ia=5):
-    """
-    Simula uma rodada de ataques para todas as IAs.
-    """
+    
     rng = random.Random(seed)
     resultados = {}
     
@@ -119,9 +102,7 @@ def simular_rodada_ataques(ias, tabuleiro, seed=42, agressividade=0.2, max_ataqu
     return resultados
 
 def test_criar_ia_simples():
-    """
-    Testa a criação de uma IA simples sem objetivo.
-    """
+   
     ia = IA("TestIA", "azul")
     
     assert ia.nome == "TestIA"
@@ -131,9 +112,7 @@ def test_criar_ia_simples():
 
 
 def test_criar_ia_com_objetivo_conquistar_territorios():
-    """
-    Testa a criação de uma IA com objetivo de conquistar territórios.
-    """
+    
     ia = criar_ia_com_objetivo("IA1", "verde", "conquistar_territorios", quantidade=5)
     
     assert ia.nome == "IA1"
@@ -143,9 +122,7 @@ def test_criar_ia_com_objetivo_conquistar_territorios():
 
 
 def test_criar_ia_com_objetivo_destruir_jogador():
-    """
-    Testa a criação de uma IA com objetivo de destruir jogador específico.
-    """
+   
     ia = criar_ia_com_objetivo("IA2", "vermelho", "destruir_jogador", cor_alvo="azul")
     
     assert ia.objetivo['tipo'] == "destruir_jogador"
@@ -153,9 +130,7 @@ def test_criar_ia_com_objetivo_destruir_jogador():
 
 
 def test_criar_multiplas_ias():
-    """
-    Testa a criação de múltiplas IAs com objetivos diferentes.
-    """
+    
     ias = criar_multiplas_ias(quantidade=3)
     
     assert len(ias) == 3
@@ -163,9 +138,7 @@ def test_criar_multiplas_ias():
     assert all(ia.objetivo is not None for ia in ias)
 
 def test_avaliar_territorios_retorna_lista(client_com_partida):
-    """
-    Testa se avaliar_territorios retorna uma lista de territórios.
-    """
+    
     partida = state.partida_global
     ia = criar_ia_com_objetivo("TestIA", "roxo", "conquistar_territorios")
     
@@ -176,10 +149,7 @@ def test_avaliar_territorios_retorna_lista(client_com_partida):
 
 
 def test_avaliar_territorios_objetivo_conquistar(client_com_partida):
-    """
-    Testa se avaliar_territorios prioriza territórios não conquistados
-    quando objetivo é conquistar territórios.
-    """
+    
     partida = state.partida_global
     ia = criar_ia_com_objetivo("TestIA", "roxo", "conquistar_territorios")
     
@@ -190,10 +160,7 @@ def test_avaliar_territorios_objetivo_conquistar(client_com_partida):
 
 
 def test_avaliar_territorios_objetivo_destruir_jogador(client_com_partida):
-    """
-    Testa se avaliar_territorios prioriza territórios do jogador alvo
-    quando objetivo é destruir jogador específico.
-    """
+    
     partida = state.partida_global
     jogador_alice = partida.jogadores[0]
     ia = criar_ia_com_objetivo("TestIA", "roxo", "destruir_jogador", cor_alvo=jogador_alice.cor)
@@ -203,10 +170,7 @@ def test_avaliar_territorios_objetivo_destruir_jogador(client_com_partida):
     assert len(prioridades) > 0
 
 def test_escolher_ataque_sem_capacidade():
-    """
-    Testa que escolher_ataque retorna None quando IA não tem territórios
-    com 2+ exércitos.
-    """
+    
     ias = criar_multiplas_ias(quantidade=2)
     tabuleiro = Tabuleiro(ias)
     distribuir_territorios_entre_ias(tabuleiro, ias)
@@ -222,10 +186,7 @@ def test_escolher_ataque_sem_capacidade():
 
 
 def test_escolher_ataque_com_capacidade(client_com_partida):
-    """
-    Testa que escolher_ataque retorna um par (origem, alvo) válido
-    quando IA tem capacidade.
-    """
+    
     partida = state.partida_global
     
     # Cria uma IA para testar
@@ -252,13 +213,7 @@ def test_escolher_ataque_com_capacidade(client_com_partida):
 
 
 def test_escolher_ataque_com_seed_deterministica():
-    """
-    Testa que escolher_ataque funciona consistentemente com seed fixa.
     
-    Em vez de comparar duas execuções diferentes (que podem ter ordem diferente),
-    testamos que: com mesma IA e mesma seed, fazer várias chamadas sucessivas
-    produz resultados válidos.
-    """
     ias = criar_multiplas_ias(quantidade=2)
     tabuleiro = Tabuleiro(ias)
     distribuir_territorios_entre_ias(tabuleiro, ias, seed=42)
@@ -298,9 +253,7 @@ def test_escolher_ataque_com_seed_deterministica():
 
 
 def test_escolher_ataque_agressividade():
-    """
-    Testa que agressividade afeta a decisão de ataque.
-    """
+    
     ias = criar_multiplas_ias(quantidade=2)
     tabuleiro = Tabuleiro(ias)
     distribuir_territorios_entre_ias(tabuleiro, ias, seed=42)
@@ -323,9 +276,7 @@ def test_escolher_ataque_agressividade():
     assert escolha_alta is None or isinstance(escolha_alta, tuple)
 
 def test_distribuir_exercitos_basico():
-    """
-    Testa a distribuição básica de exércitos entre territórios.
-    """
+    
     ias = criar_multiplas_ias(quantidade=1)
     tabuleiro = Tabuleiro(ias)
     distribuir_territorios_entre_ias(tabuleiro, ias)
@@ -342,9 +293,7 @@ def test_distribuir_exercitos_basico():
 
 
 def test_distribuir_exercitos_retorna_dict():
-    """
-    Testa que distribuir_exercitos retorna um dicionário.
-    """
+    
     ias = criar_multiplas_ias(quantidade=1)
     tabuleiro = Tabuleiro(ias)
     distribuir_territorios_entre_ias(tabuleiro, ias)
@@ -358,9 +307,7 @@ def test_distribuir_exercitos_retorna_dict():
 
 
 def test_distribuir_exercitos_zero():
-    """
-    Testa a distribuição com zero exércitos.
-    """
+    
     ias = criar_multiplas_ias(quantidade=1)
     tabuleiro = Tabuleiro(ias)
     distribuir_territorios_entre_ias(tabuleiro, ias)
@@ -375,9 +322,7 @@ def test_distribuir_exercitos_zero():
     assert exercitos_finais == exercitos_iniciais
 
 def test_validar_distribuicao_territorios():
-    """
-    Testa se a distribuição de territórios entre IAs é válida.
-    """
+    
     ias = criar_multiplas_ias(quantidade=3)
     tabuleiro = Tabuleiro(ias)
     distribuir_territorios_entre_ias(tabuleiro, ias)
@@ -386,9 +331,7 @@ def test_validar_distribuicao_territorios():
 
 
 def test_contar_exercitos_ia():
-    """
-    Testa a contagem de exércitos de uma IA.
-    """
+    
     ias = criar_multiplas_ias(quantidade=1)
     tabuleiro = Tabuleiro(ias)
     distribuir_territorios_entre_ias(tabuleiro, ias)
@@ -401,9 +344,7 @@ def test_contar_exercitos_ia():
 
 
 def test_obter_territorios_inimigos_adjacentes():
-    """
-    Testa a obtenção de territórios inimigos adjacentes.
-    """
+    
     ias = criar_multiplas_ias(quantidade=2)
     tabuleiro = Tabuleiro(ias)
     distribuir_territorios_entre_ias(tabuleiro, ias)
@@ -416,9 +357,7 @@ def test_obter_territorios_inimigos_adjacentes():
     assert all(t.cor != ia_ataque.cor for t in inimigos)
 
 def test_simulacao_rodada_ataques():
-    """
-    Testa a simulação de uma rodada completa de ataques.
-    """
+    
     ias = criar_multiplas_ias(quantidade=2)
     tabuleiro = Tabuleiro(ias)
     distribuir_territorios_entre_ias(tabuleiro, ias, seed=42)
@@ -435,10 +374,7 @@ def test_simulacao_rodada_ataques():
 
 
 def test_ciclo_completo_ia_turno():
-    """
-    Testa um ciclo completo de turno de uma IA:
-    avalia, escolhe ataque e distribui exércitos.
-    """
+    
     ias = criar_multiplas_ias(quantidade=2)
     tabuleiro = Tabuleiro(ias)
     distribuir_territorios_entre_ias(tabuleiro, ias, seed=42)
