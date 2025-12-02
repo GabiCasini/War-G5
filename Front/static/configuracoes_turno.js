@@ -134,6 +134,9 @@ function fetchEstadoAtual() {
         faseAtual.charAt(0).toUpperCase() + faseAtual.slice(1);
       let corHexJogador = players.find((p) => p.cor === jogadorAtual).corHex;
 
+      players.find((p) => p.cor === jogadorAtual).cartas = data.jogador_cartas.cartas;
+      // constroiCartasTroca(data.jogador_cartas.cartas);
+
       // Se o jogador mudou (início do turno de outro jogador), reinicia o timer
       try {
         if (jogadorAnterior !== novoJogador) {
@@ -726,6 +729,7 @@ function atualizaObjetivoPlayer() {
     document.getElementById('objetivo-player').textContent = players.find(p => p.cor === jogadorAtual).objetivo;
   }
 }
+
 
 function tratarObjetivo(objetivo) {
   if (objetivo.includes('Região 1')) {

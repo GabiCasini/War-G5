@@ -5,9 +5,11 @@ const btnPassarTurno = document.getElementById("btn-passar-turno");
 const btnMinhasCartas = document.getElementById("btn-minhas-cartas");
 const timerDisplay = document.getElementById("timer");
 const infoExercitosQtdElement = document.getElementById("info-exercitos-qtd");
-const btnTrocarCartas = document.getElementById("btn-troca");
 let timerInterval = null;
 let tempoRestante = 0;
+
+let listaCartasSelecionadas = [];
+
 
 btnMinhasCartas.addEventListener('click', toggleMinhasCartas);
 
@@ -23,6 +25,7 @@ function toggleMinhasCartas(){
   btnMinhasCartas.textContent = "Minhas Cartas"
   btnTrocarCartas.style.display = 'none'
 }
+
 
 function atualizarHUD(
   jogadorAtual,
@@ -111,7 +114,6 @@ if (objectiveCardContainer) {
         this.classList.toggle('flipped');
     });
 }
-
 function postTrocarCartas(jogador_cor, cartasSelecionadasParaTroca) {
   return fetch(LOCALHOST + "/partida/trocar_cartas", {
     method: "POST",
@@ -149,4 +151,83 @@ function postTrocarCartas(jogador_cor, cartasSelecionadasParaTroca) {
       console.error("Erro ao tentar trocar cartas:", err.message);
       throw err;
     });
+}
+
+function toggleCartaTroca(elemento) {
+  
+  let formaCarta = elemento.classList[0].split('-')[1];
+  if (listaCartasSelecionadas.length >= 2) {
+    for (let carta of listaCartasSelecionadas) {
+      if (carta !== formaCarta) {
+        alert("Só é possível selecionar 2 cartas iguais para troca.");
+        desmarcaTodasCartasTroca();
+        return;
+      }
+    }
+    alert("trocando cartas...")
+  }
+
+  if (elemento.classList.contains('carta-selecionada')) {
+    // Remover seleção
+    elemento.classList.remove('carta-selecionada');
+    listaCartasSelecionadas = listaCartasSelecionadas.filter(carta => carta !== formaCarta);
+  } else {
+    // Adicionar seleção
+    elemento.classList.add('carta-selecionada');
+    listaCartasSelecionadas.push(formaCarta);
+  }
+
+}
+
+
+
+function constroiCartasTroca(listaCartas) {
+
+  const wrapperCartas = document.getElementById('wrapper-cartas');
+  wrapperCartas.innerHTML = ''; // Limpa cartas existentes
+
+  listaCartas.forEach((carta, index) => {
+
+    let textCarta = carta[1];
+    let cartaForma = carta[0];
+
+    if (cartaForma === 'Círculo') {
+      cartaForma = 'circulo';
+    } else if (cartaForma === 'Quadrado') {
+      cartaForma = 'quadrado';
+    } else if (cartaForma === 'Triângulo') {
+      cartaForma = 'triangulo';
+    } else if (cartaForma === '') {
+      cartaForma = 'coringa';
+    }
+
+    const cartaDiv = document.createElement('div');
+    cartaDiv.classList.add(`carta-${cartaForma}`);
+    cartaDiv.classList.add('cartas-troca');
+    cartaDiv.setAttribute('onclick', 'toggleCartaTroca(this)');
+    cartaDiv.setAttribute('id', `carta-troca-${index + 1}`);
+
+    const img = document.createElement('img');
+    img.src = `/static/Carta_objetivo_${cartaForma}.svg`;
+    img.alt = 'Verso da Carta';
+    img.classList.add('carta-troca-imagem');
+
+    const textoDiv = document.createElement('div');
+    textoDiv.classList.add('texto-imagem-carta');
+    textoDiv.textContent = textCarta || '';
+
+    cartaDiv.appendChild(img);
+    cartaDiv.appendChild(textoDiv);
+
+    wrapperCartas.appendChild(cartaDiv);
+    
+  });
+}
+
+function desmarcaTodasCartasTroca() {
+  const cartas = document.querySelectorAll('.cartas-troca');
+  cartas.forEach(carta => {
+    carta.classList.remove('carta-selecionada');
+  });
+  listaCartasSelecionadas = [];
 }

@@ -489,7 +489,7 @@
             <span>Exércitos disponíveis:</span>
             <span id="info-exercitos-qtd">0</span>
           </div>
-
+          
           <div id="fase-wrapper">
             <span>Fase atual:</span>
             <span id="fase-nome"></span>
@@ -503,31 +503,33 @@
 
       </div>
 
-      <div id="hud-wrapper-second-line" style="display: none;">
+      <div id="hud-wrapper-second-line">
         <div id="wrapper-cartas">
-          <div class="cartas-troca carta-selecionada">
+          <div class="carta-circulo cartas-troca  " onclick="toggleCartaTroca(this)" id="carta-troca-1">
             <img src="{{ url_for('static', filename='Carta_objetivo_circulo.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
-            <div class="texto-imagem-carta">São Sebastião do Alto</div>
+            <div class="texto-imagem-carta ">São Sebastião do Alto</div>
           </div>
-          <div class="cartas-troca">
+          <div class=" carta-circulo cartas-troca  " onclick="toggleCartaTroca(this)" id="carta-troca-1">
             <img src="{{ url_for('static', filename='Carta_objetivo_circulo.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
-            <div class="texto-imagem-carta">São José do Vale do Rio Preto</div>
+            <div class="texto-imagem-carta ">São Sebastião do Alto</div>
           </div>
-          <div class="cartas-troca">
-            <img src="{{ url_for('static', filename='Carta_objetivo_triangulo.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
-            <div class="texto-imagem-carta">São Sebastião do Alto</div>
+            <div class="carta-circulo cartas-troca  " onclick="toggleCartaTroca(this)" id="carta-troca-1">
+            <img src="{{ url_for('static', filename='Carta_objetivo_circulo.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
+            <div class="texto-imagem-carta ">São Sebastião do Alto</div>
           </div>
-          <div class="cartas-troca">
-            <img src="{{ url_for('static', filename='Carta_objetivo_coringa.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
-            <div class="texto-imagem-carta"></div>
+          <div class="carta-circulo cartas-troca  " onclick="toggleCartaTroca(this)" id="carta-troca-1">
+            <img src="{{ url_for('static', filename='Carta_objetivo_circulo.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
+            <div class="texto-imagem-carta ">São Sebastião do Alto</div>
           </div>
-          <div class="cartas-troca">
+          <div class="carta-quadrado cartas-troca  " onclick="toggleCartaTroca(this)" id="carta-troca-1">
             <img src="{{ url_for('static', filename='Carta_objetivo_quadrado.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
-            <div class="texto-imagem-carta">São Sebastião do Alto</div>
+            <div class="texto-imagem-carta ">São Sebastião do Alto</div>
           </div>
+          
+
         </div>
       </div>
-      <button id="btn-troca" style="display: none;">Trocar Cartas (0/3)</button>
+    
     </div>
 
     <dialog id="posicionamentoDialog" class="fase-dialog">
@@ -597,7 +599,6 @@
       <div id="objective-card-inner">
         <div class="card-face card-cover">
           <img src="{{ url_for('static', filename='carta_verso.svg') }}" alt="Verso da Carta">
-          <div id="objetivo-title">Objetivo</div>
         </div>
         <div class="card-face card-content">
           <img src="{{ url_for('static', filename='carta_frente.svg') }}" alt="Frente da Carta">

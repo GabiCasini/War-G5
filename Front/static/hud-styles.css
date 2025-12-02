@@ -243,20 +243,8 @@
   z-index: 2;
 }
 
-#objetivo-title {
-  position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #000;
-  font-family: 'Bebas Neue';
-  font-weight: bold;
-  font-size: 15px;
-  z-index: 2;
-}
-
 #wrapper-cartas {
-  display: flex;
+  display: none;
   gap: 10px;
   overflow-x: auto;
   padding: 10px;
@@ -265,8 +253,8 @@
 }
 
 .carta-troca-imagem {
-  width: 110px;
-  height: 170px;
+  width: 150px;
+  height: 210px;
   object-fit: cover;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   	border-radius: 5px;
@@ -284,9 +272,12 @@
 }
 
 .carta-selecionada {
-	  outline: 3px solid #992323;
-  outline-offset: 2px;
-}
+	  /* outline: 3px solid #992323; */
+	  box-shadow: 0 0 15px rgba(153, 35, 35, 0.918);
+	  border-radius: 5px;
+	transform: scale(1.05);
+	  transition: transform 0.2s, box-shadow 0.2s;
+	}
 
 .texto-imagem-carta {
   position: absolute;
@@ -301,4 +292,16 @@
   font-size: 12px;
   text-shadow: 0 0 5px rgba(158, 158, 158, 0.7);
   user-select: none;
+}
+
+#objetivo-title {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000;
+  font-family: 'Bebas Neue';
+  font-weight: bold;
+  font-size: 15px;
+  z-index: 2;
 }
