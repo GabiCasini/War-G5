@@ -273,3 +273,25 @@ def post_avancar_turno():
         return jsonify(resposta)
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400
+    
+@partida_bp.route("/trocar_cartas", methods=["POST"])
+def post_trocar_cartas():
+    if not state.partida_global:
+        return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
+    if state.partida_global.finalizado:
+        return jsonify({"status": "finalizado", "mensagem": f"Partida finalizada. Vencedor: {state.partida_global.vencedor}"}), 400
+
+    dados = request.get_json()
+    jogador_id = dados.get("jogador_id")
+    cartas = dados.get("cartas")  # Espera-se uma lista de tuplas [(tipo, territorio), (tipo, territorio), (tipo, territorio)]
+
+    jogador = state.partida_global.get_jogador_por_cor(jogador_id)
+    
+    try:
+        state.partida_global.realizar_troca(jogador, cartas)
+        return jsonify({
+            "status": "ok",
+            "mensagem": "Tentativa de troca de cartas realizada."
+        })
+    except Exception as e:
+        return jsonify({"status": "erro", "mensagem": str(e)}), 400
