@@ -102,6 +102,10 @@ def get_estado_atual():
             "jogador_id": jogador_atual.cor,
             "nome": jogador_atual.nome,
             "territorios": territorios_jogador_json
+        },
+        "jogador_cartas": {
+            "jogador_id": jogador_atual.cor,
+            "cartas": jogador_atual.cartas
         }
     }
     return jsonify(estado_json)

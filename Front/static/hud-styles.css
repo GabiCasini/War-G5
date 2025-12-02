@@ -242,3 +242,52 @@
   line-height: 1.4;
   z-index: 2;
 }
+
+#wrapper-cartas {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px;
+  /* white-space: nowrap; */
+  /* max-width: 540px; */
+}
+
+.carta-troca-imagem {
+  width: 150px;
+  height: 210px;
+  object-fit: cover;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  	border-radius: 5px;
+}
+
+#hud-wrapper-second-line {
+  margin-top: 10px;
+  max-width: 100%;
+}
+
+.cartas-troca {
+	position: relative;
+	  cursor: pointer;
+	  
+}
+
+.carta-selecionada {
+	  outline: 3px solid #992323;
+  outline-offset: 2px;
+}
+
+.texto-imagem-carta {
+  position: absolute;
+  top: 16px;
+  left: 15px;
+  /* bottom: 8px; */
+  /* left: 50%; */
+  /* transform: translateX(-50%); */
+  color: #000000;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+  text-shadow: 0 0 5px rgba(158, 158, 158, 0.7);
+  user-select: none;
+
+}

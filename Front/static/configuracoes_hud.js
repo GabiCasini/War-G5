@@ -2,10 +2,23 @@ const playerCorBoxElement = document.getElementById("player-cor-box");
 const playerNomeElement = document.getElementById("turno-player-name");
 const faseAtualElement = document.getElementById("fase-nome");
 const btnPassarTurno = document.getElementById("btn-passar-turno");
+const btnMinhasCartas = document.getElementById("btn-minhas-cartas");
 const timerDisplay = document.getElementById("timer");
 const infoExercitosQtdElement = document.getElementById("info-exercitos-qtd");
 let timerInterval = null;
 let tempoRestante = 0;
+
+btnMinhasCartas.addEventListener('click', toggleMinhasCartas);
+
+function toggleMinhasCartas(){
+  let divCartas = document.getElementById("hud-wrapper-second-line")
+  if (divCartas.style.display === 'none') {
+    divCartas.style.display = 'flex'
+    return
+  }
+  divCartas.style.display = 'none'
+}
+
 
 function atualizarHUD(
   jogadorAtual,
@@ -94,3 +107,4 @@ if (objectiveCardContainer) {
         this.classList.toggle('flipped');
     });
 }
+

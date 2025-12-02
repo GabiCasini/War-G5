@@ -497,14 +497,37 @@
         </div>
 
         <div id="passar-turno-wrapper">
-          <button id="btn-passar-turno">Passar turno</button>
+          <button id="btn-passar-turno">Passar fase</button>
           <button id="btn-minhas-cartas">Minhas cartas</button>
         </div>
 
       </div>
 
-      <!-- <div id="hud-wrapper-second-line">
-      </div> -->
+      <div id="hud-wrapper-second-line">
+        <div id="wrapper-cartas">
+          <div class="cartas-troca carta-selecionada">
+            <img src="{{ url_for('static', filename='Carta_objetivo_circulo.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
+            <div class="texto-imagem-carta ">São Sebastião do Alto</div>
+          </div>
+          <div class="cartas-troca">
+            <img src="{{ url_for('static', filename='Carta_objetivo_circulo.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
+            <div class="texto-imagem-carta">São José do Vale do Rio Preto</div>
+          </div>
+          <div class="cartas-troca">
+            <img src="{{ url_for('static', filename='Carta_objetivo_triangulo.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
+            <div class="texto-imagem-carta">São Sebastião do Alto</div>
+          </div>
+          <div class="cartas-troca">
+            <img src="{{ url_for('static', filename='Carta_objetivo_coringa.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
+            <div class="texto-imagem-carta"></div>
+          </div>
+          <div class="cartas-troca">
+            <img src="{{ url_for('static', filename='Carta_objetivo_quadrado.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
+            <div class="texto-imagem-carta">São Sebastião do Alto</div>
+          </div>
+
+        </div>
+      </div>
     
     </div>
 
@@ -578,7 +601,7 @@
         </div>
         <div class="card-face card-content">
           <img src="{{ url_for('static', filename='carta_frente.svg') }}" alt="Frente da Carta">
-          <div id="objetivo-player" class="objective-text">Domine todos os territórios</div>
+          <div id="objetivo-player" class="objective-text"></div>
         </div>
       </div>
     </div>
