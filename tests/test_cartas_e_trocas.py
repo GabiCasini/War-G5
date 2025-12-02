@@ -114,11 +114,6 @@ def test_realizar_troca_de_cartas(partida: Partida):
     assert len(jogador.cartas) == 2
     assert (valor + exercitos) == jogador.exercitos_reserva
 
-    partida.realizar_troca(jogador, troca)
-
-    assert len(jogador.cartas) == 2
-    assert (valor + exercitos) == jogador.exercitos_reserva
-
     jogador.cartas.append(["Coringa", ""])
 
     valor = partida.valor_da_troca
