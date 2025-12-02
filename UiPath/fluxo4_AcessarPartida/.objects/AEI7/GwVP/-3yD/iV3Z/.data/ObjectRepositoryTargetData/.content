@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="6fgqnW9JKkmotQj7xpn4aw" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="127.0.0.1/inicializar_partida" DesignTimeRectangle="56, 258, 847, 103" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl id='hud-wrapper-first-line' tag='DIV' /&gt;" Guid="c00d85f1-4d89-4f6e-939f-5994249df5ac" ScopeSelectorArgument="&lt;html app='chrome.exe' title='War' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="Interactive">
+      <imageRef attrName="InformativeScreenshot" originalValue="22b82fffc048115d7f912cabffbe6e50.png" xmlns="">0fl9kXDdb40GvRbme2H8vgQ</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">CheckState</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

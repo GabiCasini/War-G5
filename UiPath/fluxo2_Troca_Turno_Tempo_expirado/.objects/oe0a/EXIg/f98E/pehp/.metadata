@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Jogador 3",
+  "Type": "Element",
+  "TaxonomyType": "Label",
+  "Id": "pehpmZHLhEOsAMR6C6YE_g",
+  "Reference": "SwBgJQK0MUm7AevS3N0W2w/pehpmZHLhEOsAMR6C6YE_g",
+  "ParentRef": "SwBgJQK0MUm7AevS3N0W2w/f98E9-8uX0-Fnz-OA-zpxQ",
+  "Created": "2025-11-30T14:13:37.9398921Z",
+  "Updated": "2025-11-30T14:13:37.9398921Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

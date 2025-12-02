@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Iniciar",
+  "Type": "Element",
+  "TaxonomyType": "Button",
+  "Id": "Xkn4gQFVR0CmM7hg4uXGkw",
+  "Reference": "5ydnmVbYTEegnBY449ZMnQ/Xkn4gQFVR0CmM7hg4uXGkw",
+  "ParentRef": "5ydnmVbYTEegnBY449ZMnQ/TsT1xQmTY0-1BM1WKHXkhg",
+  "Created": "2025-11-30T01:13:28.2384216Z",
+  "Updated": "2025-11-30T01:13:28.2384216Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

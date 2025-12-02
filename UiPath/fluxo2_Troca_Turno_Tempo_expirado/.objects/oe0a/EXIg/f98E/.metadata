@@ -1,0 +1,13 @@
+﻿{
+  "Name": "Chrome Jogo War",
+  "Type": "Screen",
+  "Id": "f98E9-8uX0-Fnz-OA-zpxQ",
+  "Reference": "SwBgJQK0MUm7AevS3N0W2w/f98E9-8uX0-Fnz-OA-zpxQ",
+  "ParentRef": "SwBgJQK0MUm7AevS3N0W2w/EXIgxn7u2UmH8HFpxrNNOw",
+  "Created": "2025-11-30T13:09:46.8143231Z",
+  "Updated": "2025-11-30T13:09:46.8143231Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

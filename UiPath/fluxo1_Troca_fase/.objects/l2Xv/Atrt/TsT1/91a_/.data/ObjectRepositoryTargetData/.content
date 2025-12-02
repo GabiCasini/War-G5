@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="AI_9y7-EskyiE_7B3vUKEA" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="127.0.0.1" CVScreenId="abcb62f8-6dd8-4a6a-bb35-ee0bb37ac783" CvElementArea="1517, 917, 829, 75" CvType="InputBox" DesignTimeRectangle="1519, 919, 825, 70" ElementType="DropDown" ElementVisibilityArgument="Interactive" FuzzySelectorArgument="&lt;webctrl id='duracao_turno' tag='SELECT' type='' class='' aaname='Duração do turno:' matching:id='fuzzy' fuzzylevel:id='0.0' matching:class='fuzzy' fuzzylevel:class='0.0' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' /&gt;" Guid="6bd97ea8-a684-46f2-bb5e-dc045dd1a599" ScopeSelectorArgument="&lt;html app='chrome.exe' title='Jogo War' /&gt;" SearchSteps="FuzzySelector, CV" Version="V6" WaitForReadyArgument="Interactive">
+      <TargetAnchorable.Anchors>
+        <scg:List x:TypeArguments="ITarget" Capacity="4">
+          <Target CVScreenId="abcb62f8-6dd8-4a6a-bb35-ee0bb37ac783" CvTextArea="1517, 884, 229, 28" CvTextArgument="Duração do turno:" CvType="Text" DesignTimeRectangle="1519, 881, 228, 30" ElementType="Text" FuzzySelectorArgument="&lt;webctrl parentid='dialogP1' tag='LABEL' type='' class='' aaname='Duração do turno:' matching:parentid='fuzzy' fuzzylevel:parentid='0.0' matching:class='fuzzy' fuzzylevel:class='0.0' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' check:innerText='Duração do turno:' /&gt;" Guid="61e403dc-8caa-468d-b812-bbe62e2726c1" SearchSteps="FuzzySelector, CV" />
+        </scg:List>
+      </TargetAnchorable.Anchors>
+      <imageRef attrName="InformativeScreenshot" originalValue="3e8105fa1f1551499726090a470bec2f.png" xmlns="">0_gznGSqWQUipYZOQsGGTDw</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">SelectItem</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

@@ -1,0 +1,6 @@
+{
+  "Name": "fluxo1_Troca_de_Fases",
+  "ProjectType": "Process",
+  "Description": "Processo em Branco",
+  "MainFile": "Main.xaml"
+}
