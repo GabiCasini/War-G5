@@ -109,8 +109,15 @@ if (objectiveCardContainer) {
     });
 }
 
-function postTrocarCartas() {
-  return fetch(LOCALHOST + "/partida/trocar_cartas", { method: "POST" })
+function postTrocarCartas(jogador_cor, cartasSelecionadasParaTroca) {
+  return fetch(LOCALHOST + "/partida/trocar_cartas", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      jogador_id: jogador_cor,
+      cartas: cartasSelecionadasParaTroca,
+    }),
+  })
     .then((resp) => {
       if (!resp.ok) {
         return resp
