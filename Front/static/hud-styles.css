@@ -243,6 +243,18 @@
   z-index: 2;
 }
 
+#objetivo-title {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000;
+  font-family: 'Bebas Neue';
+  font-weight: bold;
+  font-size: 15px;
+  z-index: 2;
+}
+
 #wrapper-cartas {
   display: flex;
   gap: 10px;
@@ -284,10 +296,9 @@
   /* left: 50%; */
   /* transform: translateX(-50%); */
   color: #000000;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Bebas Neue';
   font-weight: bold;
-  font-size: 18px;
+  font-size: 12px;
   text-shadow: 0 0 5px rgba(158, 158, 158, 0.7);
   user-select: none;
-
 }

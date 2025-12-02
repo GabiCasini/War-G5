@@ -507,7 +507,7 @@
         <div id="wrapper-cartas">
           <div class="cartas-troca carta-selecionada">
             <img src="{{ url_for('static', filename='Carta_objetivo_circulo.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
-            <div class="texto-imagem-carta ">São Sebastião do Alto</div>
+            <div class="texto-imagem-carta">São Sebastião do Alto</div>
           </div>
           <div class="cartas-troca">
             <img src="{{ url_for('static', filename='Carta_objetivo_circulo.svg') }}" alt="Verso da Carta" class="carta-troca-imagem">
@@ -527,7 +527,7 @@
           </div>
         </div>
       </div>
-    
+      <button id="btn-troca" style="display: none;">Trocar Cartas (0/3)</button>
     </div>
 
     <dialog id="posicionamentoDialog" class="fase-dialog">
@@ -597,6 +597,7 @@
       <div id="objective-card-inner">
         <div class="card-face card-cover">
           <img src="{{ url_for('static', filename='carta_verso.svg') }}" alt="Verso da Carta">
+          <div id="objetivo-title">Objetivo</div>
         </div>
         <div class="card-face card-content">
           <img src="{{ url_for('static', filename='carta_frente.svg') }}" alt="Frente da Carta">

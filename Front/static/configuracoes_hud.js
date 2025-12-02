@@ -5,6 +5,7 @@ const btnPassarTurno = document.getElementById("btn-passar-turno");
 const btnMinhasCartas = document.getElementById("btn-minhas-cartas");
 const timerDisplay = document.getElementById("timer");
 const infoExercitosQtdElement = document.getElementById("info-exercitos-qtd");
+const btnTrocarCartas = document.getElementById("btn-troca");
 let timerInterval = null;
 let tempoRestante = 0;
 
@@ -15,10 +16,12 @@ function toggleMinhasCartas(){
   if (divCartas.style.display === 'none') {
     divCartas.style.display = 'flex'
     btnMinhasCartas.textContent = "Ocultar Cartas"
+    btnTrocarCartas.style.display = 'flex'
     return
   }
   divCartas.style.display = 'none'
   btnMinhasCartas.textContent = "Minhas Cartas"
+  btnTrocarCartas.style.display = 'none'
 }
 
 function atualizarHUD(

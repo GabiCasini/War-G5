@@ -727,7 +727,6 @@ function atualizaObjetivoPlayer() {
   }
 }
 
-
 function tratarObjetivo(objetivo) {
   if (objetivo.includes('Região 1')) {
     objetivo = objetivo.replace('Região 1','Região ' + MAPEAMENTO_REGIOES['Regiao_1']);
