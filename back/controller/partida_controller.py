@@ -43,7 +43,8 @@ def get_territorios():
             "jogador_id": jogador_dono.cor,
             "cor_jogador": jogador_dono.cor,
             "exercitos": territorio.exercitos,
-            "fronteiras": [f.nome for f in territorio.fronteiras]
+            "fronteiras": [f.nome for f in territorio.fronteiras],
+            "exercitos_limite_repasse": territorio.limite_de_repasse
         })
 
     return jsonify({"territorios": territorios_json})
@@ -81,7 +82,7 @@ def get_estado_atual():
    
     territorios_jogador_json = []
     for t in territorios_do_jogador_obj:
-        territorios_jogador_json.append({"nome": t.nome, "regiao": t.regiao, "exercitos": t.exercitos})
+        territorios_jogador_json.append({"nome": t.nome, "regiao": t.regiao, "exercitos": t.exercitos, "exercitos_limite_repasse": t.limite_de_repasse})
 
     # JSON final
     estado_json = {

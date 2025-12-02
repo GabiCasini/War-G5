@@ -124,34 +124,52 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function desenharFronteiraMunicipios(nome1, nome2) {
-  const svg = document.getElementById("mapa");
-  const path1 = svg.querySelector(`path[name="${nome1}"]`);
-  const path2 = svg.querySelector(`path[name="${nome2}"]`);
+	const svg = document.getElementById("mapa");
+	if (!svg) return null;
+	const path1 = svg.querySelector(`path[name="${nome1}"]`);
+	const path2 = svg.querySelector(`path[name="${nome2}"]`);
+	if (!path1 || !path2) return null;
 
-  const getCentro = (path) => {
-    const box = path.getBBox();
-    return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
-  };
+	const getCentro = (path) => {
+		const box = path.getBBox();
+		return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+	};
 
-  const c1 = getCentro(path1);
-  const c2 = getCentro(path2);
- 
-  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-  line.setAttribute("x1", c1.x);
-  line.setAttribute("y1", c1.y);
-  line.setAttribute("x2", c2.x);
-  line.setAttribute("y2", c2.y);
+	const c1 = getCentro(path1);
+	const c2 = getCentro(path2);
 
-  // Aplica estilos (com valores padrão)
-  line.setAttribute("stroke", "gray");
-  line.setAttribute("stroke-width", "1");
-  line.setAttribute("stroke-dasharray", "3,2");
-  line.setAttribute("pointer-events", "none");
-  line.setAttribute("opacity", "0.7");
-  // Adiciona ao SVG
-  svg.insertBefore(line, svg.firstChild);
+	const vb = (svg.getAttribute('viewBox') || '0 0 0 0').split(' ').map(Number);
+	const vbX = vb[0] || 0;
+	const vbY = vb[1] || 0;
+	const vbW = vb[2] || svg.viewBox.baseVal.width || 0;
+	const vbH = vb[3] || svg.viewBox.baseVal.height || 0;
+	const centerY = (vbY + vbH);
+	const centerLeftX = -(vbX + vbW) ;  
+	const centerRightX = vbX + vbW + 1000; 
 
-  return line;
+	const criarLinha = (x1, y1, x2, y2) => {
+		const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+		line.setAttribute("x1", x1);
+		line.setAttribute("y1", y1);
+		line.setAttribute("x2", x2);
+		line.setAttribute("y2", y2);
+		line.setAttribute("stroke", "gray");
+		line.setAttribute("stroke-width", "1");
+		line.setAttribute("stroke-dasharray", "3,2");
+		line.setAttribute("pointer-events", "none");
+		line.setAttribute("opacity", "0.7");
+		svg.insertBefore(line, svg.firstChild);
+		return line;
+	};
+
+	if (nome1 === "Vassouras" && nome2 === "Cambuci") {
+		const line1 = criarLinha(c1.x, c1.y, centerLeftX + 100, centerY - 500);
+		const line2 = criarLinha(c2.x, c2.y, centerRightX, centerY);
+		return [line1, line2];
+	}
+
+	const line = criarLinha(c1.x, c1.y, c2.x, c2.y);
+	return line;
 }
 
 
@@ -162,6 +180,7 @@ desenharFronteiraMunicipios("Paraíba do Sul", "Comendador Levy Gasparian");
 desenharFronteiraMunicipios("Nova Friburgo", "Cordeiro");
 desenharFronteiraMunicipios("Bom Jardim", "Trajano de Moraes");
 desenharFronteiraMunicipios("Teresópolis", "Nova Friburgo");
+desenharFronteiraMunicipios("Vassouras", "Cambuci");
 
 
 function desenharNomeRegioes() {

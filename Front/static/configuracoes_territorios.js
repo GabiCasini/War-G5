@@ -362,6 +362,8 @@ function ataqueTerritorio(territorioDe, territorioPara) {
 }
 
 function reposicionarTerritorio(territorioDe, territorioPara) {
+
+
   const dialog = document.getElementById('reposicionamentoDialog');
   const form = document.getElementById('reposicionamentoForm');
   const titulo = document.getElementById('reposicionamentoTitulo');
@@ -372,8 +374,12 @@ function reposicionarTerritorio(territorioDe, territorioPara) {
   const btnIncrement = dialog.querySelector('.btn-increment');
 
   const territorioDeObj = territorios.find(t => t.nome === territorioDe);
-  const maxQtd = territorioDeObj ? (territorioDeObj.exercitos - 1) : 1;
+  const maxQtd = territorioDeObj ? (territorioDeObj.exercitos_limite_repasse) : 1;
 
+  if (maxQtd < 1) {
+    alert("Não há exércitos suficientes para reposicionar.");
+    return;
+  }
   titulo.textContent = 'Reposicionar Exércitos';
   label.textContent = `Mover quantos exércitos de ${territorioDe} para ${territorioPara}?`;
   input.value = 1;
