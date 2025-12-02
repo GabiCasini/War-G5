@@ -21,7 +21,6 @@ function toggleMinhasCartas(){
   btnMinhasCartas.textContent = "Minhas Cartas"
 }
 
-
 function atualizarHUD(
   jogadorAtual,
   jogadorCor,
@@ -110,3 +109,34 @@ if (objectiveCardContainer) {
     });
 }
 
+function postTrocarCartas() {
+  return fetch(LOCALHOST + "/partida/trocar_cartas", { method: "POST" })
+    .then((resp) => {
+      if (!resp.ok) {
+        return resp
+          .json()
+          .then((errBody) => {
+            throw new Error(
+              (errBody && (errBody.mensagem || errBody.message)) ||
+                `HTTP ${resp.status}`
+            );
+          })
+          .catch(() => {
+            throw new Error(`HTTP ${resp.status}`);
+          });
+      }
+      return resp.json();
+    })
+    .then((data) => {
+      console.log("Tentativa de troca de cartas finalizada com sucesso:", data);
+      fetchJogadores();
+      fetchTerritorios();
+      fetchEstadoAtual();
+      refreshTerritorios();
+      return data;
+    })
+    .catch((err) => {
+      console.error("Erro ao tentar trocar cartas:", err.message);
+      throw err;
+    });
+}
