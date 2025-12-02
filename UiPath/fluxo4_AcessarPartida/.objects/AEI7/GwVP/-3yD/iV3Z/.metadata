@@ -1,0 +1,13 @@
+﻿{
+  "Name": "Turno de Jogador 1 Tem…",
+  "Type": "Element",
+  "Id": "iV3ZEGmCsE6I5y5HUyVEjg",
+  "Reference": "EJhlZwExP0SzXmfTyOt1UA/iV3ZEGmCsE6I5y5HUyVEjg",
+  "ParentRef": "EJhlZwExP0SzXmfTyOt1UA/-3yDiPaspEGT0OVL4X4X9w",
+  "Created": "2025-11-30T14:56:47.6216747Z",
+  "Updated": "2025-11-30T14:56:47.6216747Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

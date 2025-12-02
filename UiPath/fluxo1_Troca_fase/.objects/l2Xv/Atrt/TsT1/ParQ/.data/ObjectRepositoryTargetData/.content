@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="kamUcDADkEOnOh9wOfVp0Q" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="127.0.0.1/inicializar_partida" CVScreenId="58f91240-fbf6-45ea-8394-187035ae5ada" CvType="AnyWordGroup" DesignTimeRectangle="754, 296, 188, 35" ElementType="Text" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl id='fase-nome' tag='SPAN' /&gt;" Guid="bf2683f6-38ec-4c2c-8639-1ca6e7b4f3ce" ScopeSelectorArgument="&lt;html app='chrome.exe' title='War' /&gt;" SearchSteps="Selector, CV" Version="V6" WaitForReadyArgument="Interactive">
+      <imageRef attrName="InformativeScreenshot" originalValue="0994eeb31efd73de500833918a4d3812.png" xmlns="">0UYjpk1edsUOySFxY9O776g</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">GetText</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

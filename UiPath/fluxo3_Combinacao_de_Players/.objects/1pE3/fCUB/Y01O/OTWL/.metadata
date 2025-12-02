@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Quantidade de jogadores…",
+  "Type": "Element",
+  "TaxonomyType": "Dropdown",
+  "Id": "OTWLitATzkW02SVveUhjEw",
+  "Reference": "5fwMRekOp0al95Mc118tPg/OTWLitATzkW02SVveUhjEw",
+  "ParentRef": "5fwMRekOp0al95Mc118tPg/Y01OYg21fEOILPNrdXJzcg",
+  "Created": "2025-12-01T00:29:14.5680908Z",
+  "Updated": "2025-12-01T00:29:14.5680908Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

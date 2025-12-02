@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="BVGI8-bwtECnREXUm9vAVQ" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="127.0.0.1" CVScreenId="b9ec0f60-f835-4b62-8735-e5f9b7ecc7e7" CvElementArea="1518, 1041, 828, 75" CvType="InputBox" DesignTimeRectangle="1519, 1043, 825, 70" ElementType="DropDown" ElementVisibilityArgument="Interactive" FuzzySelectorArgument="&lt;webctrl id='qtd_humanos' tag='SELECT' type='' class='' aaname='Quantidade de jogadores humanos:' matching:id='fuzzy' fuzzylevel:id='0.0' matching:class='fuzzy' fuzzylevel:class='0.0' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' /&gt;" Guid="b58ae6f3-7f90-43de-b6d0-77433fc257a3" ScopeSelectorArgument="&lt;html app='chrome.exe' title='Jogo War' /&gt;" SearchSteps="FuzzySelector, CV" Version="V6" WaitForReadyArgument="Interactive">
+      <TargetAnchorable.Anchors>
+        <scg:List x:TypeArguments="ITarget" Capacity="4">
+          <Target CVScreenId="b9ec0f60-f835-4b62-8735-e5f9b7ecc7e7" CvTextArea="1515, 1005, 453, 26" CvTextArgument="Quantidade de jogadores humanos:" CvType="Text" DesignTimeRectangle="1519, 1004, 450, 30" ElementType="Text" FuzzySelectorArgument="&lt;webctrl aaname='Quantidade de jogadores humanos:' parentid='dialogP1' tag='LABEL' type='' class='' matching:aaname='fuzzy' fuzzylevel:aaname='0.0' matching:parentid='fuzzy' fuzzylevel:parentid='0.0' matching:class='fuzzy' fuzzylevel:class='0.0' check:innerText='Quantidade de jogadores humanos:' /&gt;" Guid="06e971e5-7efd-40c2-892f-d8671d10b2c4" SearchSteps="FuzzySelector, CV" />
+        </scg:List>
+      </TargetAnchorable.Anchors>
+      <imageRef attrName="InformativeScreenshot" originalValue="5f7d364a27bf3c7de429aa4e6fd6c3b2.png" xmlns="">09tmgyxbZC0-tr8OPfSToSg</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">SelectItem</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

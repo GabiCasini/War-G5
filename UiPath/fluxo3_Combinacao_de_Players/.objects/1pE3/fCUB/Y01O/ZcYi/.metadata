@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Jogar",
+  "Type": "Element",
+  "TaxonomyType": "Button",
+  "Id": "ZcYi8K3qCUG6-hQzIe4s4A",
+  "Reference": "5fwMRekOp0al95Mc118tPg/ZcYi8K3qCUG6-hQzIe4s4A",
+  "ParentRef": "5fwMRekOp0al95Mc118tPg/Y01OYg21fEOILPNrdXJzcg",
+  "Created": "2025-12-01T00:28:05.0863653Z",
+  "Updated": "2025-12-01T00:28:05.0863653Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Continuar",
+  "Type": "Element",
+  "TaxonomyType": "Button",
+  "Id": "nBui3nZX1kC2Zx8zyZFNVA",
+  "Reference": "5fwMRekOp0al95Mc118tPg/nBui3nZX1kC2Zx8zyZFNVA",
+  "ParentRef": "5fwMRekOp0al95Mc118tPg/Y01OYg21fEOILPNrdXJzcg",
+  "Created": "2025-12-01T00:32:25.7216137Z",
+  "Updated": "2025-12-01T00:32:25.7216137Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

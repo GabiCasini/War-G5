@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Chrome Jogo War",
+  "Type": "App",
+  "Id": "AEI77KzXUUGM4AjY0E_i9A",
+  "Reference": "EJhlZwExP0SzXmfTyOt1UA/AEI77KzXUUGM4AjY0E_i9A",
+  "Created": "2025-11-30T14:56:47.0452289Z",
+  "Updated": "2025-11-30T14:56:47.0452289Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

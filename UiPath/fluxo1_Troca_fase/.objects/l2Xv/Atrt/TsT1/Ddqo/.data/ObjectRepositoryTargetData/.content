@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="pbARy_9sikGksmz8Cx2wcw" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="127.0.0.1" CVScreenId="9ee5ce08-7fe7-4997-8359-6a17031a23c8" CvElementArea="1275, 960, 245, 123" CvTextArea="1347, 1004, 102, 42" CvTextArgument="Jogar" CvType="Button" DesignTimeRectangle="1280, 965, 236, 116" ElementType="Button" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl id='openInitDialog' tag='BUTTON' /&gt;" Guid="dac11c3b-eff6-44bd-b9db-2ac1ee4ebcb4" ScopeSelectorArgument="&lt;html app='chrome.exe' title='Jogo War' /&gt;" SearchSteps="Selector, CV" Version="V6" WaitForReadyArgument="Interactive">
+      <imageRef attrName="InformativeScreenshot" originalValue="460c53f91dcdbbb216e7f5719ae9885e.png" xmlns="">0qugrBCQZdEmyweq9c2WuaA</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">Click</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

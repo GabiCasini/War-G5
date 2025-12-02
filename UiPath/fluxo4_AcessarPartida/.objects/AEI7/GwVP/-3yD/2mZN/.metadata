@@ -1,0 +1,14 @@
+﻿{
+  "Name": "Duração do turno",
+  "Type": "Element",
+  "TaxonomyType": "Dropdown",
+  "Id": "2mZNlJajkEGjm2m-uSxBqg",
+  "Reference": "EJhlZwExP0SzXmfTyOt1UA/2mZNlJajkEGjm2m-uSxBqg",
+  "ParentRef": "EJhlZwExP0SzXmfTyOt1UA/-3yDiPaspEGT0OVL4X4X9w",
+  "Created": "2025-12-01T00:15:42.35113Z",
+  "Updated": "2025-12-01T00:15:42.35113Z",
+  "CreatedBy": [
+    "UiPath.UIAutomationCore, Version=25.10.16.0, Culture=neutral, PublicKeyToken=null",
+    "UiPath.Platform, Version=25.10.1.0, Culture=neutral, PublicKeyToken=null"
+  ]
+}

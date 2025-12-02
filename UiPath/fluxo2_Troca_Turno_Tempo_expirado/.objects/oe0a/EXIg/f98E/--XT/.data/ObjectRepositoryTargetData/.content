@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="Ex6_vSEq0kCWeLu7vnbFBw" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="127.0.0.1/inicializar_partida" CVScreenId="bce8fa9e-0d27-43a2-bccb-2fe4355990c5" CvElementArea="726, 254, 178, 55" CvTextArea="753, 270, 125, 20" CvTextArgument="Passar turno" CvType="Button" DesignTimeRectangle="730, 257, 173, 49" ElementType="Button" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl id='btn-passar-turno' tag='BUTTON' /&gt;" Guid="1dcca36c-d9e9-4575-a6e7-fd144e7b15f0" ScopeSelectorArgument="&lt;html app='chrome.exe' title='War' /&gt;" SearchSteps="Selector, CV" Version="V6" WaitForReadyArgument="Interactive">
+      <imageRef attrName="InformativeScreenshot" originalValue="1873dfec1dd18cfdf1bf15349371d50f.png" xmlns="">0_toweBEdd0WAy9LNuu0wxg</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">Click</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="115vABFbUUGfynrzzWGOsg" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="127.0.0.1" DesignTimeRectangle="1584, 128, 694, 240" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;ctrl name='127.0.0.1:5000 diz' role='dialog' /&gt;&lt;ctrl idx='2' role='pane' /&gt;" Guid="db3cd282-8af0-4cf9-83a6-1707366d3727" ScopeSelectorArgument="&lt;wnd app='chrome.exe' cls='Chrome_WidgetWin_1' title='Jogo War - Google Chrome' /&gt;" SearchSteps="Selector" Version="V6" WaitForReadyArgument="Interactive">
+      <imageRef attrName="InformativeScreenshot" originalValue="66b1758d30237accd3be4d1e644ecdcf.png" xmlns="">03mb_ow8LxkeYxGkI2ziiPw</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">CheckState</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>

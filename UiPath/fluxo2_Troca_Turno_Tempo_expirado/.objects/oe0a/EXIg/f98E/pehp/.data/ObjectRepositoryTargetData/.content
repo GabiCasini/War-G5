@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ObjectRepositoryTargetData ContentHash="S6_aqF2bZUWt7Rexbc8fPg" xmlns="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ObjectRepositoryTargetData.Data>
+    <TargetAnchorable x:Key="TargetAnchorable" BrowserURL="127.0.0.1/inicializar_partida" CVScreenId="748155ed-405e-4e11-8870-d417989aecce" CvType="AnyWordGroup" DesignTimeRectangle="97, 307, 119, 34" ElementType="Text" ElementVisibilityArgument="Interactive" FullSelectorArgument="&lt;webctrl id='turno-player-name' tag='SPAN' /&gt;" Guid="4fdb9a94-4350-4bd6-8c53-4d08e083ce30" ScopeSelectorArgument="&lt;html app='chrome.exe' title='War' /&gt;" SearchSteps="Selector, CV" Version="V6" WaitForReadyArgument="Interactive">
+      <imageRef attrName="InformativeScreenshot" originalValue="1a03fdb0b350d901abeb1673596e6aee.png" xmlns="">0PAeMIdpEF0Gcc6ZU1MSArQ</imageRef>
+    </TargetAnchorable>
+    <x:String x:Key="ActivityType">GetText</x:String>
+  </ObjectRepositoryTargetData.Data>
+</ObjectRepositoryTargetData>
