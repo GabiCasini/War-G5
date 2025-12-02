@@ -14,9 +14,11 @@ function toggleMinhasCartas(){
   let divCartas = document.getElementById("hud-wrapper-second-line")
   if (divCartas.style.display === 'none') {
     divCartas.style.display = 'flex'
+    btnMinhasCartas.textContent = "Ocultar Cartas"
     return
   }
   divCartas.style.display = 'none'
+  btnMinhasCartas.textContent = "Minhas Cartas"
 }
 
 
