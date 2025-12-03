@@ -1,8 +1,3 @@
-"""
-Simula um turno completo de uma IA em memória (sem HTTP).
-Gera eventos com delay de ~1s para posicionamento, ataques e reposicionamento.
-Ao final, valida que nenhum território ficou com 0 exércitos.
-"""
 import time
 import json
 import random
@@ -74,9 +69,9 @@ def simulate_turn(partida: Partida, jogador):
     # resumo final: verificar novamente
     zeros_final = [t.nome for t in partida.tabuleiro.territorios if t.exercitos == 0]
     if zeros_final:
-        print(now(), 'RESULTADO: FAIL - territórios com 0 exércitos:', zeros_final)
+        print(now(), 'FAIL - territórios com 0 exércitos:', zeros_final)
     else:
-        print(now(), 'RESULTADO: PASS - nenhum território com 0 exércitos')
+        print(now(), 'PASS - nenhum território com 0 exércitos')
 
     print(now(), 'Eventos totais gerados:', len(events))
     return events

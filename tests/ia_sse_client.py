@@ -1,13 +1,3 @@
-"""
-Simple SSE client for testing `/ia/stream` and initializing a 3-player match.
-This script:
- - POSTs form data to /inicializar_partida to create a match (1 human + 2 IAs)
- - GETs /partida/estado_atual to find current jogador
- - If the current player is IA, opens SSE to /ia/stream with acao=turno_completo
- - Logs each received SSE event with a timestamp
-
-Run: python tests/ia_sse_client.py
-"""
 import time
 import sys
 import json
@@ -60,7 +50,6 @@ def get_estado():
 
 
 def parse_sse_lines(iterable):
-    """Yield complete data blobs parsed from SSE lines (simple parser)."""
     buffer = []
     for raw in iterable:
         if not raw:

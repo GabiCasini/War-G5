@@ -4,6 +4,7 @@ from back import state
 from back.model.Partida import Partida 
 
 from back.controller.partida_controller import partida_bp
+from back.controller.init_page import init_page_bp
 
 @pytest.fixture(scope='module')
 def app():
@@ -11,7 +12,8 @@ def app():
     app = Flask(__name__)
     app.config['TESTING'] = True
     
-    # Registra o blueprint da API
+    # Registra os blueprints da API
+    app.register_blueprint(init_page_bp)
     app.register_blueprint(partida_bp)
     
     yield app
