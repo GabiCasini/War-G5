@@ -174,8 +174,9 @@ function toggleCartaTroca(elemento) {
       cartasDiferentes.add(formaCarta);
 
       let numCartasIguais = listaCartasSelecionadas.filter(carta => carta[0] === formaCarta).length + 1;
+      let temCoringa = listaCartasSelecionadas.some(carta => carta[0] === 'coringa') || (formaCarta === 'coringa');
 
-      if ((cartasDiferentes.size === 3) || (numCartasIguais === 3) || (formaCarta === 'coringa')) {
+      if ((cartasDiferentes.size === 3) || (numCartasIguais === 3) || (temCoringa)) {
 
         if (faseAtual !== "posicionamento") {
           alert("Você só pode trocar cartas na fase de posicionamento.");
