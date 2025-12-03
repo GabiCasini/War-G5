@@ -277,29 +277,29 @@ def test_escolher_ataque_agressividade():
 
 def test_distribuir_exercitos_basico():
     
-    ias = criar_multiplas_ias(quantidade=1)
-    tabuleiro = Tabuleiro(ias)
-    distribuir_territorios_entre_ias(tabuleiro, ias)
+    ias = [["IA1", "verde", "ai"], ["IA2", "vermelho", "ai"], ["IA3", "azul", "ai"]]
+    partida = Partida(0, 3, 120, ias, shuffle_jogadores=False)
+    tabuleiro = partida.tabuleiro
     
-    ia = ias[0]
+    ia = partida.jogadores[0]
     exercitos_iniciais = contar_exercitos_ia(ia)
     
-    distribuicao = ia.distribuir_exercitos(tabuleiro, 10)
+    distribuicao = ia.distribuir_exercitos(partida, 7)
     
     exercitos_finais = contar_exercitos_ia(ia)
     
-    # Total deve aumentar em 10
-    assert exercitos_finais == exercitos_iniciais + 10
+    # Total deve aumentar em 7
+    assert exercitos_finais == exercitos_iniciais + 7
 
 
 def test_distribuir_exercitos_retorna_dict():
     
-    ias = criar_multiplas_ias(quantidade=1)
-    tabuleiro = Tabuleiro(ias)
-    distribuir_territorios_entre_ias(tabuleiro, ias)
+    ias = [["IA1", "verde", "ai"], ["IA2", "vermelho", "ai"], ["IA3", "azul", "ai"]]
+    partida = Partida(0, 3, 120, ias, shuffle_jogadores=False)
     
-    ia = ias[0]
-    distribuicao = ia.distribuir_exercitos(tabuleiro, 5)
+    ia = partida.jogadores[0]
+    
+    distribuicao = ia.distribuir_exercitos(partida, 7)
     
     assert isinstance(distribuicao, dict)
     assert all(isinstance(k, str) for k in distribuicao.keys())
@@ -308,15 +308,14 @@ def test_distribuir_exercitos_retorna_dict():
 
 def test_distribuir_exercitos_zero():
     
-    ias = criar_multiplas_ias(quantidade=1)
-    tabuleiro = Tabuleiro(ias)
-    distribuir_territorios_entre_ias(tabuleiro, ias)
+    ias = [["IA1", "verde", "ai"], ["IA2", "vermelho", "ai"], ["IA3", "azul", "ai"]]
+    partida = Partida(0, 3, 120, ias, shuffle_jogadores=False)
+    tabuleiro = partida.tabuleiro
     
-    ia = ias[0]
+    ia = partida.jogadores[0]
     exercitos_iniciais = contar_exercitos_ia(ia)
     
-    distribuicao = ia.distribuir_exercitos(tabuleiro, 0)
-    
+    distribuicao = ia.distribuir_exercitos(partida, 0)
     exercitos_finais = contar_exercitos_ia(ia)
     
     assert exercitos_finais == exercitos_iniciais
@@ -375,11 +374,11 @@ def test_simulacao_rodada_ataques():
 
 def test_ciclo_completo_ia_turno():
     
-    ias = criar_multiplas_ias(quantidade=2)
-    tabuleiro = Tabuleiro(ias)
-    distribuir_territorios_entre_ias(tabuleiro, ias, seed=42)
+    ias = [["IA1", "verde", "ai"], ["IA2", "vermelho", "ai"], ["IA3", "azul", "ai"]]
+    partida = Partida(0, 3, 120, ias, shuffle_jogadores=False)
+    tabuleiro = partida.tabuleiro
     
-    ia = ias[0]
+    ia = partida.jogadores[0]
     
     # 1. Avalia territórios
     prioridades = ia.avaliar_territorios(tabuleiro)
@@ -392,5 +391,5 @@ def test_ciclo_completo_ia_turno():
     assert escolha is None or isinstance(escolha, tuple)
     
     # 3. Distribui exércitos
-    distribuicao = ia.distribuir_exercitos(tabuleiro, 5)
-    assert sum(distribuicao.values()) == 5
+    distribuicao = ia.distribuir_exercitos(partida, 7)
+    assert sum(distribuicao.values()) == 7
