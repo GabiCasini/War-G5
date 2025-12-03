@@ -4,6 +4,8 @@ let jogadorCorAtual = null;
 const LOCALHOST = "http://127.0.0.1:5000";
 let iaExecutando = {};
 
+
+
 // Atualiza visibilidade dos controles que devem aparecer apenas para jogadores humanos
 function atualizarVisibilidadeBotoes(playerObj) {
   try {
@@ -131,6 +133,9 @@ function fetchEstadoAtual() {
       let faseAtualStringPrimeiraMaiuscula =
         faseAtual.charAt(0).toUpperCase() + faseAtual.slice(1);
       let corHexJogador = players.find((p) => p.cor === jogadorAtual).corHex;
+
+      players.find((p) => p.cor === jogadorAtual).cartas = data.jogador_cartas.cartas;
+      constroiCartasTroca(data.jogador_cartas.cartas);
 
       // Se o jogador mudou (início do turno de outro jogador), reinicia o timer
       try {

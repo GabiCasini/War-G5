@@ -8,6 +8,7 @@ class Player {
         this.tipo = tipo;
         this.exercitosDisponiveisPosicionamento = 0;
         this.objetivo = objetivo;
+        this.cartas = [];
     }
 }
 

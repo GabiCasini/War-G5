@@ -43,7 +43,8 @@ def get_territorios():
             "jogador_id": jogador_dono.cor,
             "cor_jogador": jogador_dono.cor,
             "exercitos": territorio.exercitos,
-            "fronteiras": [f.nome for f in territorio.fronteiras]
+            "fronteiras": [f.nome for f in territorio.fronteiras],
+            "exercitos_limite_repasse": territorio.limite_de_repasse
         })
 
     return jsonify({"territorios": territorios_json})
@@ -81,7 +82,7 @@ def get_estado_atual():
    
     territorios_jogador_json = []
     for t in territorios_do_jogador_obj:
-        territorios_jogador_json.append({"nome": t.nome, "regiao": t.regiao, "exercitos": t.exercitos})
+        territorios_jogador_json.append({"nome": t.nome, "regiao": t.regiao, "exercitos": t.exercitos, "exercitos_limite_repasse": t.limite_de_repasse})
 
     # JSON final
     estado_json = {
@@ -101,6 +102,10 @@ def get_estado_atual():
             "jogador_id": jogador_atual.cor,
             "nome": jogador_atual.nome,
             "territorios": territorios_jogador_json
+        },
+        "jogador_cartas": {
+            "jogador_id": jogador_atual.cor,
+            "cartas": jogador_atual.cartas
         }
     }
     return jsonify(estado_json)
@@ -266,5 +271,28 @@ def post_avancar_turno():
         # Nota: mantemos a informação do próximo jogador em `resposta['proximo_jogador']`.
 
         return jsonify(resposta)
+    except Exception as e:
+        return jsonify({"status": "erro", "mensagem": str(e)}), 400
+    
+@partida_bp.route("/trocar_cartas", methods=["POST"])
+def post_trocar_cartas():
+    if not state.partida_global:
+        return jsonify({"status": "erro", "mensagem": "Partida não iniciada"}), 400
+    if state.partida_global.finalizado:
+        return jsonify({"status": "finalizado", "mensagem": f"Partida finalizada. Vencedor: {state.partida_global.vencedor}"}), 400
+
+    dados = request.get_json()
+    jogador_id = dados.get("jogador_id")
+    cartas = dados.get("cartas")  # Espera-se uma lista de tuplas [(tipo, territorio), (tipo, territorio), (tipo, territorio)]
+    print(f"[DEBUG] Jogador {jogador_id} tentando trocar cartas: {cartas}")
+
+    jogador = state.partida_global.get_jogador_por_cor(jogador_id)
+    
+    try:
+        state.partida_global.realizar_troca(jogador, cartas)
+        return jsonify({
+            "status": "ok",
+            "mensagem": "Tentativa de troca de cartas realizada."
+        })
     except Exception as e:
         return jsonify({"status": "erro", "mensagem": str(e)}), 400

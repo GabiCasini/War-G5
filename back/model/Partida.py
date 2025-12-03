@@ -258,7 +258,7 @@ class Partida:
         if self.conquistou_algum_territorio and len(jogador.cartas) < 5:
             jogador.adicionar_carta(self.manager_de_cartas.atribuir_carta())
 
-    def realizar_troca(self, jogador: Jogador, cartas):
+    def realizar_troca(self, jogador: Jogador, cartas: list[tuple[str, str]]):
         if self.manager_de_cartas.validar_possivel_troca(cartas):
             jogador.trocar_cartas(cartas, self.valor_da_troca)
             self.manager_de_cartas.cartas_trocadas(cartas)

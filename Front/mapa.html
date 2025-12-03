@@ -489,7 +489,7 @@
             <span>Exércitos disponíveis:</span>
             <span id="info-exercitos-qtd">0</span>
           </div>
-
+          
           <div id="fase-wrapper">
             <span>Fase atual:</span>
             <span id="fase-nome"></span>
@@ -497,14 +497,17 @@
         </div>
 
         <div id="passar-turno-wrapper">
-          <button id="btn-passar-turno">Passar turno</button>
+          <button id="btn-passar-turno">Passar fase</button>
           <button id="btn-minhas-cartas">Minhas cartas</button>
         </div>
 
       </div>
 
-      <!-- <div id="hud-wrapper-second-line">
-      </div> -->
+      <div id="hud-wrapper-second-line">
+        <div id="wrapper-cartas">
+          
+        </div>
+      </div>
     
     </div>
 
@@ -578,7 +581,7 @@
         </div>
         <div class="card-face card-content">
           <img src="{{ url_for('static', filename='carta_frente.svg') }}" alt="Frente da Carta">
-          <div id="objetivo-player" class="objective-text">Domine todos os territórios</div>
+          <div id="objetivo-player" class="objective-text"></div>
         </div>
       </div>
     </div>
