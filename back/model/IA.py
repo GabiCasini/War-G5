@@ -316,7 +316,7 @@ class IA(Jogador):
 
             ataques += 1
 
-    def distribuir_exercitos(self, tabuleiro, exercitos_disponiveis):
+    def distribuir_exercitos(self, partida, exercitos_disponiveis):
         """
         Sugere uma distribuição dos exércitos disponíveis entre os territórios do jogador.
         Considera o tipo de objetivo para reforço mais inteligente.
@@ -327,9 +327,92 @@ class IA(Jogador):
         rng = random
 
         distribuicao = {t.nome: 0 for t in self.territorios}
-        prioridades = self.avaliar_territorios(tabuleiro)
+        prioridades = self.avaliar_territorios(partida.tabuleiro)
         vulneraveis = sorted(self.territorios, key=lambda t: t.exercitos)
 
+        if len(self.cartas) > 2:
+            guia_cartas = [[], [], [], []]
+            for c in range(len(self.cartas)):
+                if self.cartas[c][0] == "Círculo":
+                    guia_cartas[0].append(c)
+            
+                elif self.cartas[c][0] == "Quadrado":
+                    guia_cartas[1].append(c)
+
+                elif self.cartas[c][0] == "Triângulo":
+                    guia_cartas[2].append(c)
+
+                else:
+                    guia_cartas[3].append(c)
+
+            if len(guia_cartas[0]) >= 3:
+                troca = []
+                for i in range(3):
+                    troca.append(self.cartas[guia_cartas[0][i]])
+                valor = partida.valor_da_troca
+                if partida.realizar_troca(self, troca):
+                    exercitos_disponiveis += valor
+
+            elif len(guia_cartas[1]) >= 3:
+                troca = []
+                for i in range(3):
+                    troca.append(self.cartas[guia_cartas[1][i]])
+                valor = partida.valor_da_troca
+                if partida.realizar_troca(self, troca):
+                    exercitos_disponiveis += valor
+
+            elif len(guia_cartas[2]) >= 3:
+                troca = []
+                for i in range(3):
+                    troca.append(self.cartas[guia_cartas[2][i]])
+                valor = partida.valor_da_troca
+                if partida.realizar_troca(self, troca):
+                    exercitos_disponiveis += valor
+
+            elif len(guia_cartas[0]) >= 1 and len(guia_cartas[1]) >= 1 and len(guia_cartas[2]) >= 1:
+                troca = []
+                troca.append(self.cartas[guia_cartas[0][0]])
+                troca.append(self.cartas[guia_cartas[1][0]])
+                troca.append(self.cartas[guia_cartas[2][0]])
+                valor = partida.valor_da_troca
+                if partida.realizar_troca(self, troca):
+                    exercitos_disponiveis += valor
+
+            elif len(guia_cartas[3]) > 0:
+                troca = []
+                count = 0
+
+                for i in guia_cartas[3]:
+                    if count == 3:
+                        break
+                    troca.append(self.cartas[i])
+                    count += 1
+                
+                for i in guia_cartas[0]:
+                    if count == 3:
+                        break
+                    troca.append(self.cartas[i])
+                    count += 1
+
+                for i in guia_cartas[1]:
+                    if count == 3:
+                        break
+                    troca.append(self.cartas[i])
+                    count += 1
+
+
+                for i in guia_cartas[2]:
+                    if count == 3:
+                        break
+                    troca.append(self.cartas[i])
+                    count += 1
+
+                if len(troca) == 3:
+                    valor = partida.valor_da_troca
+                    if partida.realizar_troca(self, troca):
+                        exercitos_disponiveis += valor
+        
+                
         # preserva ordem ao combinar prioridades e vulneráveis
         def _unique_preserve_order(seq):
             seen = set()

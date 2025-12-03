@@ -38,7 +38,7 @@ def ia_stream():
             if acao in ('posicionamento', 'turno_completo'):
                 if getattr(jogador, 'exercitos_reserva', 0) <= 0:
                     partida.tabuleiro.calcula_exercitos_a_receber(jogador)
-                distribuicao = jogador.distribuir_exercitos(partida.tabuleiro, jogador.exercitos_reserva)
+                distribuicao = jogador.distribuir_exercitos(partida, jogador.exercitos_reserva)
                 try:
                     jogador.remover_exercitos_para_posicionamento(jogador.exercitos_reserva)
                 except Exception:

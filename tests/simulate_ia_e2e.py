@@ -25,7 +25,7 @@ def simulate_turn(partida: Partida, jogador):
     partida.tabuleiro.calcula_exercitos_a_receber(jogador)
     total_reserva = getattr(jogador, 'exercitos_reserva', 0)
     print(now(), 'Exércitos na reserva:', total_reserva)
-    distribuicao = jogador.distribuir_exercitos(partida.tabuleiro, jogador.exercitos_reserva)
+    distribuicao = jogador.distribuir_exercitos(partida, jogador.exercitos_reserva)
     # refletir consumo da reserva (como faz o controller)
     try:
         jogador.remover_exercitos_para_posicionamento(total_reserva)

@@ -205,10 +205,7 @@ class Partida:
         """
         print(f"Território {territorio.nome} conquistado por {vencedor.cor} de {perdedor.cor}")
         perdedor.remover_territorio(territorio)
-        # Move 1 exercito automaticamente para o territorio conquistado
-        # Eventualmente o jogador deve poder escolher a quantidade (de 1 a 3, sendo que o territorio de origem deve continuar com pelo menos 1 exercito)
-        exercitos_para_mover = 1
-        vencedor.receber_territorio_conquistado(origem, territorio, exercitos_para_mover) #adiciona o território na lista do jogador e atualiza a cor 
+        vencedor.receber_territorio_conquistado(origem, territorio, 1) #adiciona o território na lista do jogador e atualiza a cor 
 
     # Verifica se o jogador foi eliminado (caso sua lista de territorios tenha tamanho zero) e trata a eliminação caso necessário
     def verificar_eliminacao(self, atacante: Jogador, defensor: Jogador):
@@ -271,6 +268,9 @@ class Partida:
             jogador.trocar_cartas(cartas, self.valor_da_troca)
             self.manager_de_cartas.cartas_trocadas(cartas)
             self.incrementar_troca()
+            return True
+        else:
+            return False
     
     def incrementar_troca(self):
         if self.valor_da_troca < 12:
@@ -296,7 +296,7 @@ class Partida:
             try:
                 partida.tabuleiro.calcula_exercitos_a_receber(jogador_ia)
                 if getattr(jogador_ia, 'exercitos_reserva', 0) > 0 and hasattr(jogador_ia, 'distribuir_exercitos'):
-                    distribuicao = jogador_ia.distribuir_exercitos(partida.tabuleiro, jogador_ia.exercitos_reserva)
+                    distribuicao = jogador_ia.distribuir_exercitos(partida, jogador_ia.exercitos_reserva)
                     try:
                         jogador_ia.remover_exercitos_para_posicionamento(jogador_ia.exercitos_reserva)
                     except Exception:
