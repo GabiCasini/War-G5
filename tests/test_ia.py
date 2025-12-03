@@ -1,4 +1,3 @@
-import pytest
 import random
 from back.model.IA import IA
 from back.model.Tabuleiro import Tabuleiro
@@ -279,12 +278,11 @@ def test_distribuir_exercitos_basico():
     
     ias = [["IA1", "verde", "ai"], ["IA2", "vermelho", "ai"], ["IA3", "azul", "ai"]]
     partida = Partida(0, 3, 120, ias, shuffle_jogadores=False)
-    tabuleiro = partida.tabuleiro
-    
+
     ia = partida.jogadores[0]
     exercitos_iniciais = contar_exercitos_ia(ia)
     
-    distribuicao = ia.distribuir_exercitos(partida, 7)
+    ia.distribuir_exercitos(partida, 7)
     
     exercitos_finais = contar_exercitos_ia(ia)
     
@@ -310,12 +308,11 @@ def test_distribuir_exercitos_zero():
     
     ias = [["IA1", "verde", "ai"], ["IA2", "vermelho", "ai"], ["IA3", "azul", "ai"]]
     partida = Partida(0, 3, 120, ias, shuffle_jogadores=False)
-    tabuleiro = partida.tabuleiro
     
     ia = partida.jogadores[0]
     exercitos_iniciais = contar_exercitos_ia(ia)
     
-    distribuicao = ia.distribuir_exercitos(partida, 0)
+    ia.distribuir_exercitos(partida, 0)
     exercitos_finais = contar_exercitos_ia(ia)
     
     assert exercitos_finais == exercitos_iniciais
