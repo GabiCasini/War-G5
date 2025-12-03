@@ -115,12 +115,15 @@ if (objectiveCardContainer) {
     });
 }
 function postTrocarCartas(jogador_cor, cartasSelecionadasParaTroca) {
+
+  let formattedCartas = cartasSelecionadasParaTroca.map(carta => [formatTextoCarta(carta[0]), carta[1]]);
+
   return fetch(LOCALHOST + "/partida/trocar_cartas", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       jogador_id: jogador_cor,
-      cartas: cartasSelecionadasParaTroca,
+      cartas: formattedCartas,
     }),
   })
     .then((resp) => {
@@ -167,19 +170,35 @@ function toggleCartaTroca(elemento) {
     listaCartasSelecionadas = listaCartasSelecionadas.filter(carta => carta[0] !== formaCarta);
   } else {
     if (listaCartasSelecionadas.length >= 2) {
+      let cartasDiferentes = new Set(listaCartasSelecionadas.map(carta => carta[0]));
+      cartasDiferentes.add(formaCarta);
+
+      let numCartasIguais = listaCartasSelecionadas.filter(carta => carta[0] === formaCarta).length + 1;
+
+      if ((cartasDiferentes.size === 3) || (numCartasIguais === 3) || (formaCarta === 'coringa')) {
+
+        if (faseAtual !== "posicionamento") {
+          alert("Você só pode trocar cartas na fase de posicionamento.");
+          return;
+        }
+        // Três cartas diferentes selecionadas
+        elemento.classList.add('carta-selecionada');
+        listaCartasSelecionadas.push([formaCarta, textoCarta]);
+        alert("trocando cartas...")
+        postTrocarCartas(jogadorAtual, listaCartasSelecionadas);
+        return;
+      }
+    // Verificar se todas as cartas selecionadas são iguais à nova carta
       for (let carta of listaCartasSelecionadas) {
         if (carta[0] !== formaCarta) {
-          alert("Só é possível selecionar 3 cartas iguais para troca.");
-          desmarcaTodasCartasTroca();
-          return;
+          
         }
     }
     // Adicionar seleção
-    elemento.classList.add('carta-selecionada');
-    listaCartasSelecionadas.push([formaCarta, textoCarta]);
-    alert("trocando cartas...")
-    postTrocarCartas(jogadorAtual, listaCartasSelecionadas);
+    alert("Combinação inválida. Selecione três cartas iguais ou três cartas diferentes.");
+    desmarcaTodasCartasTroca();
     return;
+
     }
     // Adicionar seleção
     elemento.classList.add('carta-selecionada');
@@ -239,4 +258,17 @@ function desmarcaTodasCartasTroca() {
     carta.classList.remove('carta-selecionada');
   });
   listaCartasSelecionadas = [];
+}
+
+
+function formatTextoCarta(texto){
+  if (texto === "circulo"){
+    return "Círculo";
+  } else if (texto === "quadrado"){
+    return "Quadrado";
+  } else if (texto === "triangulo"){
+    return "Triângulo";
+  } else if (texto === "coringa"){
+    return "Coringa";
+  }
 }
