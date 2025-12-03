@@ -244,7 +244,7 @@
 }
 
 #wrapper-cartas {
-  display: none;
+  display: flex;
   gap: 10px;
   overflow-x: auto;
   padding: 10px;
@@ -289,7 +289,7 @@
   color: #000000;
   font-family: 'Bebas Neue';
   font-weight: bold;
-  font-size: 12px;
+  font-size: 15px;
   text-shadow: 0 0 5px rgba(158, 158, 158, 0.7);
   user-select: none;
 }

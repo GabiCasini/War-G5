@@ -10,7 +10,7 @@ let tempoRestante = 0;
 
 let listaCartasSelecionadas = [];
 
-
+document.getElementById("hud-wrapper-second-line").style.display = 'none'
 btnMinhasCartas.addEventListener('click', toggleMinhasCartas);
 
 function toggleMinhasCartas(){
@@ -18,12 +18,12 @@ function toggleMinhasCartas(){
   if (divCartas.style.display === 'none') {
     divCartas.style.display = 'flex'
     btnMinhasCartas.textContent = "Ocultar Cartas"
-    btnTrocarCartas.style.display = 'flex'
+    // btnTrocarCartas.style.display = 'flex'
     return
   }
   divCartas.style.display = 'none'
   btnMinhasCartas.textContent = "Minhas Cartas"
-  btnTrocarCartas.style.display = 'none'
+  // btnTrocarCartas.style.display = 'none'
 }
 
 
@@ -141,6 +141,7 @@ function postTrocarCartas(jogador_cor, cartasSelecionadasParaTroca) {
     })
     .then((data) => {
       console.log("Tentativa de troca de cartas finalizada com sucesso:", data);
+      desmarcaTodasCartasTroca();
       fetchJogadores();
       fetchTerritorios();
       fetchEstadoAtual();
@@ -156,25 +157,33 @@ function postTrocarCartas(jogador_cor, cartasSelecionadasParaTroca) {
 function toggleCartaTroca(elemento) {
   
   let formaCarta = elemento.classList[0].split('-')[1];
-  if (listaCartasSelecionadas.length >= 2) {
-    for (let carta of listaCartasSelecionadas) {
-      if (carta !== formaCarta) {
-        alert("Só é possível selecionar 2 cartas iguais para troca.");
-        desmarcaTodasCartasTroca();
-        return;
-      }
-    }
-    alert("trocando cartas...")
-  }
+  let textoCarta = elemento.querySelector('.texto-imagem-carta').textContent;
+
+  
 
   if (elemento.classList.contains('carta-selecionada')) {
     // Remover seleção
     elemento.classList.remove('carta-selecionada');
-    listaCartasSelecionadas = listaCartasSelecionadas.filter(carta => carta !== formaCarta);
+    listaCartasSelecionadas = listaCartasSelecionadas.filter(carta => carta[0] !== formaCarta);
   } else {
+    if (listaCartasSelecionadas.length >= 2) {
+      for (let carta of listaCartasSelecionadas) {
+        if (carta[0] !== formaCarta) {
+          alert("Só é possível selecionar 3 cartas iguais para troca.");
+          desmarcaTodasCartasTroca();
+          return;
+        }
+    }
     // Adicionar seleção
     elemento.classList.add('carta-selecionada');
-    listaCartasSelecionadas.push(formaCarta);
+    listaCartasSelecionadas.push([formaCarta, textoCarta]);
+    alert("trocando cartas...")
+    postTrocarCartas(jogadorAtual, listaCartasSelecionadas);
+    return;
+    }
+    // Adicionar seleção
+    elemento.classList.add('carta-selecionada');
+    listaCartasSelecionadas.push([formaCarta, textoCarta]);
   }
 
 }
@@ -197,7 +206,7 @@ function constroiCartasTroca(listaCartas) {
       cartaForma = 'quadrado';
     } else if (cartaForma === 'Triângulo') {
       cartaForma = 'triangulo';
-    } else if (cartaForma === '') {
+    } else if (cartaForma === 'Coringa') {
       cartaForma = 'coringa';
     }
 

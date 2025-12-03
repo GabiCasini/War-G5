@@ -135,7 +135,7 @@ function fetchEstadoAtual() {
       let corHexJogador = players.find((p) => p.cor === jogadorAtual).corHex;
 
       players.find((p) => p.cor === jogadorAtual).cartas = data.jogador_cartas.cartas;
-      // constroiCartasTroca(data.jogador_cartas.cartas);
+      constroiCartasTroca(data.jogador_cartas.cartas);
 
       // Se o jogador mudou (início do turno de outro jogador), reinicia o timer
       try {

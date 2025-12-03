@@ -284,6 +284,7 @@ def post_trocar_cartas():
     dados = request.get_json()
     jogador_id = dados.get("jogador_id")
     cartas = dados.get("cartas")  # Espera-se uma lista de tuplas [(tipo, territorio), (tipo, territorio), (tipo, territorio)]
+    print(f"[DEBUG] Jogador {jogador_id} tentando trocar cartas: {cartas}")
 
     jogador = state.partida_global.get_jogador_por_cor(jogador_id)
     
