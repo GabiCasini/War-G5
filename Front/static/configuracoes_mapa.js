@@ -7,7 +7,9 @@ const MAPEAMENTO_REGIOES = {
 	"Regiao_6": "Baixada Litorânea"
 }
 
-
+window.addEventListener("beforeunload", function () {
+    navigator.sendBeacon("/partida/salvar_partida");
+});
 
 document.addEventListener('DOMContentLoaded', function () {
 	// Configuração para aparecer o tooltip com o nome do município ao passar o mouse sobre ele

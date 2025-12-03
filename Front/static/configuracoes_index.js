@@ -113,6 +113,7 @@ openInitBtn.addEventListener('click', () => {
     dialogP1.style.display = 'block';
     continueBtn.style.display = 'block';
     dialogP2.style.display = 'none';
+    navigator.sendBeacon("/partida/resetar_partida");
 });
 
 closeInitDialogBtn.addEventListener('click', () => {

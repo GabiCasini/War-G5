@@ -4,6 +4,16 @@ from .. import state
 
 partida_bp = Blueprint('partida', __name__, url_prefix='/partida')
 
+@partida_bp.route("/salvar_partida", methods=["POST", "GET"])
+def salvar_partida_route():
+    state.salvar_partida(state.partida_global)
+    return ("Partida Salva", 204)
+
+@partida_bp.route("/resetar_partida", methods=["POST", "GET"])
+def resetar_partida_route():
+    state.apagar_partida()
+    return ("Partida Resetada", 204)
+
 # Retorna lista de jogadores da partida e suas informacoes
 @partida_bp.route("/jogadores", methods=["GET"])
 def get_jogadores():
@@ -20,7 +30,8 @@ def get_jogadores():
             "cor": jogador.cor,
             "ia": jogador.tipo == 'ai',
             "objetivo": jogador.objetivo,
-            "ordem": i + 1
+            "ordem": i + 1,
+            "exercitos_reserva": jogador.exercitos_reserva
         })
 
     return jsonify({"jogadores": jogadores_json})
@@ -166,6 +177,11 @@ def post_ataque():
     atacante = state.partida_global.get_jogador_por_cor(jogador_id)
     territorio_origem = state.partida_global.get_territorio_por_nome(nome_territorio_origem)
     territorio_alvo = state.partida_global.get_territorio_por_nome(nome_territorio_ataque)
+    
+    # Validação de território alvo
+    if not territorio_alvo:
+        return jsonify({"status": "erro", "mensagem": "Território de ataque não encontrado"}), 400
+    
     defensor = state.partida_global.get_jogador_por_cor(territorio_alvo.cor)
     
     try:

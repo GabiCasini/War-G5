@@ -154,6 +154,14 @@ class Partida:
             print("Atacante não possui exércitos suficientes para atacar.")
             return False
         
+        # Valida se territórios são adjacentes
+        if territorio_alvo not in territorio_origem.fronteiras:
+            raise ValueError(f"Território {territorio_alvo.nome} não é adjacente a {territorio_origem.nome}")
+        
+        # Valida se atacante possui o território de origem
+        if not atacante.possui_territorio(territorio_origem):
+            raise ValueError(f"Atacante não possui o território {territorio_origem.nome}")
+        
         #Dados de ataque
         dados_ataque = 3 if atacante.exercitos_no_territorio(territorio_origem) >= 4 else atacante.exercitos_no_territorio(territorio_origem) - 1
 

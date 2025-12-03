@@ -7,7 +7,21 @@ def test_resolver_combate(partida: Partida):
     jogador_b: Jogador = partida.jogadores[1]
 
     territorio_a: Territorio = jogador_a.territorios[0]
-    territorio_b: Territorio = jogador_b.territorios[0]
+    # Encontra território adjacente do jogador B
+    territorio_b = None
+    for fronteira in territorio_a.fronteiras:
+        if fronteira.cor == jogador_b.cor:
+            territorio_b = fronteira
+            break
+    
+    # Se não encontrou adjacente, pega qualquer território de B e o torna adjacente
+    if not territorio_b:
+        territorio_b = jogador_b.territorios[0]
+        # Adiciona manualmente a adjacência
+        if territorio_b not in territorio_a.fronteiras:
+            territorio_a.fronteiras.append(territorio_b)
+        if territorio_a not in territorio_b.fronteiras:
+            territorio_b.fronteiras.append(territorio_a)
 
     jogador_a.adicionar_exercitos_territorio(territorio_a, 5)
     jogador_b.adicionar_exercitos_territorio(territorio_b, 3)
